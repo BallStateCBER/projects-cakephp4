@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e7b42e4311daa1ff8b0af4326d849437",
+    "content-hash": "5ab76939a606a888ad466641aa7c2ac4",
     "packages": [
         {
             "name": "aura/intl",
@@ -51,6 +51,54 @@
                 "localization"
             ],
             "time": "2017-01-20T05:00:11+00:00"
+        },
+        {
+            "name": "ballstatecber/datacenter-plugin-cakephp4",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/BallStateCBER/datacenter-plugin-cakephp4.git",
+                "reference": "3595135551c7837a49e4d1f08981c4e2656034b0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/BallStateCBER/datacenter-plugin-cakephp4/zipball/3595135551c7837a49e4d1f08981c4e2656034b0",
+                "reference": "3595135551c7837a49e4d1f08981c4e2656034b0",
+                "shasum": ""
+            },
+            "require": {
+                "cakephp/cakephp": "~4.1.0",
+                "cakephp/migrations": "^3.0",
+                "cakephp/plugin-installer": "^1.2",
+                "ext-json": "*",
+                "mobiledetect/mobiledetectlib": "^2.8",
+                "php": ">=7.2"
+            },
+            "require-dev": {
+                "cakephp/bake": "^2.0.3",
+                "cakephp/cakephp-codesniffer": "~4.2.0",
+                "cakephp/debug_kit": "^4.1",
+                "josegonzalez/dotenv": "^3.2",
+                "phpunit/phpunit": "~8.5.0",
+                "psy/psysh": "@stable"
+            },
+            "suggest": {
+                "dereuromark/cakephp-ide-helper": "After baking your code, this keeps your annotations in sync with the code evolving from there on for maximum IDE and PHPStan/Psalm compatibility.",
+                "markstory/asset_compress": "An asset compression plugin which provides file concatenation and a flexible filter system for preprocessing and minification.",
+                "phpstan/phpstan": "PHPStan focuses on finding errors in your code without actually running it. It catches whole classes of bugs even before you write tests for the code."
+            },
+            "type": "cakephp-plugin",
+            "autoload": {
+                "psr-4": {
+                    "App\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Ball State CBER DataCenter plugin for CakePHP 4",
+            "time": "2020-09-17T22:38:33+00:00"
         },
         {
             "name": "cakephp/cakephp",
@@ -5178,12 +5226,13 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "ballstatecber/datacenter-plugin-cakephp4": 20,
         "psy/psysh": 0
     },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.2"
+        "php": ">=7.4"
     },
     "platform-dev": [],
     "plugin-api-version": "1.1.0"
