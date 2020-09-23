@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Controller\Controller;
+use Cake\Event\EventInterface;
 
 /**
  * Application Controller
@@ -49,5 +50,16 @@ class AppController extends Controller
          * see https://book.cakephp.org/4/en/controllers/components/form-protection.html
          */
         //$this->loadComponent('FormProtection');
+    }
+
+    /**
+     * beforeFilter callback
+     *
+     * @param \Cake\Event\EventInterface $event An Event instance
+     * @return \Cake\Http\Response|void|null
+     */
+    public function beforeFilter(EventInterface $event)
+    {
+        $this->Auth->deny();
     }
 }
