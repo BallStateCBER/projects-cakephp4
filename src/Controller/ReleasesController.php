@@ -1,0 +1,311 @@
+<?php
+declare(strict_types=1);
+
+namespace App\Controller;
+
+use App\Model\Entity\Release;
+use Cake\Event\EventInterface;
+
+/**
+ * Releases Controller
+ *
+ * @method \App\Model\Entity\Release[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+ * @property \App\Model\Table\AuthorsTable $Authors
+ * @property \App\Model\Table\GraphicsTable $Graphics
+ * @property \App\Model\Table\PartnersTable $Partners
+ * @property \App\Model\Table\ReleasesTable $Releases
+ * @property \App\Model\Table\TagsTable $Tags
+ * @property \DataCenter\Controller\Component\TagManagerComponent $TagManager
+ */
+class ReleasesController extends AppController
+{
+    private array $reportFiletypes = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'csv'];
+
+    /**
+     * beforeFilter callback
+     *
+     * @param \Cake\Event\EventInterface $event An Event instance
+     * @return \Cake\Http\Response|void|null
+     * @throws \Exception
+     */
+    public function beforeFilter(EventInterface $event)
+    {
+        parent::beforeFilter($event);
+        $this->Auth->allow(['index', 'view', 'year']);
+        $this->loadComponent('DataCenter.TagManager');
+    }
+
+    /**
+     * Home page
+     *
+     * @return \Cake\Http\Response|null|void Renders view
+     */
+    public function index()
+    {
+        $releases = $this->paginate($this->Releases);
+
+        $this->set(compact('releases'));
+    }
+
+    /**
+     * View Release page
+     *
+     * @param string|null $id Release id.
+     * @return \Cake\Http\Response|null|void Renders view
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function view($id = null)
+    {
+        $release = $this->Releases->get($id, [
+            'contain' => [],
+        ]);
+
+        $this->set(compact('release'));
+    }
+
+    /**
+     * Add a New Release page
+     *
+     * @return \Cake\Http\Response Redirects on successful add, renders view otherwise.
+     */
+    public function add()
+    {
+        $this->loadModel('Partners');
+        $this->loadModel('Authors');
+        $release = $this->Releases->newEmptyEntity();
+
+        if ($this->request->is('post')) {
+            $release = $this->processForm($release);
+
+            if ($this->Releases->save($release)) {
+                $this->Flash->success('Release added');
+                $this->updateDataCenterHome();
+                $this->redirect([
+                    'controller' => 'Releases',
+                    'action' => 'view',
+                    'id' => $release->id,
+                    'slug' => $release->slug
+                ]);
+            } else {
+                $this->Flash->error(
+                    'The release could not be saved. Please correct any indicated errors and try again.'
+                );
+            }
+        }
+
+        $this->set([
+            'authors' => $this->Authors->find()->orderAsc('name')->all(),
+            'pageTitle' => 'Add a New Release',
+            'partners' => $this->Partners->find()->orderAsc('name')->all(),
+            'release' => $release,
+            'reportFiletypes' => $this->reportFiletypes,
+        ]);
+        $this->setAvailableTags();
+
+        return $this->render('/Releases/form');
+    }
+
+    /**
+     * Edit Release page
+     *
+     * @param string|null $releaseId Release id.
+     * @return \Cake\Http\Response Redirects on successful edit, renders view otherwise.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function edit($releaseId = null)
+    {
+        $release = $this->Releases->get($releaseId, [
+            'contain' => ['Authors', 'Graphics', 'Partners', 'Tags'],
+        ]);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $release = $this->processForm($release);
+
+            if ($this->Releases->save($release)) {
+                $this->Flash->success('Release updated');
+                $this->redirect([
+                    'controller' => 'Releases',
+                    'action' => 'view',
+                    'id' => $release->id,
+                    'slug' => $release->slug
+                ]);
+            } else {
+                $this->Flash->error(
+                    'The release could not be updated. Please correct any indicated errors and try again.'
+                );
+            }
+        }
+        $this->set([
+            'authors' => $this->Authors->find()->orderAsc('name')->all(),
+            'pageTitle' => 'Edit ' . $release->title,
+            'partners' => $this->Partners->find()->orderAsc('name')->all(),
+            'release' => $release,
+            'reportFiletypes' => $this->reportFiletypes,
+        ]);
+        $this->setAvailableTags();
+
+        return $this->render('/Releases/form');
+    }
+
+    /**
+     * Delete method
+     *
+     * @param string|null $releaseId Release id
+     * @return \Cake\Http\Response|null|void Redirects to index.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function delete($releaseId = null)
+    {
+        $this->request->allowMethod(['post', 'delete']);
+        $release = $this->Releases->get($releaseId);
+        if ($this->Releases->delete($release)) {
+            $this->Flash->success('The release has been deleted.');
+        } else {
+            $this->Flash->error('There was an error deleting this release');
+        }
+
+        return $this->redirect(['action' => 'index']);
+    }
+
+    /**
+     * Calls a page that refreshes the Data Center's homepage's cache of the latest release
+     *
+     * @return bool
+     */
+    private function updateDataCenterHome()
+    {
+        $isLocalhost = stripos($_SERVER['SERVER_NAME'] ?? '', 'localhost') !== false;
+        $url = $isLocalhost
+            ? 'http://dchome.localhost/refresh_latest_release'
+            : 'https://cberdata.org/refresh_latest_release';
+
+        $results = trim(file_get_contents($url));
+        return (boolean) $results;
+    }
+
+    /**
+     * Reads request data, creates Graphic entities, adds them to the current release, and returns it
+     *
+     * @param \App\Model\Entity\Release $release
+     * @return \App\Model\Entity\Release
+     */
+    private function processNewGraphics(Release $release)
+    {
+        // Note if images were uploaded, and ignore any graphics without uploaded images
+        $this->loadModel('Graphics');
+        $graphicsData = $this->request->getData('graphics');
+        if ($graphicsData) {
+            foreach ($graphicsData as $i => $graphic) {
+                if (empty($graphic['name'])) {
+                    // Ignore any graphics without uploaded images
+                    continue;
+                } else {
+                    $graphicEntity = $this->Graphics->newEntity([
+                        'title' => $graphic['title'],
+                        'url' => $graphic['url'],
+                        'image' => $graphic['name'],
+                        'dir' => $graphic['name'],
+                        'weight' => $graphic['weight'],
+                    ]);
+                    if ($this->Graphics->save($graphicEntity)) {
+                        $release->graphics[] = $graphicEntity;
+                    } else {
+                        $this->Flash->error(sprintf(
+                            'Error uploading "%s" graphic. Details: %s',
+                            $graphic['title'],
+                            print_r($graphicEntity->getErrors(), true)
+                        ));
+                    }
+
+                }
+            }
+        }
+        $release->graphics = $graphicsData;
+
+        return $release;
+    }
+
+    /**
+     * Reads request data, finds or creates a Partner entity, adds it to the current release, and returns the release
+     *
+     * @param \App\Model\Entity\Release $release
+     * @return \App\Model\Entity\Release
+     */
+    private function processNewPartner(Release $release)
+    {
+        $newPartnerName = $this->request->getData('new_partner');
+        if (!$newPartnerName) {
+            return $release;
+        }
+
+        $newPartnerName = trim($newPartnerName);
+        $partnerData = ['name' => $newPartnerName];
+        $partnerExists = $this->Partners->exists($partnerData);
+        if ($partnerExists) {
+            $partner = $this->Partners
+                ->find()
+                ->where($partnerData)
+                ->first();
+            $release->partner = $partner;
+        } else {
+            $partner = $this->Partners->newEntity($partnerData);
+            if ($this->Partners->save($partner)) {
+                $release->partner = $partner;
+            } else {
+                $this->Flash->error("There was an error saving the partner $newPartnerName");
+            }
+        }
+
+        return $release;
+    }
+
+    /**
+     * Reads request data, creates Author entities, adds them to the current release, and returns it
+     *
+     * @param \App\Model\Entity\Release $release
+     * @return \App\Model\Entity\Release
+     */
+    private function processNewAuthors(Release $release)
+    {
+        $newAuthors = $this->request->getData('new_authors') ?? [];
+        foreach ($newAuthors as $authorName) {
+            $author = $this->Authors->newEntity(['name' => $authorName]);
+            $this->Authors->save($author);
+            $release->authors[] = $author;
+        }
+
+        return $release;
+    }
+
+    /**
+     * Sets the $availableTags variable in the view
+     */
+    private function setAvailableTags()
+    {
+        $this->loadModel('Tags');
+        $this->set([
+            'availableTags' => $this->Tags
+                ->find('threaded')
+                ->select(['id', 'name', 'parent_id', 'selectable'])
+                ->orderAsc('name')
+        ]);
+    }
+
+    /**
+     * Updates the $release entity using request data and returns the updated entity
+     *
+     * @param \App\Model\Entity\Release $release
+     * @return \App\Model\Entity\Release
+     */
+    private function processForm(Release $release)
+    {
+        $release = $this->Releases->patchEntity($release, $this->request->getData());
+
+        $this->loadModel('Tags');
+        $release->tags = $this->TagManager->processTagInput($this->request->getData(), $this->Tags);
+        $release = $this->processNewAuthors($release);
+        $release = $this->processNewPartner($release);
+        $release = $this->processNewGraphics($release);
+
+        return $release;
+    }
+}
