@@ -39,7 +39,7 @@
                 ],
                 [
                     'class' => 'btn btn-secondary',
-                    'escape' => false
+                    'escape' => false,
                 ]
             ) ?>
             <?= $this->Form->postLink(
@@ -64,7 +64,7 @@
                 <td class="description_col">
                     <?= $release['Release']['description'] ?>
 
-                    <?php if (!empty($release['Tag'])):?>
+                    <?php if (!empty($release['Tag'])): ?>
                         <p class="tags">
                             Tags:
                             <?php
@@ -85,7 +85,7 @@
                         </p>
                     <?php endif; ?>
 
-                    <?php if ($release->authors):?>
+                    <?php if ($release->authors): ?>
                         <p class="authors">
                             <?= __n('Author', 'Authors', count($release->authors)) ?>:
                             <?php
