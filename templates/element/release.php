@@ -124,8 +124,8 @@
                                         <?php
                                             $imgSrc = sprintf(
                                                 '/img/releases/%s/%s',
-                                                $graphic['dir'],
-                                                $this->Graphic->thumbnail($graphic['image'])
+                                                $graphic->dir,
+                                                $graphic->thumbnail
                                             );
                                             echo $this->Html->link(
                                                 sprintf(
@@ -133,7 +133,7 @@
                                                     $imgSrc,
                                                     $graphic->title
                                                 ),
-                                                $graphic['url'],
+                                                $graphic->url,
                                                 ['escape' => false]
                                             );
                                         ?>
