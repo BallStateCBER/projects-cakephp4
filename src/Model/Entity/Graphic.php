@@ -42,4 +42,22 @@ class Graphic extends Entity
         'modified' => true,
         'release' => true,
     ];
+
+    protected $_virtual = ['thumbnail_filename'];
+
+    /**
+     * Takes the filename of the full-sized graphic and returns the filename of its thumbnail
+     *
+     * @param string $filename Full-sized image filename
+     * @return string
+     */
+    protected function _getThumbnailFilename(string $filename)
+    {
+        $filenameSplit = explode('.', $filename);
+        $thumbnailFilename = array_slice($filenameSplit, 0, count($filenameSplit) - 1);
+        $thumbnailFilename[] = 'thumb';
+        $thumbnailFilename[] = end($filenameSplit);
+
+        return implode('.', $thumbnailFilename);
+    }
 }
