@@ -10,10 +10,11 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property int $release_id
+ * @property string $dir
+ * @property string $image
+ * @property string $thumbnail
  * @property string $title
  * @property string $url
- * @property string $image
- * @property string $dir
  * @property int $weight
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
@@ -43,17 +44,16 @@ class Graphic extends Entity
         'release' => true,
     ];
 
-    protected $_virtual = ['thumbnail_filename'];
+    protected $_virtual = ['thumbnail'];
 
     /**
-     * Takes the filename of the full-sized graphic and returns the filename of its thumbnail
+     * Returns the filename of this graphic's thumbnail
      *
-     * @param string $filename Full-sized image filename
      * @return string
      */
-    protected function _getThumbnailFilename(string $filename)
+    protected function _getThumbnail()
     {
-        $filenameSplit = explode('.', $filename);
+        $filenameSplit = explode('.', $this->image);
         $thumbnailFilename = array_slice($filenameSplit, 0, count($filenameSplit) - 1);
         $thumbnailFilename[] = 'thumb';
         $thumbnailFilename[] = end($filenameSplit);
