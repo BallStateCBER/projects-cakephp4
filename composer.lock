@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c08ecc8aeb3d60e2d59636f99ac7b175",
+    "content-hash": "08ac16643d8735a89a14029138c4ce4c",
     "packages": [
         {
             "name": "aura/intl",
@@ -58,39 +58,28 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/BallStateCBER/datacenter-plugin-cakephp4.git",
-                "reference": "83f5e2346ef4266a363b0de94aff4c0e52d8cef2"
+                "reference": "c920ef3e8aff79d61089f8cb372c5c3b9e4d9580"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BallStateCBER/datacenter-plugin-cakephp4/zipball/83f5e2346ef4266a363b0de94aff4c0e52d8cef2",
-                "reference": "83f5e2346ef4266a363b0de94aff4c0e52d8cef2",
+                "url": "https://api.github.com/repos/BallStateCBER/datacenter-plugin-cakephp4/zipball/c920ef3e8aff79d61089f8cb372c5c3b9e4d9580",
+                "reference": "c920ef3e8aff79d61089f8cb372c5c3b9e4d9580",
                 "shasum": ""
             },
             "require": {
                 "cakephp/cakephp": "~4.1.0",
-                "cakephp/migrations": "^3.0",
-                "cakephp/plugin-installer": "^1.2",
                 "ext-json": "*",
-                "mobiledetect/mobiledetectlib": "^2.8",
-                "php": ">=7.2"
+                "php": ">=7.4"
             },
             "require-dev": {
                 "cakephp/bake": "^2.0.3",
                 "cakephp/cakephp-codesniffer": "~4.2.0",
-                "cakephp/debug_kit": "^4.1",
-                "josegonzalez/dotenv": "^3.2",
-                "phpunit/phpunit": "~8.5.0",
-                "psy/psysh": "@stable"
-            },
-            "suggest": {
-                "dereuromark/cakephp-ide-helper": "After baking your code, this keeps your annotations in sync with the code evolving from there on for maximum IDE and PHPStan/Psalm compatibility.",
-                "markstory/asset_compress": "An asset compression plugin which provides file concatenation and a flexible filter system for preprocessing and minification.",
-                "phpstan/phpstan": "PHPStan focuses on finding errors in your code without actually running it. It catches whole classes of bugs even before you write tests for the code."
+                "phpunit/phpunit": "~8.5.0"
             },
             "type": "cakephp-plugin",
             "autoload": {
                 "psr-4": {
-                    "App\\": "src/"
+                    "DataCenter\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -98,7 +87,7 @@
                 "MIT"
             ],
             "description": "Ball State CBER DataCenter plugin for CakePHP 4",
-            "time": "2020-09-23T21:05:02+00:00"
+            "time": "2020-10-05T15:57:45+00:00"
         },
         {
             "name": "cakephp/cakephp",
@@ -5864,6 +5853,57 @@
                 }
             ],
             "time": "2020-07-12T23:59:07+00:00"
+        },
+        {
+            "name": "twbs/bootstrap",
+            "version": "v4.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/twbs/bootstrap.git",
+                "reference": "8a628b943cf31ca0a002c08af661a95772480225"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/twbs/bootstrap/zipball/8a628b943cf31ca0a002c08af661a95772480225",
+                "reference": "8a628b943cf31ca0a002c08af661a95772480225",
+                "shasum": ""
+            },
+            "replace": {
+                "twitter/bootstrap": "self.version"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.3.x-dev"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jacob Thornton",
+                    "email": "jacobthornton@gmail.com"
+                },
+                {
+                    "name": "Mark Otto",
+                    "email": "markdotto@gmail.com"
+                }
+            ],
+            "description": "The most popular front-end framework for developing responsive, mobile first projects on the web.",
+            "homepage": "https://getbootstrap.com",
+            "keywords": [
+                "JS",
+                "css",
+                "framework",
+                "front-end",
+                "mobile-first",
+                "responsive",
+                "sass",
+                "web"
+            ],
+            "time": "2018-01-18T18:29:48+00:00"
         },
         {
             "name": "twig/markdown-extra",
