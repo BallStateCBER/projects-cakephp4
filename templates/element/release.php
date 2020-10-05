@@ -138,7 +138,7 @@
                                             );
                                         ?>
                                     </td>
-                                    <?php if ($k % 2 == 1 && count($release['Graphic']) > $k + 1): ?>
+                                    <?php if ($k % 2 == 1 && count($release->graphics) > $k + 1): ?>
                                         </tr>
                                         <tr>
                                     <?php endif; ?>
