@@ -89,7 +89,7 @@ class ReleasesController extends AppController
                     'controller' => 'Releases',
                     'action' => 'view',
                     'id' => $release->id,
-                    'slug' => $release->slug
+                    'slug' => $release->slug,
                 ]);
             } else {
                 $this->Flash->error(
@@ -131,7 +131,7 @@ class ReleasesController extends AppController
                     'controller' => 'Releases',
                     'action' => 'view',
                     'id' => $release->id,
-                    'slug' => $release->slug
+                    'slug' => $release->slug,
                 ]);
             } else {
                 $this->Flash->error(
@@ -184,13 +184,14 @@ class ReleasesController extends AppController
             : 'https://cberdata.org/refresh_latest_release';
 
         $results = trim(file_get_contents($url));
-        return (boolean) $results;
+
+        return (bool)$results;
     }
 
     /**
      * Reads request data, creates Graphic entities, adds them to the current release, and returns it
      *
-     * @param \App\Model\Entity\Release $release
+     * @param \App\Model\Entity\Release $release Release entity
      * @return \App\Model\Entity\Release
      */
     private function processNewGraphics(Release $release)
@@ -220,7 +221,6 @@ class ReleasesController extends AppController
                             print_r($graphicEntity->getErrors(), true)
                         ));
                     }
-
                 }
             }
         }
@@ -232,7 +232,7 @@ class ReleasesController extends AppController
     /**
      * Reads request data, finds or creates a Partner entity, adds it to the current release, and returns the release
      *
-     * @param \App\Model\Entity\Release $release
+     * @param \App\Model\Entity\Release $release Release entity
      * @return \App\Model\Entity\Release
      */
     private function processNewPartner(Release $release)
@@ -266,7 +266,7 @@ class ReleasesController extends AppController
     /**
      * Reads request data, creates Author entities, adds them to the current release, and returns it
      *
-     * @param \App\Model\Entity\Release $release
+     * @param \App\Model\Entity\Release $release Release entity
      * @return \App\Model\Entity\Release
      */
     private function processNewAuthors(Release $release)
@@ -283,6 +283,8 @@ class ReleasesController extends AppController
 
     /**
      * Sets the $availableTags variable in the view
+     *
+     * @return void
      */
     private function setAvailableTags()
     {
@@ -291,14 +293,14 @@ class ReleasesController extends AppController
             'availableTags' => $this->Tags
                 ->find('threaded')
                 ->select(['id', 'name', 'parent_id', 'selectable'])
-                ->orderAsc('name')
+                ->orderAsc('name'),
         ]);
     }
 
     /**
      * Updates the $release entity using request data and returns the updated entity
      *
-     * @param \App\Model\Entity\Release $release
+     * @param \App\Model\Entity\Release $release Release entity
      * @return \App\Model\Entity\Release
      */
     private function processForm(Release $release)
