@@ -1,7 +1,11 @@
 <?php
 /**
  * @var \App\Model\Entity\Release $release
+ * @var \App\View\AppView $this
  */
+
+$loggedIn = $this->request->getSession()->read('User');
+$graphicsColClass = count($release->graphics) > 1 ? 'graphics_col_double' : 'graphics_col_single';
 ?>
 <div class="release">
     <h1>
@@ -28,7 +32,7 @@
         ) ?>
     </p>
 
-    <?php if ($this->Auth->user()): ?>
+    <?php if ($loggedIn): ?>
         <span class="controls">
             <?= $this->Html->link(
                 'Edit',
@@ -52,8 +56,8 @@
                 [
                     'class' => 'btn btn-danger',
                     'escape' => false,
+                    'confirm' => 'Are you sure that you want to delete this release?',
                 ],
-                'Are you sure that you want to delete this release?'
             ) ?>
         </span>
     <?php endif; ?>
@@ -62,9 +66,9 @@
         <tbody>
             <tr>
                 <td class="description_col">
-                    <?= $release['Release']['description'] ?>
+                    <?= $release->description ?>
 
-                    <?php if (!empty($release['Tag'])): ?>
+                    <?php if ($release->tags): ?>
                         <p class="tags">
                             Tags:
                             <?php
@@ -73,7 +77,7 @@
                                     $tagLinks[] = $this->Html->link(
                                         $tag->name,
                                         [
-                                            'controller' => 'tags',
+                                            'controller' => 'Tags',
                                             'action' => 'view',
                                             'id' => $tag->id,
                                             'slug' => $tag->slug,
@@ -106,7 +110,7 @@
                     <?php endif; ?>
 
                 </td>
-                <td class="graphics_col <?= count($release->graphics) > 1 ? 'graphics_col_double' : 'graphics_col_single' ?>">
+                <td class="graphics_col <?= $graphicsColClass ?>">
                     <p class="date">
                         Published <?= $release->released->format('F j, Y') ?>
                     </p>
