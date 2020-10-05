@@ -5,7 +5,7 @@
  */
 
 $loggedIn = $this->request->getSession()->read('User');
-$graphicsColClass = count($release->graphics) > 1 ? 'graphics_col_double' : 'graphics_col_single';
+$graphicsColClass = count($release->graphics ?? []) > 1 ? 'graphics_col_double' : 'graphics_col_single';
 ?>
 <div class="release">
     <h1>
