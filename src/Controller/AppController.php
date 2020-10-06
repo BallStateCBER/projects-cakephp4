@@ -52,9 +52,6 @@ class AppController extends Controller
          * see https://book.cakephp.org/4/en/controllers/components/form-protection.html
          */
         //$this->loadComponent('FormProtection');
-
-        $layout = $this->request->is('ajax') ? 'DataCenter.ajax' : 'DataCenter.default';
-        $this->viewBuilder()->setLayout($layout);
     }
 
     /**
