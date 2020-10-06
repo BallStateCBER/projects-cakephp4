@@ -1,3 +1,51 @@
 @import "./cake.css";
 @import "../../vendor/twbs/bootstrap/scss/bootstrap.scss";
 @import "../../vendor/ballstatecber/datacenter-plugin-cakephp4/webroot/css/datacenter.scss";
+
+#menu_column {
+    h2 {
+        margin-bottom: 0.5em;
+        margin-top: 1em;
+
+        &:first-of-type {
+            margin-top: 0;
+        }
+    }
+}
+
+ul.tags {
+    li {
+        display: inline;
+
+        &:after {
+            content: '\2022';
+        }
+
+        &:last-child:after {
+            content: '';
+        }
+    }
+}
+
+#login_link {
+    display: inline-block;
+    font-size: 80%;
+    margin-top: 20px;
+}
+
+#partners-list {
+    margin: 0;
+    padding: 0;
+
+    li {
+        border-bottom: 1px solid #ddd;
+
+        &:last-child {
+            border-bottom: none;
+        }
+    }
+}
+
+#tags-list {
+    font-size: 0.85em;
+}

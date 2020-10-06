@@ -7,7 +7,7 @@
 <h2>
     Clients, Partners, and Sponsors
 </h2>
-<ul class="partners">
+<ul class="partners unstyled" id="partners-list">
     <?php foreach ($sidebarVars['partners'] as $partner) : ?>
         <li>
             <?= $this->Html->link(
@@ -27,7 +27,7 @@
 <h2>
     Topics
 </h2>
-<ul class="tags unstyled">
+<ul class="tags unstyled" id="tags-list">
     <?php foreach ($sidebarVars['tags'] as $tag) : ?>
         <li>
             <?php
