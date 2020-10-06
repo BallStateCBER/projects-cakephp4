@@ -26,6 +26,9 @@ use Cake\Event\EventInterface;
  * will inherit them.
  *
  * @link https://book.cakephp.org/4/en/controllers.html#the-app-controller
+ * @property \App\Model\Table\PartnersTable $Partners
+ * @property \App\Model\Table\ReleasesTable $Releases
+ * @property \App\Model\Table\TagsTable $Tags
  */
 class AppController extends Controller
 {
@@ -52,6 +55,10 @@ class AppController extends Controller
          * see https://book.cakephp.org/4/en/controllers/components/form-protection.html
          */
         //$this->loadComponent('FormProtection');
+
+        $this->loadModel('Tags');
+        $this->loadModel('Releases');
+        $this->loadModel('Partners');
     }
 
     /**
@@ -63,5 +70,51 @@ class AppController extends Controller
     public function beforeFilter(EventInterface $event)
     {
         $this->Auth->deny();
+        $this->setSidebarVariables();
+    }
+
+    /**
+     * Sets variables used by the sidebar element
+     *
+     * @return void
+     */
+    private function setSidebarVariables()
+    {
+        $tags = $this->Tags
+            ->find()
+            ->select(['Tags.id', 'Tags.name', 'Tags.slug'])
+            ->distinct(['Tags.name', 'Tags.slug'])
+            ->matching('Releases')
+            ->orderAsc('Tags.name')
+            ->all();
+
+        $releases = $this->Releases
+            ->find()
+            ->select(['id', 'released'])
+            ->orderDesc('released')
+            ->all();
+        $years = [];
+        foreach ($releases as $release) {
+            $year = $release->released->format('Y');
+            if (!in_array($year, $years)) {
+                $years[] = $year;
+            }
+        }
+
+        $partners = $this->Partners
+            ->find()
+            ->select(['Partners.id', 'Partners.name', 'Partners.short_name', 'Partners.slug'])
+            ->distinct(['Partners.id', 'Partners.name', 'Partners.short_name', 'Partners.slug'])
+            ->matching('Releases')
+            ->orderAsc('Partners.name')
+            ->all();
+
+        $this->set([
+            'sidebarVars' => [
+                'partners' => $partners,
+                'tags' => $tags,
+                'years' => $years,
+            ],
+        ]);
     }
 }
