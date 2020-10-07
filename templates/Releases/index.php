@@ -5,8 +5,6 @@
  */
 ?>
 
-<?= $this->element('DataCenter.pagination') ?>
-
 <div class="releases">
 	<?php foreach ($releases as $release): ?>
 		<?= $this->element('release', compact('release')) ?>
