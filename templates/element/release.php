@@ -100,7 +100,7 @@ $graphicsColClass = count($release->graphics ?? []) > 1 ? 'graphics_col_double' 
                                         [
                                             'controller' => 'Authors',
                                             'action' => 'view',
-                                            $author->id,
+                                            'id' => $author->id,
                                         ]
                                     );
                                 }

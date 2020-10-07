@@ -45,7 +45,39 @@ use Cake\Routing\RouteBuilder;
 $routes->setRouteClass(DashedRoute::class);
 
 $routes->scope('/', function (RouteBuilder $builder) {
+    // Releases
     $builder->connect('/', ['controller' => 'Releases', 'action' => 'index']);
+    $builder->connect(
+        '/:id/:slug',
+        ['controller' => 'Releases', 'action' => 'view'],
+        ['id' => '[0-9]+', 'slug' => '[-_a-z0-9]+', 'pass' => ['id', 'slug']],
+    );
+    $builder->connect(
+        '/year/:year',
+        ['controller' => 'Releases', 'action' => 'year'],
+        ['year' => '[0-9]+', 'pass' => ['year']],
+    );
+
+    // Partners
+    $builder->connect(
+        '/partner/:id/:slug',
+        ['controller' => 'Partners', 'action' => 'view'],
+        ['id' => '[0-9]+', 'slug' => '[-_a-z0-9]+', 'pass' => ['id', 'slug']],
+    );
+
+    // Tags
+    $builder->connect(
+        '/tag/:id/:slug',
+        ['controller' => 'Tags', 'action' => 'view'],
+        ['id' => '[0-9]+', 'slug' => '[-_a-z0-9]+', 'pass' => ['id', 'slug']],
+    );
+
+    // Authors
+    $builder->connect(
+        '/author/:id',
+        ['controller' => 'Authors', 'action' => 'view'],
+        ['id' => '[0-9]+', 'pass' => ['id']],
+    );
 
     $builder->fallbacks();
 });
