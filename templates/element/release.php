@@ -133,9 +133,10 @@ $graphicsColClass = count($release->graphics ?? []) > 1 ? 'graphics_col_double' 
                                             );
                                             echo $this->Html->link(
                                                 sprintf(
-                                                    '<div class="graphic"><img src="%s" /></div>%s',
+                                                    '<div class="graphic"><img src="%s" alt="%s" /></div>%s',
                                                     $imgSrc,
-                                                    $graphic->title
+                                                    $graphic->title,
+                                                    $graphic->title,
                                                 ),
                                                 $graphic->url,
                                                 ['escape' => false]
