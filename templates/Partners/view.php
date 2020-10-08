@@ -9,26 +9,7 @@
 </h1>
 
 <?php if ($partner->releases): ?>
-    <table class="releases-list table">
-        <?php foreach ($partner->releases as $release): ?>
-            <tr>
-                <td>
-                    <?= $release->released->format('F j, Y') ?>
-                </td>
-                <td>
-                    <?= $this->Html->link(
-                        $release->title,
-                        [
-                            'controller' => 'Releases',
-                            'action' => 'view',
-                            'id' => $release->id,
-                            'slug' => $release->slug,
-                        ]
-                    ) ?>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-    </table>
+    <?= $this->element('release_list', ['releases' => $partner->releases]) ?>
 <?php else: ?>
     <p>
         No associated projects or publications could be found.
