@@ -133,6 +133,11 @@ return [
             'bypassAuth' => true,
         ],
         [
+            'controller' => 'Tags',
+            'action' => ['view'],
+            'bypassAuth' => true,
+        ],
+        [
             'role' => '*',
             'plugin' => 'DebugKit',
             'controller' => '*',
