@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\ORM\Query;
+
 /**
  * Authors Controller
  *
@@ -33,7 +35,11 @@ class AuthorsController extends AppController
     public function view($id = null)
     {
         $author = $this->Authors->get($id, [
-            'contain' => ['Releases'],
+            'contain' => [
+                'Releases' => function (Query $q) {
+                    return $q->orderDesc('released');
+                },
+            ],
         ]);
 
         $this->set([

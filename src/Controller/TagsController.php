@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\ORM\Query;
+
 /**
  * Tags Controller
  *
@@ -36,7 +38,11 @@ class TagsController extends AppController
     public function view($id = null)
     {
         $tag = $this->Tags->get($id, [
-            'contain' => ['Releases'],
+            'contain' => [
+                'Releases' => function (Query $q) {
+                    return $q->orderDesc('released');
+                },
+            ],
         ]);
 
         $this->set([

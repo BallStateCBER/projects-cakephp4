@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\ORM\Query;
+
 /**
  * Partners Controller
  *
@@ -33,7 +35,11 @@ class PartnersController extends AppController
     public function view($id = null)
     {
         $partner = $this->Partners->get($id, [
-            'contain' => ['Releases'],
+            'contain' => [
+                'Releases' => function (Query $q) {
+                    return $q->orderDesc('released');
+                },
+            ],
         ]);
 
         $this->set([
