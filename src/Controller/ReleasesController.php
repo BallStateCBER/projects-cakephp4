@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Model\Entity\Release;
+use Cake\Database\Expression\QueryExpression;
 use Cake\Event\EventInterface;
 
 /**
@@ -314,5 +315,28 @@ class ReleasesController extends AppController
         $release = $this->processNewGraphics($release);
 
         return $release;
+    }
+
+    /**
+     * Lists all releases released in the specified year
+     *
+     * @param null|string $year Publishing year
+     * @return void
+     */
+    public function year($year = null)
+    {
+        $releases = $this->Releases
+            ->find()
+            ->select(['id', 'title', 'slug', 'released'])
+            ->where(function (QueryExpression $exp) use ($year) {
+                return $exp->like('released', "$year%");
+            })
+            ->orderAsc('released');
+
+        $this->set([
+            'year' => $year,
+            'releases' => $releases,
+            'pageTitle' => "$year Projects and Publications",
+        ]);
     }
 }

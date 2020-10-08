@@ -2,6 +2,13 @@
 @import "../../vendor/twbs/bootstrap/scss/bootstrap.scss";
 @import "../../vendor/ballstatecber/datacenter-plugin-cakephp4/webroot/css/datacenter.scss";
 
+h1.page_title {
+    color: #cc0000;
+    font-size: 200%;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+
 #menu_column {
     h2 {
         margin-bottom: 0.5em;
@@ -177,6 +184,20 @@ div.release {
         &:last-child {
             border-bottom: 0;
         }
+    }
+
+    td:first-child {
+        padding: 7px 7px 7px 0;
+        white-space: nowrap;
+        width: 125px;
+    }
+
+    td:last-child {
+        padding: 7px;
+    }
+
+    tr:nth-child(even) td {
+        background-color: #eee;
     }
 }
 
