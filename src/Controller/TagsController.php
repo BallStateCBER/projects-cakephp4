@@ -39,7 +39,10 @@ class TagsController extends AppController
             'contain' => ['Releases'],
         ]);
 
-        $this->set(compact('tag'));
+        $this->set([
+            'tag' => $tag,
+            'pageTitle' => str_replace(' And ', ' and ', ucwords($tag->name)),
+        ]);
     }
 
     /**

@@ -36,7 +36,10 @@ class PartnersController extends AppController
             'contain' => ['Releases'],
         ]);
 
-        $this->set(compact('partner'));
+        $this->set([
+            'partner' => $partner,
+            'pageTitle' => "Projects and Publications with $partner->name",
+        ]);
     }
 
     /**

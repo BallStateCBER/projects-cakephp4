@@ -1,11 +1,12 @@
 <?php
 /**
- * @var \App\View\AppView $this
  * @var \App\Model\Entity\Partner $partner
+ * @var \App\View\AppView $this
+ * @var string $pageTitle
  */
 ?>
 <h1 class="page_title">
-    Projects and Publications with <?= $partner->name ?>
+    <?= $pageTitle ?>
 </h1>
 
 <?php if ($partner->releases): ?>
