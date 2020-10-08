@@ -123,13 +123,18 @@ return [
             }
         ],
         [
-            'controller' => 'Releases',
-            'action' => ['index', 'view', 'year'],
+            'controller' => 'Authors',
+            'action' => ['view'],
             'bypassAuth' => true,
         ],
         [
             'controller' => 'Partners',
             'action' => ['view'],
+            'bypassAuth' => true,
+        ],
+        [
+            'controller' => 'Releases',
+            'action' => ['index', 'view', 'year'],
             'bypassAuth' => true,
         ],
         [
