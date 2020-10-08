@@ -47,7 +47,7 @@
 <h2>
     Publishing Date
 </h2>
-<ul class="unstyled">
+<ul class="unstyled" id="years-list">
     <?php foreach ($sidebarVars['years'] as $year) : ?>
         <li>
             <?= $this->Html->link($year, [
