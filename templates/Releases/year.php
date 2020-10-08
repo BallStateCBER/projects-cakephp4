@@ -10,7 +10,7 @@
 </h1>
 
 <?php if ($releases) : ?>
-    <table class="releases table">
+    <table class="releases-list table">
         <?php foreach ($releases as $release): ?>
             <tr>
                 <td>
