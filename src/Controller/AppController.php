@@ -48,7 +48,6 @@ class AppController extends Controller
 
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
-        $this->loadComponent('Auth');
 
         /*
          * Enable the following component for recommended CakePHP form protection settings.
@@ -69,7 +68,6 @@ class AppController extends Controller
      */
     public function beforeFilter(EventInterface $event)
     {
-        $this->Auth->deny();
         $this->setSidebarVariables();
     }
 

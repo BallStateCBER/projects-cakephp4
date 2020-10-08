@@ -32,7 +32,6 @@ class ReleasesController extends AppController
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
-        $this->Auth->allow(['index', 'view', 'year']);
         $this->loadComponent('DataCenter.TagManager');
     }
 
