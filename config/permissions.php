@@ -128,6 +128,11 @@ return [
             'bypassAuth' => true,
         ],
         [
+            'controller' => 'Partners',
+            'action' => ['view'],
+            'bypassAuth' => true,
+        ],
+        [
             'role' => '*',
             'plugin' => 'DebugKit',
             'controller' => '*',
