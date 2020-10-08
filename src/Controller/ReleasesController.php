@@ -63,7 +63,7 @@ class ReleasesController extends AppController
     public function view($id = null)
     {
         $release = $this->Releases->get($id, [
-            'contain' => [],
+            'contain' => ['Partners', 'Graphics', 'Authors', 'Tags'],
         ]);
 
         $this->set(compact('release'));
