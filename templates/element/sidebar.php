@@ -66,10 +66,10 @@
     null,
     [
         'method' => 'get',
-        'url' => ['controller' => 'releases', 'action' => 'search'],
+        'url' => ['controller' => 'Releases', 'action' => 'search'],
     ]
 ) ?>
-<?= $this->Form->control('q', ['label' => false]) ?>
+<?= $this->Form->control('term', ['label' => false]) ?>
 <?= $this->Form->submit('Search') ?>
 <?= $this->Form->end() ?>
 

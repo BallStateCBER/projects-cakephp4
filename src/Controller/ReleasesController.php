@@ -338,4 +338,51 @@ class ReleasesController extends AppController
             'pageTitle' => "$year Projects and Publications",
         ]);
     }
+
+    /**
+     * Search results page
+     *
+     * @return void
+     */
+    public function search()
+    {
+        $searchTerm = $this->request->getQuery('term');
+        $searchTerm = $searchTerm ? trim($searchTerm) : $searchTerm;
+
+        if ($searchTerm) {
+            $query = $this->Releases
+                ->find()
+                ->select(['id', 'title', 'slug', 'released', 'description'])
+                ->where([
+                    'OR' => [
+                        function (QueryExpression $exp) use ($searchTerm) {
+                            return $exp->like('title', "%$searchTerm%");
+                        },
+                        function (QueryExpression $exp) use ($searchTerm) {
+                            return $exp->like('description', "%$searchTerm%");
+                        },
+                    ],
+                ])
+                ->orderDesc('released');
+            $releases = $this->paginate($query);
+
+            $tags = $this->Tags
+                ->find()
+                ->select(['id', 'name', 'slug'])
+                ->where(function (QueryExpression $exp) use ($searchTerm) {
+                    return $exp->like('name', "%$searchTerm%");
+                })
+                ->all();
+        } else {
+            $releases = [];
+            $tags = [];
+        }
+
+        $this->set([
+            'pageTitle' => "Search Results: $searchTerm",
+            'releases' => $releases,
+            'tags' => $tags,
+            'searchTerm' => $searchTerm,
+        ]);
+    }
 }

@@ -134,7 +134,7 @@ return [
         ],
         [
             'controller' => 'Releases',
-            'action' => ['index', 'view', 'year'],
+            'action' => ['index', 'view', 'year', 'search'],
             'bypassAuth' => true,
         ],
         [
