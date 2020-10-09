@@ -61,7 +61,7 @@ class Application extends BaseApplication
         Configure::write('Users.config', ['users', 'permissions']);
         $this->addPlugin(\CakeDC\Users\Plugin::class);
         $identifiers = Configure::read('Auth.Identifiers');
-        $identifiers['Authentication.Password']['fields']['username'] = 'email';
+        $identifiers['Password']['fields']['username'] = 'email';
         Configure::write('Auth.Identifiers', $identifiers);
     }
 
