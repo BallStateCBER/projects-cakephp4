@@ -13,6 +13,7 @@
             <?= $this->Html->link(
                 $partner->short_name,
                 [
+                    'plugin' => false,
                     'controller' => 'Partners',
                     'action' => 'view',
                     'id' => $partner->id,
@@ -34,6 +35,7 @@
                 $tagName = ucwords($tag['name']);
                 $tagName = str_replace(' And ', ' and ', $tagName);
                 echo $this->Html->link($tagName, [
+                    'plugin' => false,
                     'controller' => 'Tags',
                     'action' => 'view',
                     'id' => $tag->id,
@@ -51,6 +53,7 @@
     <?php foreach ($sidebarVars['years'] as $year) : ?>
         <li>
             <?= $this->Html->link($year, [
+                'plugin' => false,
                 'controller' => 'Releases',
                 'action' => 'year',
                 'year' => $year,
@@ -66,7 +69,11 @@
     null,
     [
         'method' => 'get',
-        'url' => ['controller' => 'Releases', 'action' => 'search'],
+        'url' => [
+            'plugin' => false,
+            'controller' => 'Releases',
+            'action' => 'search'
+        ],
     ]
 ) ?>
 <?= $this->Form->control('term', ['label' => false]) ?>
