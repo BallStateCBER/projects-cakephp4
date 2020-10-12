@@ -72,7 +72,7 @@
         'url' => [
             'plugin' => false,
             'controller' => 'Releases',
-            'action' => 'search'
+            'action' => 'search',
         ],
     ]
 ) ?>
@@ -86,35 +86,83 @@
     </h2>
     <ul class="unstyled">
         <li>
-            <?= $this->Html->link('New Release', ['controller' => 'Releases', 'action' => 'add']) ?>
+            <?= $this->Html->link(
+                'New Release',
+                [
+                    'plugin' => false,
+                    'controller' => 'Releases',
+                    'action' => 'add',
+                ]
+            ) ?>
         </li>
         <li>
-            <?= $this->Html->link('New User', ['controller' => 'Users', 'action' => 'add']) ?>
+            <?= $this->Html->link(
+                'New User',
+                [
+                    'plugin' => false,
+                    'controller' => 'Users',
+                    'action' => 'add',
+                ]
+            ) ?>
         </li>
         <li>
-            <?= $this->Html->link('Clients / Partners / Sponsors', ['controller' => 'Partners', 'action' => 'index']) ?>
+            <?= $this->Html->link(
+                'Clients / Partners / Sponsors',
+                [
+                    'plugin' => false,
+                    'controller' => 'Partners',
+                    'action' => 'index',
+                ]
+            ) ?>
         </li>
         <li>
-            <?= $this->Html->link('Tags', ['controller' => 'Tags', 'action' => 'edit']) ?>
+            <?= $this->Html->link(
+                'Tags',
+                [
+                    'plugin' => false,
+                    'controller' => 'Tags',
+                    'action' => 'edit',
+                ]
+            ) ?>
         </li>
         <li>
-            <?= $this->Html->link('Authors', ['controller' => 'Authors', 'action' => 'index']) ?>
+            <?= $this->Html->link(
+                'Authors',
+                [
+                    'plugin' => false,
+                    'controller' => 'Authors',
+                    'action' => 'index',
+                ]
+            ) ?>
         </li>
         <li>
-            <?= $this->Html->link('Change my password', ['controller' => 'Users', 'action' => 'changePassword']) ?>
+            <?= $this->Html->link(
+                'Change my password',
+                [
+                    'plugin' => false,
+                    'controller' => 'Users',
+                    'action' => 'changePassword',
+                ]
+            ) ?>
         </li>
         <li>
-            <?= $this->Html->link('Logout', ['controller' => 'Users', 'action' => 'logout']) ?>
+            <?= $this->Html->link(
+                'Logout',
+                [
+                    'plugin' => 'CakeDC/Users',
+                    'controller' => 'Users',
+                    'action' => 'logout',
+                ]
+            ) ?>
         </li>
     </ul>
 <?php else : ?>
     <?= $this->Html->link(
         'Admin login',
         [
+            'plugin' => 'CakeDC/Users',
             'controller' => 'Users',
             'action' => 'login',
-            'admin' => false,
-            'plugin' => false,
         ],
         ['id' => 'login_link']
     ) ?>
