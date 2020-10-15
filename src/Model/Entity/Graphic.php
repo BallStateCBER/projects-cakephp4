@@ -13,6 +13,7 @@ use Cake\ORM\Entity;
  * @property string $dir
  * @property string $image
  * @property string $thumbnail
+ * @property string $thumbnailFullPath
  * @property string $title
  * @property string $url
  * @property int $weight
@@ -59,5 +60,19 @@ class Graphic extends Entity
         $thumbnailFilename[] = end($filenameSplit);
 
         return implode('.', $thumbnailFilename);
+    }
+
+    /**
+     * Returns the full path to this graphic's thumbnail
+     *
+     * @return string
+     */
+    protected function _getThumbnailFullPath()
+    {
+        return sprintf(
+            '/img/releases/%s/%s',
+            $this->dir,
+            $this->thumbnail
+        );
     }
 }
