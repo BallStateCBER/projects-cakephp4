@@ -98,12 +98,18 @@ class ReleasesController extends AppController
             }
         }
 
+        $validExtensions = [];
+        foreach ($this->reportFiletypes as $ext) {
+            $validExtensions[] = "*.$ext";
+        }
+
         $this->set([
             'authors' => $this->Authors->find()->orderAsc('name')->all(),
             'pageTitle' => 'Add a New Release',
             'partners' => $this->Partners->find()->orderAsc('name')->all(),
             'release' => $release,
             'reportFiletypes' => $this->reportFiletypes,
+            'validExtensions' => $validExtensions,
         ]);
         $this->setAvailableTags();
 
