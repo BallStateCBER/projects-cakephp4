@@ -32,7 +32,7 @@ class ReleaseForm {
         cancelAddAuthorButton.addEventListener('click', function (event) {
             event.preventDefault();
             const newAuthorContainer = document.getElementById('new_author');
-            const newAuthorNameField = document.querySelector('#new_author input[type=text]');
+            const newAuthorNameField = newAuthorContainer.querySelector('input[type=text]');
             const duration = 300;
             slideUp(newAuthorContainer, duration);
             setTimeout(function () {
