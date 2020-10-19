@@ -5,23 +5,24 @@
  * @var \Cake\ORM\ResultSet|\App\Model\Entity\Author[] $authors
  * @var \Cake\ORM\ResultSet|\App\Model\Entity\Partner[] $partners
  * @var \Cake\ORM\ResultSet|\App\Model\Entity\Tag[] $availableTags
+ * @var array $alternateTemplates
+ * @var array $defaultTemplates
+ * @var bool $hasGraphics
+ * @var int $graphicsIterator
+ * @var int $time
+ * @var int $uploadMb
+ * @var string $action
  * @var string $pageTitle
+ * @var string $token
  * @var string[] $reportFiletypes
  * @var string[] $validExtensions
  */
 
-    use Cake\Core\Configure;
     use Cake\Utility\Hash;
 
     $this->Html->script('release_form', ['block' => 'scriptTop']);
     $this->element('DataCenter.font_awesome_init');
     $this->element('DataCenter.rich_text_editor_init', ['selector' => '#description']);
-
-    // Determine file upload limit
-    $maxUpload = (int)(ini_get('upload_max_filesize'));
-    $maxPost = (int)(ini_get('post_max_size'));
-    $memoryLimit = (int)(ini_get('memory_limit'));
-    $uploadMb = min($maxUpload, $maxPost, $memoryLimit);
 
     // Load uploadify library
     $this->Html->script(
@@ -34,16 +35,6 @@
     );
     $this->Html->script('/data_center/uploadifive/jquery.uploadifive.min.js', ['block' => 'scriptTop']);
     $this->Html->css('/data_center/uploadifive/uploadifive.css', ['block' => true]);
-    $time = time();
-    $token = md5(Configure::read('upload_token') . $time);
-
-    /* $i is the next key to be applied to a new input row.
-     * It begins at zero (or the highest key of data['Graphic'] + 1)
-     * and needs to be provided to jQuery. */
-    $i = $release->graphics ? 1 + max(array_keys($release->graphics)) : 0;
-
-    $action = $this->request->getParam('action');
-    $hasGraphics = (bool)$release->graphics;
 
     $newPartnerOptions = [
         'id' => 'release-new-partner',
@@ -60,7 +51,7 @@
         token: <?= json_encode($token) ?>,
         validExtensions: <?= json_encode(implode('|', $validExtensions)) ?>,
     });
-    document.querySelector('body').dataset.graphicsIterator = <?= $i ?>;
+    document.querySelector('body').dataset.graphicsIterator = <?= $graphicsIterator ?>;
 <?php $this->end(); ?>
 
 <h1 class="page_title">
@@ -74,7 +65,7 @@
             'type' => 'file',
         ]
     );
-    if ($this->request->getParam('action') == 'edit') {
+    if ($action == 'edit') {
         echo $this->Form->control('id', ['type' => 'hidden', 'value' => $release->id]);
     }
     echo $this->Form->control('title');
@@ -88,24 +79,7 @@
 ?>
 
 <?php if ($partners): ?>
-    <?php
-        $templates = [
-            'inputContainer' => '<div class="form-group form-row {{type}}{{required}}">' .
-                '<div class="col-8">{{content}}</div><div class="col-4 d-flex align-items-end">{{after}}</div></div>',
-            'select' => '<select class="form-control" name="{{name}}"{{attrs}}>{{content}}</select>',
-        ];
-        $templates['inputContainerError'] = str_replace(
-            'form-group',
-            'form-group is-invalid',
-            $templates['inputContainer']
-        );
-        $templates['inputContainerError'] = str_replace(
-            '{{content}}',
-            '{{content}}{{error}}',
-            $templates['inputContainerError']
-        );
-        $this->Form->setTemplates($templates);
-    ?>
+    <?php $this->Form->setTemplates($alternateTemplates); ?>
     <div id="choose_partner">
         <?= $this->Form->control('partner_id', [
             'class' => 'partner validate[funcCall[checkPartner]]',
@@ -152,11 +126,7 @@
     ]) ?>
 </div>
 
-<?php $this->Form->setTemplates(include(str_replace(
-    '\\',
-    DS,
-    ROOT . '\vendor\ballstatecber\datacenter-plugin-cakephp4\config\bootstrap_form.php'
-))); ?>
+<?php $this->Form->setTemplates($defaultTemplates); ?>
 
 <ul id="authors_container">
     <?php if ($release->authors): ?>
@@ -361,23 +331,23 @@
                             'disabled' => true,
                             'required' => true,
                             'class' => 'validate[condRequired[Graphic{i}Image]',
-                            'after' => ' <button title="Find report" class="find_report"><i class="fas fa-search" alt="Find report"></i></button>',
+                            'after' => ' <button title="Find report" class="find_report">' .
+                                '<i class="fas fa-search" alt="Find report"></i></button>',
                         ]
                     ) ?>
                 </td>
                 <td>
-                    <?php
-                        $options = $release->graphics ? range(1, count($release->graphics) + 1) : [1];
-                        echo $this->Form->control(
-                            'graphics.{i}.weight',
-                            [
-                                'label' => false,
-                                'disabled' => true,
-                                'type' => 'select',
-                                'options' => $options,
-                            ]
-                        );
-                    ?>
+                    <?= $this->Form->control(
+                        'graphics.{i}.weight',
+                        [
+                            'label' => false,
+                            'disabled' => true,
+                            'type' => 'select',
+                            'options' => $release->graphics
+                                ? range(1, count($release->graphics) + 1)
+                                : [1],
+                        ]
+                    ) ?>
                 </td>
             </tr>
         </tfoot>

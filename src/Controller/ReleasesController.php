@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Model\Entity\Release;
+use Cake\Core\Configure;
 use Cake\Database\Expression\QueryExpression;
 use Cake\Event\EventInterface;
 
@@ -112,6 +113,7 @@ class ReleasesController extends AppController
             'validExtensions' => $validExtensions,
         ]);
         $this->setAvailableTags();
+        $this->setReleaseFormVars($release);
 
         return $this->render('/Releases/form');
     }
@@ -153,6 +155,7 @@ class ReleasesController extends AppController
             'reportFiletypes' => $this->reportFiletypes,
         ]);
         $this->setAvailableTags();
+        $this->setReleaseFormVars($release);
 
         return $this->render('/Releases/form');
     }
@@ -390,5 +393,58 @@ class ReleasesController extends AppController
             'tags' => $tags,
             'searchTerm' => $searchTerm,
         ]);
+    }
+
+    /**
+     * Sets view variables for the release form page
+     *
+     * @param \App\Model\Entity\Release $release Release entity
+     * @return void
+     */
+    private function setReleaseFormVars($release)
+    {
+        // Determine file upload limit
+        $maxUpload = (int)(ini_get('upload_max_filesize'));
+        $maxPost = (int)(ini_get('post_max_size'));
+        $memoryLimit = (int)(ini_get('memory_limit'));
+        $uploadMb = min($maxUpload, $maxPost, $memoryLimit);
+
+        $time = time();
+        $token = md5(Configure::read('upload_token') . $time);
+        $action = $this->request->getParam('action');
+        $hasGraphics = (bool)$release->graphics;
+        $graphicsIterator = $release->graphics ? 1 + max(array_keys($release->graphics)) : 0;
+
+        $alternateTemplates = [
+            'inputContainer' => '<div class="form-group form-row {{type}}{{required}}">' .
+                '<div class="col-8">{{content}}</div><div class="col-4 d-flex align-items-end">{{after}}</div></div>',
+            'select' => '<select class="form-control" name="{{name}}"{{attrs}}>{{content}}</select>',
+        ];
+        $alternateTemplates['inputContainerError'] = str_replace(
+            'form-group',
+            'form-group is-invalid',
+            $alternateTemplates['inputContainer']
+        );
+        $alternateTemplates['inputContainerError'] = str_replace(
+            '{{content}}',
+            '{{content}}{{error}}',
+            $alternateTemplates['inputContainerError']
+        );
+        $defaultTemplates = include(str_replace(
+            '\\',
+            DS,
+            ROOT . '\vendor\ballstatecber\datacenter-plugin-cakephp4\config\bootstrap_form.php'
+        ));
+
+        $this->set(compact(
+            'action',
+            'alternateTemplates',
+            'defaultTemplates',
+            'graphicsIterator',
+            'hasGraphics',
+            'time',
+            'token',
+            'uploadMb',
+        ));
     }
 }
