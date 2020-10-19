@@ -57,7 +57,7 @@ class ReleaseForm {
         const addPartnerButton = document.getElementById('add_partner_button');
         addPartnerButton.addEventListener('click', function (event) {
             event.preventDefault();
-            document.getElementById('ReleasePartnerId').value = '';
+            document.getElementById('release-partner-id').selectedIndex = 0;
             document.getElementById('choose_partner').style.display = 'none';
             document.getElementById('add_partner').style.display = 'block';
         });
@@ -65,7 +65,7 @@ class ReleaseForm {
         const choosePartnerButton = document.getElementById('choose_partner_button');
         choosePartnerButton.addEventListener('click', function (event) {
             event.preventDefault();
-            document.getElementById('ReleaseNewPartner').value = '';
+            document.getElementById('release-new-partner').value = '';
             document.getElementById('choose_partner').style.display = 'block';
             document.getElementById('add_partner').style.display = 'none';
         });
