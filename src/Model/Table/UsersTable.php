@@ -27,7 +27,7 @@ use Cake\Validation\Validator;
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
-class UsersTable extends Table
+class UsersTable extends \CakeDC\Users\Model\Table\UsersTable
 {
     /**
      * Initialize method
