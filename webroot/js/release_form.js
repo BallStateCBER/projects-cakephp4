@@ -115,17 +115,14 @@ class ReleaseForm {
 
         const li = document.createElement('li');
         const button = document.createElement('button');
-        button.innerHTML = 'X';
+        button.innerHTML = '<i class="fas fa-times" title="Remove"></i>';
+        button.className = 'btn btn-sm btn-link';
+        const self = this;
         button.addEventListener('click', function (event) {
             event.preventDefault();
-            const container = event.target.parentElement;
-            const duration = 300;
-            slideUp(container, duration);
-            setTimeout(function () {
-                container.remove();
-            }, duration);
+            self.removeNewAuthor(event.target.closest('li'));
         });
-        li.innerHTML = name + '<input type="hidden" name="data[new_authors][]" value="' + name + '" />';
+        li.innerHTML = authorName.value + '<input type="hidden" name="data[new_authors][]" value="' + authorName.value + '" />';
         li.appendChild(button);
         li.style.display = 'none';
         document.getElementById('authors_container').appendChild(li);
@@ -353,5 +350,13 @@ class ReleaseForm {
                 alphabetic.style.display = 'block';
             }
         });
+    }
+
+    removeNewAuthor(container) {
+        const duration = 300;
+        slideUp(container, duration);
+        setTimeout(function () {
+            container.remove();
+        }, duration);
     }
 }
