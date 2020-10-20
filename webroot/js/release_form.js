@@ -122,7 +122,7 @@ class ReleaseForm {
             event.preventDefault();
             self.removeNewAuthor(event.target.closest('li'));
         });
-        li.innerHTML = authorName.value + '<input type="hidden" name="data[new_authors][]" value="' + authorName.value + '" />';
+        li.innerHTML = authorName.value + '<input type="hidden" name="new_authors[]" value="' + authorName.value + '" />';
         li.appendChild(button);
         li.style.display = 'none';
         document.getElementById('authors_container').appendChild(li);
