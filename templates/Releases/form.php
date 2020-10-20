@@ -107,7 +107,7 @@
 <?php endif; ?>
 
 <?= $this->Form->control('author', [
-    'div' => ['id' => 'author_select'],
+    'id' => 'author-select',
     'empty' => true,
     'label' => 'Author(s)',
     'templateVars' => ['after' => ' <button id="add_author_toggler" class="btn btn-secondary">Add new</button>'],

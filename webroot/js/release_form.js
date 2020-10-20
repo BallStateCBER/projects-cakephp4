@@ -40,10 +40,10 @@ class ReleaseForm {
             }, duration);
         });
 
-        /*const releaseAuthor = document.getElementById('ReleaseAuthor');
-        releaseAuthor.addEventListener('click', function () {
+        const authorSelector = document.getElementById('author-select');
+        authorSelector.addEventListener('change', function () {
             self.selectAuthor();
-        });*/
+        });
 
         const form = document.getElementById('ReleaseForm');
         form.addEventListener('submit', function (event) {
@@ -136,9 +136,10 @@ class ReleaseForm {
     }
 
     selectAuthor() {
-        const select = document.getElementById('ReleaseAuthor');
+        const select = document.getElementById('author-select');
         const authorId = select.value;
         const selected = select.querySelector('option:checked');
+        console.log(selected);
         selected.selected = false;
 
         if (authorId === '') {
@@ -146,14 +147,14 @@ class ReleaseForm {
         }
 
         // Do nothing if author is already selected
-        const authorIsSelected = document.querySelector(`#authors_container input[value=${authorId}]`);
+        const authorIsSelected = document.querySelector(`#authors_container input[value="${authorId}"]`);
         if (authorIsSelected !== null) {
             return;
         }
 
-        const authorName = selected.innerHtml;
+        const authorName = selected.innerText;
         const li = document.createElement('li');
-        li.innerHTML = `${authorName}<input type="hidden" name="author[]" value="${authorId}" />`;
+        li.innerHTML = `${authorName}<input type="hidden" name="authors[_ids][]" value="${authorId}" />`;
         const button = document.createElement('button');
         button.innerHTML = 'X';
         button.addEventListener('click', function (event) {
