@@ -139,7 +139,6 @@ class ReleaseForm {
     const select = document.getElementById('author-select');
     const authorId = select.value;
     const selected = select.querySelector('option:checked');
-    console.log(selected);
     selected.selected = false;
 
     if (authorId === '') {
@@ -263,7 +262,11 @@ class ReleaseForm {
     // Set up the 'find report' button
     newRow.querySelector('button.find_report').addEventListener('click', function (event) {
       event.preventDefault();
-      self.toggleReportFinder(event.target, i);
+      let button = event.target;
+      if (!button.classList.contains('btn')) {
+        button = button.closest('button');
+      }
+      self.toggleReportFinder(button, i);
     });
 
     // Add the now-unique row
@@ -283,15 +286,16 @@ class ReleaseForm {
   }
 
   /* Called when a 'find report' button is clicked
-   * link: the link clicked
+   * button: the button clicked
    * i: the unique key for the corresponding 'linked graphics' row */
-  toggleReportFinder(link, i) {
+  toggleReportFinder(button, i) {
     const existingSelectionBox = document.getElementById(`report_choices_${i}`);
 
     // Open
     if (existingSelectionBox === null) {
-      const cell = link.closest('td');
-      this.loadReportFinder(cell, i);
+      button.innerHTML = '<i class="fas fa-spinner fa-spin loading"></i>';
+      const cell = button.closest('td');
+      this.loadReportFinder(cell, i, button);
 
     // Close
     } else {
@@ -300,18 +304,20 @@ class ReleaseForm {
   }
 
   // cell: the table cell that contains the input field to be populated
-  loadReportFinder(cell, i) {
+  loadReportFinder(cell, i, button) {
+    const self = this;
     fetch('/releases/list-reports')
       .then(response => response.text())
-      .then(html => this.setupReportFinder(html, cell, i));
+      .then(function (html) {
+        self.setupReportFinder(html, cell, i);
+        button.innerHTML = '<i class="fas fa-search"></i>';
+      });
   }
 
   /* html: the results of requesting /releases/list-reports
    * cell: the table cell that contains the input field to be populated
    * i: the unique key of the row in the 'add/edit linked graphics' box */
   setupReportFinder(html, cell, i) {
-    console.log('report finder:');
-    console.log(html);
     const newRow = document.createElement('tr');
     newRow.innerHTML = `<td colspan="4" class="report_choices"><div id="report_choices_${i}">${html}</div></td>`;
     cell.closest('tbody').append(newRow);
@@ -342,18 +348,18 @@ class ReleaseForm {
           console.log(error);
         });
     });
-    newRow.querySelector('.sorting_options a').addEventListener('click', function (event) {
+    newRow.querySelector('.sorting-options button').addEventListener('click', function (event) {
       event.preventDefault();
       const link = event.target;
       link.classList.add('selected');
       const newest = newRow.querySelector('ul.newest');
       const alphabetic = newRow.querySelector('ul.alphabetic');
       if (link.classList.contains('newest')) {
-        newRow.querySelector('.sorting_options a.alphabetic').classList.remove('selected');
+        newRow.querySelector('.sorting-options button.alphabetic').classList.remove('selected');
         newest.style.display = 'block';
         alphabetic.style.display = 'none';
       } else if (link.classList.contains('alphabetic')) {
-        newRow.querySelector('.sorting_options a.newest').classList.remove('selected');
+        newRow.querySelector('.sorting-options button.newest').classList.remove('selected');
         newest.style.display = 'none';
         alphabetic.style.display = 'block';
       }

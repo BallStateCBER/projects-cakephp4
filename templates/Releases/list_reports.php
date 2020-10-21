@@ -5,9 +5,9 @@
  */
 ?>
 
-<div id="list-reports-buttons">
+<div class="list-reports-buttons">
     <span class="d-inline-block align-middle">Sort:</span>
-    <div class="btn-group btn-group-toggle" data-toiggle="buttons">
+    <div class="btn-group btn-group-toggle sorting-options" data-toggle="buttons">
         <button class="newest active btn btn-sm btn-outline-secondary">Newest</button>
         <button class="alphabetic btn btn-sm btn-outline-secondary">Alphabetic</button>
     </div>

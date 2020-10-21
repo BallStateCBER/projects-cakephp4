@@ -120,7 +120,7 @@ return [
                 }
 
                 return false;
-            }
+            },
         ],
         [
             'controller' => 'Authors',
@@ -149,5 +149,18 @@ return [
             'action' => '*',
             'bypassAuth' => true,
         ],
-    ]
+        [
+            'plugin' => 'DataCenter',
+            'controller' => '*',
+            'action' => '*',
+            'bypassAuth' => true,
+        ],
+
+        // Debugging. Delete this when done
+        [
+            'controller' => 'Releases',
+            'action' => '*',
+            'bypassAuth' => true,
+        ],
+    ],
 ];
