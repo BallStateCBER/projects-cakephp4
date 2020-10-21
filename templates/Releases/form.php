@@ -168,7 +168,12 @@
             release's description.
         </li>
     </ul>
-    <input type="file" name="file_upload" id="upload_reports" />
+    <div class="input-group mb-3">
+        <div class="custom-file">
+            <input type="file" name="file_upload" id="upload_reports" />
+            <label class="custom-file-label" for="upload_reports">Choose file</label>
+        </div>
+    </div>
     <input type="checkbox" name="overwrite" value="1" id="overwrite_reports" />
     <label for="overwrite_reports">
         Overwrite reports with the same filename
@@ -364,5 +369,5 @@
             'allowCustom' => true,
         ]
     );
-    echo $this->Form->submit('Submit');
+    echo $this->Form->submit('Submit', ['class' => 'btn btn-primary']);
     echo $this->Form->end();
