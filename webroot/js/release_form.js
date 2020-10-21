@@ -249,7 +249,7 @@ class ReleaseForm {
 
     // Set up the remove button
     const self = this;
-    dummyRow.querySelectorAll('button.remove_graphic').each(function (button) {
+    dummyRow.querySelectorAll('button.remove_graphic').forEach(function (button) {
       button.addEventListener('click', function (event) {
         event.preventDefault();
         self.removeGraphic(event.target);
@@ -257,7 +257,7 @@ class ReleaseForm {
     });
 
     // Set up the 'find report' button
-    dummyRow.querySelector('a.find_report').addEventListener('click', function (event) {
+    dummyRow.querySelector('button.find_report').addEventListener('click', function (event) {
       event.preventDefault();
       self.toggleReportFinder(event.target, i);
     });
