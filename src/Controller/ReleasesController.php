@@ -436,19 +436,17 @@ class ReleasesController extends AppController
             ROOT . '\vendor\ballstatecber\datacenter-plugin-cakephp4\config\bootstrap_form.php'
         ));
 
-        $graphicUploadTemplate = [
-            'inputContainer' => '<div class="input-group {{type}}{{required}}"><div class="custom-file">' .
-                '{{content}}-{{label}}-</div></div>',
-            'formGroup' => '{{input}}{{label}}',
-            'label' => '<label class="custom-file-label" {{attrs}}>{{text}}</label>',
+        $buttonAppendTemplate = [
+            'inputContainer' => '<div class="input-group {{type}}{{required}}">{{content}}' .
+                '<div class="input-group-append">{{after}}</div></div>'
         ];
 
         $this->set(compact(
             'action',
             'alternateTemplates',
+            'buttonAppendTemplate',
             'defaultTemplates',
             'graphicsIterator',
-            'graphicUploadTemplate',
             'hasGraphics',
             'time',
             'token',

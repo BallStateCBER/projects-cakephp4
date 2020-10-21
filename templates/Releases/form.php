@@ -13,8 +13,8 @@
  * @var string $pageTitle
  * @var string $token
  * @var string[] $alternateTemplates
+ * @var string[] $buttonAppendTemplate
  * @var string[] $defaultTemplates
- * @var string[] $graphicUploadTemplate
  * @var string[] $reportFiletypes
  * @var string[] $validExtensions
  */
@@ -260,9 +260,9 @@
                                 [
                                     'label' => false,
                                     'class' => "validate[condRequired[Graphic{$k}Image]]",
-                                    'templates' => $alternateTemplates,
+                                    'templates' => $buttonAppendTemplate,
                                     'templateVars' => ['after' => sprintf(
-                                        '<button title="Find report" class="find_report" id="find_report_button_%d">' .
+                                        '<button title="Find report" class="btn btn-outline-secondary find_report" id="find_report_button_%d">' .
                                             '<i class="fas fa-search" title="Find report"></i>' .
                                         '</button>',
                                         $k
@@ -336,9 +336,9 @@
                             'disabled' => true,
                             'required' => true,
                             'class' => 'validate[condRequired[Graphic{i}Image]',
-                            'templates' => $alternateTemplates,
+                            'templates' => $buttonAppendTemplate,
                             'templateVars' => [
-                                'after' => ' <button title="Find report" class="find_report">' .
+                                'after' => '<button title="Find report" class="btn btn-outline-secondary find_report">' .
                                     '<i class="fas fa-search" title="Find report"></i></button>',
                             ],
                         ]
