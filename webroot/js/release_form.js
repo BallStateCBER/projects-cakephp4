@@ -320,7 +320,7 @@ class ReleaseForm {
   setupReportFinder(html, cell, i) {
     const newRow = document.createElement('tr');
     newRow.innerHTML = `<td colspan="4" class="report_choices"><div id="report_choices_${i}">${html}</div></td>`;
-    cell.closest('tbody').append(newRow);
+    cell.closest('tr').after(newRow);
     newRow.querySelector('button.report').addEventListener('click', function (event) {
       event.preventDefault();
       const reportFilename = event.target.innerText.trim();
