@@ -254,22 +254,6 @@ table.graphics {
     max-height: 300px;
     overflow: auto;
     text-align: left;
-
-    a.close,
-    a.refresh {
-      float: right;
-      font-size: 80%;
-      margin-left: 10px;
-    }
-
-    .sorting_options {
-      font-size: 80%;
-      margin-left: 20px;
-
-      a.selected {
-        text-decoration: underline;
-      }
-    }
   }
 
   .input-group {
@@ -292,6 +276,10 @@ table.graphics {
   input[type=text] {
     width: 150px;
   }
+}
+
+#list-reports-buttons {
+  float: right;
 }
 
 #author_select {
@@ -323,4 +311,15 @@ table.graphics {
 
 fieldset.release-form {
   margin-top: 3em;
+}
+
+.select-report {
+  button.report {
+    padding-bottom: 0;
+    padding-top: 0;
+  }
+}
+
+.select-report-instructions {
+  clear: both;
 }

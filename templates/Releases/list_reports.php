@@ -5,36 +5,40 @@
  */
 ?>
 
-<button class="close">
-    Cancel
-</button>
-<button class="refresh">
-    <i class="fas fa-spinner fa-spin loading" style="display: none;"></i>
-    Refresh
-</button>
+<div id="list-reports-buttons">
+    <span class="d-inline-block align-middle">Sort:</span>
+    <div class="btn-group btn-group-toggle" data-toiggle="buttons">
+        <button class="newest active btn btn-sm btn-outline-secondary">Newest</button>
+        <button class="alphabetic btn btn-sm btn-outline-secondary">Alphabetic</button>
+    </div>
+    <button class="refresh btn btn-sm btn-secondary">
+        <i class="fas fa-spinner fa-spin loading" style="display: none;"></i>
+        Refresh
+    </button>
+    <button class="reports-cancel btn btn-sm btn-secondary">
+        Cancel
+    </button>
+</div>
 
 <?php if ($filesNewest): ?>
-    <strong>Select a report to link this graphic to</strong>
-    <span class="sorting_options">
-        Sort:
-        <button class="newest selected">Newest</button>
-        <button class="alphabetic">Alphabetic</button>
-    </span>
-    <ul class="unstyled newest">
+    <p class="select-report-instructions">
+        Select a report to link this graphic to:
+    </p>
+    <ul class="unstyled newest select-report">
         <?php foreach ($filesNewest as $timestamp => $info): ?>
             <li>
-                <a href="#" class="report">
+                <button class="btn btn-link report">
                     <?= $info['filename'] ?>
-                </a>
+                </button>
             </li>
         <?php endforeach; ?>
     </ul>
-    <ul class="unstyled alphabetic" style="display: none;">
+    <ul class="unstyled alphabetic select-report" style="display: none;">
         <?php foreach ($filesAlphabetic as $filename => $info): ?>
             <li>
-                <a href="#" class="report">
+                <button class="btn btn-link report">
                     <?= $info['filename'] ?>
-                </a>
+                </button>
             </li>
         <?php endforeach; ?>
     </ul>

@@ -315,18 +315,18 @@ class ReleaseForm {
     const newRow = document.createElement('tr');
     newRow.innerHTML = `<td colspan="4" class="report_choices"><div id="report_choices_${i}">${html}</div></td>`;
     cell.closest('tbody').append(newRow);
-    newRow.querySelector('a.report').addEventListener('click', function (event) {
+    newRow.querySelector('button.report').addEventListener('click', function (event) {
       event.preventDefault();
       const reportFilename = event.target.innerText.trim();
       cell.querySelector('input').value = `/reports/${reportFilename}`;
       newRow.remove();
     });
-    newRow.querySelector('a.close').addEventListener('click', function (event) {
+    newRow.querySelector('button.reports-cancel').addEventListener('click', function (event) {
       event.preventDefault();
       newRow.remove();
     });
     const self = this;
-    newRow.querySelector('a.refresh').addEventListener('click', function (event) {
+    newRow.querySelector('button.refresh').addEventListener('click', function (event) {
       event.preventDefault();
       const loading = event.target.querySelector('.loading');
       loading.style.display = 'inline';
