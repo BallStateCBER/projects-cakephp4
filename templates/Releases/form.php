@@ -146,7 +146,7 @@
 
 <?= $this->Form->control('description') ?>
 
-<fieldset class="reports">
+<fieldset class="reports release-form">
     <legend>
         Upload Reports
         <a href="#" id="footnote_upload_reports_handle">
@@ -182,7 +182,7 @@
     </label>
 </fieldset>
 
-<fieldset class="graphics">
+<fieldset class="graphics release-form">
     <legend>
         Linked Graphics
         <a href="#" id="footnote_upload_graphics_handle">
@@ -362,8 +362,9 @@
     </table>
 </fieldset>
 
-<?php
-    echo $this->element(
+<fieldset class="release-form">
+    <legend>Tags</legend>
+    <?= $this->element(
         'DataCenter.Tags/editor',
         [
             'availableTags' => $availableTags->toArray(),
@@ -371,6 +372,9 @@
             'hideLabel' => true,
             'allowCustom' => true,
         ]
-    );
+    ) ?>
+</fieldset>
+
+<?php
     echo $this->Form->submit('Submit', ['class' => 'btn btn-primary']);
     echo $this->Form->end();
