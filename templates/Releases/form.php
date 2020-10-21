@@ -6,7 +6,6 @@
  * @var \Cake\ORM\ResultSet|\App\Model\Entity\Partner[] $partners
  * @var \Cake\ORM\ResultSet|\App\Model\Entity\Tag[] $availableTags
  * @var bool $hasGraphics
- * @var int $graphicsIterator
  * @var int $time
  * @var int $uploadMb
  * @var string $action
@@ -53,7 +52,6 @@
         token: <?= json_encode($token) ?>,
         validExtensions: <?= json_encode(implode('|', $validExtensions)) ?>,
     });
-    document.querySelector('body').dataset.graphicsIterator = <?= $graphicsIterator ?>;
 <?php $this->end(); ?>
 
 <h1 class="page_title">

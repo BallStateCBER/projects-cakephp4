@@ -204,14 +204,14 @@ class ReleaseForm {
     this.updateOrderSelectors();
 
     // Hide table head if table body is empty
-    const rows = document.querySelector('table.graphics tbody tr');
+    const rows = document.querySelectorAll('table.graphics tbody tr');
     if (rows.length === 0) {
       document.querySelector('table.graphics thead').style.display = 'none';
     }
   }
 
   updateOrderSelectors() {
-    const rowCount = document.querySelector('table.graphics tbody tr').length;
+    const rowCount = document.querySelectorAll('table.graphics tbody tr').length;
     const selectElements = document.querySelectorAll('table.graphics select');
     selectElements.forEach(function (select) {
       const selected = select.querySelector('option:checked').value;
@@ -226,21 +226,25 @@ class ReleaseForm {
     });
   }
 
+  getGraphicsCount() {
+    return document.querySelectorAll('table.graphics tbody tr.graphic').length;
+  }
+
   /**
    * Create another row of input fields under 'linked graphics'
    */
   addGraphic(formId) {
     // Get and advance the key
     const body = document.querySelector('body');
-    let i = body.dataset.graphicsIterator;
-    body.dataset.graphicsIterator++;
+    let i = this.getGraphicsCount();
 
     // Get the row to be copied
-    const dummyRow = document.querySelector('table.graphics tfoot .dummy-row').cloneNode(true);
-    dummyRow.classList.remove('dummy-row');
+    const newRow = document.querySelector('table.graphics tfoot .dummy-row').cloneNode(true);
+    newRow.classList.remove('dummy-row');
+    newRow.classList.add('graphic');
 
     // Apply a unique key to each row
-    dummyRow.querySelectorAll('input, select').forEach(function (element) {
+    newRow.querySelectorAll('input, select').forEach(function (element) {
       element.id = element.id.replace('{i}', i);
       element.name = element.name.replace('{i}', i);
       element.className = element.className.replace('{i}', i);
@@ -249,7 +253,7 @@ class ReleaseForm {
 
     // Set up the remove button
     const self = this;
-    dummyRow.querySelectorAll('button.remove_graphic').forEach(function (button) {
+    newRow.querySelectorAll('button.remove_graphic').forEach(function (button) {
       button.addEventListener('click', function (event) {
         event.preventDefault();
         self.removeGraphic(event.target);
@@ -257,13 +261,13 @@ class ReleaseForm {
     });
 
     // Set up the 'find report' button
-    dummyRow.querySelector('button.find_report').addEventListener('click', function (event) {
+    newRow.querySelector('button.find_report').addEventListener('click', function (event) {
       event.preventDefault();
       self.toggleReportFinder(event.target, i);
     });
 
     // Add the now-unique row
-    document.querySelector('table.graphics tbody').append(dummyRow);
+    document.querySelector('table.graphics tbody').append(newRow);
 
     // Reset 'order' options
     this.updateOrderSelectors();
