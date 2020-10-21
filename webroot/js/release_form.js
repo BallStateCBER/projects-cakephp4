@@ -299,17 +299,19 @@ class ReleaseForm {
     }
   }
 
-  /* cell: the table cell that contains the input field to be populated
-   * i: the unique key of the row in the 'add/edit linked graphics' box */
+  // cell: the table cell that contains the input field to be populated
   loadReportFinder(cell, i) {
-    fetch(`/releases/list_reports/${i}`)
+    fetch('/releases/list-reports')
+      .then(response => response.text())
       .then(html => this.setupReportFinder(html, cell, i));
   }
 
-  /* html: the results of requesting /releases/list_reports/$i
+  /* html: the results of requesting /releases/list-reports
    * cell: the table cell that contains the input field to be populated
    * i: the unique key of the row in the 'add/edit linked graphics' box */
   setupReportFinder(html, cell, i) {
+    console.log('report finder:');
+    console.log(html);
     const newRow = document.createElement('tr');
     newRow.innerHTML = `<td colspan="4" class="report_choices"><div id="report_choices_${i}">${html}</div></td>`;
     cell.closest('tbody').append(newRow);
@@ -328,8 +330,9 @@ class ReleaseForm {
       event.preventDefault();
       const loading = event.target.querySelector('.loading');
       loading.style.display = 'inline';
-      fetch(`/releases/list_reports/${i}`)
-        .then(function(html) {
+      fetch('/releases/list-reports')
+        .then(response => response.text())
+        .then(function (html) {
           newRow.remove();
           self.setupReportFinder(html, cell, i);
         })
