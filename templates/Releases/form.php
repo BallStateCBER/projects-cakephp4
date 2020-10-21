@@ -5,8 +5,6 @@
  * @var \Cake\ORM\ResultSet|\App\Model\Entity\Author[] $authors
  * @var \Cake\ORM\ResultSet|\App\Model\Entity\Partner[] $partners
  * @var \Cake\ORM\ResultSet|\App\Model\Entity\Tag[] $availableTags
- * @var array $alternateTemplates
- * @var array $defaultTemplates
  * @var bool $hasGraphics
  * @var int $graphicsIterator
  * @var int $time
@@ -14,6 +12,9 @@
  * @var string $action
  * @var string $pageTitle
  * @var string $token
+ * @var string[] $alternateTemplates
+ * @var string[] $defaultTemplates
+ * @var string[] $graphicUploadTemplate
  * @var string[] $reportFiletypes
  * @var string[] $validExtensions
  */
@@ -40,6 +41,7 @@
         'id' => 'release-new-partner',
         'label' => 'Client, Partner, or Sponsor',
         'type' => 'text',
+        'templates' => $alternateTemplates,
     ];
 ?>
 
@@ -79,7 +81,6 @@
 ?>
 
 <?php if ($partners): ?>
-    <?php $this->Form->setTemplates($alternateTemplates); ?>
     <div id="choose_partner">
         <?= $this->Form->control('partner_id', [
             'class' => 'partner validate[funcCall[checkPartner]]',
@@ -87,6 +88,7 @@
             'id' => 'release-partner-id',
             'label' => 'Client, Partner, or Sponsor',
             'options' => Hash::combine($partners->toArray(), '{n}.id', '{n}.name'),
+            'templates' => $alternateTemplates,
             'templateVars' => [
                 'after' => ' <button id="add_partner_button" class="btn btn-secondary">Add new</button>'
             ],
@@ -107,11 +109,12 @@
 <?php endif; ?>
 
 <?= $this->Form->control('author', [
-    'id' => 'author-select',
     'empty' => true,
+    'id' => 'author-select',
     'label' => 'Author(s)',
-    'templateVars' => ['after' => ' <button id="add_author_toggler" class="btn btn-secondary">Add new</button>'],
     'options' => Hash::combine($authors->toArray(), '{n}.id', '{n}.name'),
+    'templates' => $alternateTemplates,
+    'templateVars' => ['after' => ' <button id="add_author_toggler" class="btn btn-secondary">Add new</button>'],
 ]) ?>
 
 <div id="new_author" style="display: none;">
@@ -119,14 +122,13 @@
         'label' => false,
         'type' => 'text',
         'placeholder' => 'Author\'s name',
+        'templates' => $alternateTemplates,
         'templateVars' => [
             'after' => '<button id="add_author_button" class="btn btn-sm btn-secondary">Add</button> ' .
                 '<button id="cancel_add_author_button" class="btn btn-sm btn-secondary">Cancel</button>',
         ],
     ]) ?>
 </div>
-
-<?php $this->Form->setTemplates($defaultTemplates); ?>
 
 <ul id="authors_container">
     <?php if ($release->authors): ?>
@@ -168,7 +170,7 @@
             release's description.
         </li>
     </ul>
-    <div class="input-group mb-3">
+    <div class="input-group">
         <div class="custom-file">
             <input type="file" name="file_upload" id="upload_reports" />
             <label class="custom-file-label" for="upload_reports">Choose file</label>
@@ -211,15 +213,14 @@
                                 </button>
                             </td>
                             <td>
-                                <?= $this->Form->control(
-                                    "graphics.$k.image",
-                                    [
-                                        'class' => 'upload',
-                                        'label' => false,
-                                        'required' => true,
-                                        'type' => 'file',
-                                    ]
-                                ) ?>
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" name="graphics[<?= $k ?>][image]" id="upload-graphic-<?= $k ?>" />
+                                        <label class="custom-file-label" for="upload-graphic-<?= $k ?>">
+                                            Choose file
+                                        </label>
+                                    </div>
+                                </div>
                             </td>
                         <?php elseif ($action == 'edit'): ?>
                             <td>
@@ -249,7 +250,7 @@
                                 "graphics.$k.title",
                                 [
                                     'label' => false,
-                                    'class' => "validate[condRequired[Graphic{$k}Image]]"
+                                    'class' => "validate[condRequired[Graphic{$k}Image]]",
                                 ]
                             ) ?>
                         </td>
@@ -259,12 +260,13 @@
                                 [
                                     'label' => false,
                                     'class' => "validate[condRequired[Graphic{$k}Image]]",
-                                    'after' => sprintf(
+                                    'templates' => $alternateTemplates,
+                                    'templateVars' => ['after' => sprintf(
                                         '<button title="Find report" class="find_report" id="find_report_button_%d">' .
-                                        '<i class="fas fa-search" title="Find report"></i>' .
+                                            '<i class="fas fa-search" title="Find report"></i>' .
                                         '</button>',
                                         $k
-                                    ),
+                                    )],
                                 ]
                             ) ?>
                             <?php $this->append('buffered'); ?>
@@ -306,16 +308,14 @@
                     </a>
                 </td>
                 <td>
-                    <?= $this->Form->control(
-                        'graphics.{i}.image',
-                        [
-                            'type' => 'file',
-                            'label' => false,
-                            'disabled' => true,
-                            'required' => true,
-                            'class' => 'validate[required,funcCall[checkExtension]] upload',
-                        ]
-                    ) ?>
+                    <div class="input-group">
+                        <div class="custom-file">
+                            <input type="file" name="graphics[{i}][image]" id="upload-graphic-{i}" required="required" />
+                            <label class="custom-file-label" for="upload-graphic-{i}">
+                                Choose file
+                            </label>
+                        </div>
+                    </div>
                 </td>
                 <td>
                     <?= $this->Form->control(
@@ -336,8 +336,11 @@
                             'disabled' => true,
                             'required' => true,
                             'class' => 'validate[condRequired[Graphic{i}Image]',
-                            'after' => ' <button title="Find report" class="find_report">' .
-                                '<i class="fas fa-search" alt="Find report"></i></button>',
+                            'templates' => $alternateTemplates,
+                            'templateVars' => [
+                                'after' => ' <button title="Find report" class="find_report">' .
+                                    '<i class="fas fa-search" title="Find report"></i></button>',
+                            ],
                         ]
                     ) ?>
                 </td>

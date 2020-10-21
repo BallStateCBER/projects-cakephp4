@@ -222,6 +222,7 @@ table.graphics {
   td,
   th {
     text-align: center;
+    vertical-align: baseline;
   }
 
   tbody td,
@@ -315,4 +316,10 @@ table.graphics {
 fieldset.graphics,
 fieldset.reports {
   margin-top: 3em;
+}
+
+.input-group {
+  label {
+    text-align: left;
+  }
 }
