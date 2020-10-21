@@ -464,6 +464,9 @@ class ReleasesController extends AppController
         $filesNewest = [];
         $filesAlphabetic = [];
         foreach ($filenames as $i => $filename) {
+            if (in_array($filename, ['.', '..'])) {
+                continue;
+            }
             $file = (new SplFileInfo(WWW_ROOT . 'reports' . DS . $filename))->getFileInfo();
             $lastChange = $file->getMTime();
             $fileInfo = [
