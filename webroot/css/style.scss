@@ -272,6 +272,14 @@ table.graphics {
     }
   }
 
+  .input-group {
+    label,
+    input {
+      text-align: left;
+      width: 200px;
+    }
+  }
+
   div.input {
     margin-bottom: 0;
   }
@@ -316,10 +324,4 @@ table.graphics {
 fieldset.graphics,
 fieldset.reports {
   margin-top: 3em;
-}
-
-.input-group {
-  label {
-    text-align: left;
-  }
 }
