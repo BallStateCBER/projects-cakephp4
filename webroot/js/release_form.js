@@ -93,7 +93,7 @@ class ReleaseForm {
 
     });
 
-    const addGraphicButton = document.querySelector('a.add_graphic');
+    const addGraphicButton = document.querySelector('button.add_graphic');
     addGraphicButton.addEventListener('click', function (event) {
       event.preventDefault();
       self.addGraphic('ReleaseAddForm');

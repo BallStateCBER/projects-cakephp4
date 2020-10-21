@@ -296,16 +296,16 @@
         <tfoot>
             <tr class="add_graphic">
                 <th colspan="4">
-                    <a href="#" class="add_graphic">
+                    <button class="add_graphic btn btn-secondary">
                         <i class="fas fa-plus-circle"></i> Add a linked graphic
-                    </a>
+                    </button>
                 </th>
             </tr>
             <tr class="dummy-row">
                 <td>
-                    <a href="#" class="remove_graphic">
+                    <button class="remove_graphic btn btn-link">
                         <i class="fas fa-times-circle" title="Remove"></i>
-                    </a>
+                    </button>
                 </td>
                 <td>
                     <div class="input-group">
