@@ -212,7 +212,7 @@ class ReleaseForm {
 
   updateOrderSelectors() {
     const rowCount = document.querySelector('table.graphics tbody tr').length;
-    const selectElements = document.querySelector('table.graphics select');
+    const selectElements = document.querySelectorAll('table.graphics select');
     selectElements.forEach(function (select) {
       const selected = select.querySelector('option:checked').value;
       select.innerHtml = '';
