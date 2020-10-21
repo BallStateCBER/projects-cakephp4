@@ -7,6 +7,7 @@ use App\Model\Entity\Release;
 use Cake\Core\Configure;
 use Cake\Database\Expression\QueryExpression;
 use Cake\Event\EventInterface;
+use SplFileInfo;
 
 /**
  * Releases Controller
@@ -450,5 +451,32 @@ class ReleasesController extends AppController
             'token',
             'uploadMb',
         ));
+    }
+
+    /**
+     * Displays a page that lists all report documents in /webroot/reports
+     *
+     * @return void
+     */
+    public function listReports()
+    {
+        $filenames = scandir(WWW_ROOT . 'reports');
+        $filesNewest = [];
+        $filesAlphabetic = [];
+        foreach ($filenames as $i => $filename) {
+            $file = (new SplFileInfo(WWW_ROOT . 'reports' . DS . $filename))->getFileInfo();
+            $lastChange = $file->getMTime();
+            $fileInfo = [
+                'filename' => $filename,
+                'timestamp' => $lastChange,
+                'date' => date('r', $lastChange),
+            ];
+            $filesNewest["$lastChange.$i"] = $fileInfo;
+            $filesAlphabetic[$filename] = $fileInfo;
+        }
+        krsort($filesNewest);
+        ksort($filesAlphabetic);
+        $this->set(compact('filesNewest', 'filesAlphabetic'));
+        $this->viewBuilder()->setLayout('ajax');
     }
 }
