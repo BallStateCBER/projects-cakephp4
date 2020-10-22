@@ -80,7 +80,7 @@
 <?= $this->Form->submit('Search') ?>
 <?= $this->Form->end() ?>
 
-<?php if ($this->request->getSession()->read('User')) : ?>
+<?php if ($sidebarVars['user']) : ?>
     <h2>
         Administration
     </h2>

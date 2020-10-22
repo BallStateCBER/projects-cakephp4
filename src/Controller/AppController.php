@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Controller\Controller;
+use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 
 /**
@@ -29,6 +30,7 @@ use Cake\Event\EventInterface;
  * @property \App\Model\Table\PartnersTable $Partners
  * @property \App\Model\Table\ReleasesTable $Releases
  * @property \App\Model\Table\TagsTable $Tags
+ * @property \Authentication\Controller\Component\AuthenticationComponent $Authentication
  */
 class AppController extends Controller
 {
@@ -58,6 +60,9 @@ class AppController extends Controller
         $this->loadModel('Tags');
         $this->loadModel('Releases');
         $this->loadModel('Partners');
+
+        $authenticationConfig = Configure::read('Auth.AuthenticationComponent');
+        $this->loadComponent('Authentication.Authentication', $authenticationConfig);
     }
 
     /**
@@ -107,10 +112,14 @@ class AppController extends Controller
             ->orderAsc('Partners.name')
             ->all();
 
+        $identity = $this->Authentication->getIdentity();
+        $user = $identity ? $identity->getOriginalData() : null;
+
         $this->set([
             'sidebarVars' => [
                 'partners' => $partners,
                 'tags' => $tags,
+                'user' => $user,
                 'years' => $years,
             ],
         ]);

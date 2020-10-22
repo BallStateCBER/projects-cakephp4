@@ -58,11 +58,9 @@ class Application extends BaseApplication
 
         $this->addPlugin('DataCenter');
 
-        Configure::write('Users.config', ['users', 'permissions']);
         $this->addPlugin(\CakeDC\Users\Plugin::class);
-        $identifiers = Configure::read('Auth.Identifiers');
-        $identifiers['Password']['fields']['username'] = 'email';
-        Configure::write('Auth.Identifiers', $identifiers);
+
+        Configure::write('Users.config', ['users', 'permissions']);
     }
 
     /**
