@@ -42,4 +42,21 @@ return [
             'fields' => ['username' => 'email'],
         ],
     ],
+    /* Property  Cookie.className should be defined
+    'Auth.Authenticators' => [
+        'Form' => [
+            'className' => 'Authentication.Form',
+            'fields' => ['username' => 'email'],
+        ],
+        'Session' => [
+            'className' => 'Authentication.Session',
+            'fields' => ['username' => 'email'],
+        ],
+        'Cookie' => [
+            'className' => 'Authentication.Cookie',
+        ],
+        'SocialPendingEmail' => [
+            'className' => 'CakeDC\Users\Authenticator\SocialPendingEmail',
+        ],
+    ],*/
 ];

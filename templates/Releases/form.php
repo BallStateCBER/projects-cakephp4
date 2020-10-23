@@ -142,7 +142,7 @@
     <?php endif; ?>
 </ul>
 
-<?= $this->Form->control('description') ?>
+<?= $this->Form->control('description', ['required' => false]) ?>
 
 <fieldset class="reports release-form">
     <legend>
@@ -268,7 +268,7 @@
                                 ]
                             ) ?>
                             <?php $this->append('buffered'); ?>
-                                document.getElementById(<?= "find_report_button_$k" ?>).addEventListener(
+                                document.getElementById(<?= json_encode("find_report_button_$k") ?>).addEventListener(
                                     'click',
                                     function(event) {
                                         event.preventDefault();
@@ -308,7 +308,7 @@
                 <td>
                     <div class="input-group">
                         <div class="custom-file">
-                            <input type="file" name="graphics[{i}][image]" id="upload-graphic-{i}" required="required" />
+                            <input type="file" name="graphics[{i}][image]" id="upload-graphic-{i}" />
                             <label class="custom-file-label" for="upload-graphic-{i}">
                                 Choose file
                             </label>
