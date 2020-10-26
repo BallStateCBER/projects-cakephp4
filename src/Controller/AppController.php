@@ -31,6 +31,7 @@ use Cake\Event\EventInterface;
  * @property \App\Model\Table\ReleasesTable $Releases
  * @property \App\Model\Table\TagsTable $Tags
  * @property \Authentication\Controller\Component\AuthenticationComponent $Authentication
+ * @property \Authorization\Controller\Component\AuthorizationComponent $Authorization
  */
 class AppController extends Controller
 {
