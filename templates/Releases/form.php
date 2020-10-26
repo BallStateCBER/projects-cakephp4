@@ -272,7 +272,7 @@
                                     'click',
                                     function(event) {
                                         event.preventDefault();
-                                        toggleReportFinder(this, <?= $k ?>);
+                                        toggleReportFinder(this, <?= json_encode($k) ?>);
                                     }
                                 );
                             <?php $this->end(); ?>
