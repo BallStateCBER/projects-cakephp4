@@ -194,7 +194,14 @@ class ReleasesController extends AppController
             ? 'http://dchome.localhost/refresh_latest_release'
             : 'https://cberdata.org/refresh_latest_release';
 
-        $results = trim(file_get_contents($url));
+        $contextOptions = $isLocalhost ? [
+            'ssl' => [
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+            ],
+        ] : [];
+
+        $results = trim(file_get_contents($url, false, stream_context_create($contextOptions)));
 
         return (bool)$results;
     }
