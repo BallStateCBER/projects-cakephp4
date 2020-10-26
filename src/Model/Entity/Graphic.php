@@ -54,7 +54,7 @@ class Graphic extends Entity
      */
     protected function _getThumbnail()
     {
-        $filenameSplit = explode('.', $this->image);
+        $filenameSplit = explode('.', $this->image ?? '');
         $thumbnailFilename = array_slice($filenameSplit, 0, count($filenameSplit) - 1);
         $thumbnailFilename[] = 'thumb';
         $thumbnailFilename[] = end($filenameSplit);
