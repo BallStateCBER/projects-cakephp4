@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cd7e9db0308a337effc9d4d0c07c2408",
+    "content-hash": "d1ed340309d7b6415f96fb20d877f61f",
     "packages": [
         {
             "name": "aura/intl",
@@ -58,12 +58,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/BallStateCBER/datacenter-plugin-cakephp4.git",
-                "reference": "04cc9960ebc1b1fe0c0fdcd2f7e14f2d00f60a8f"
+                "reference": "de69dd9ec6c5aa0a25c7c11d124460cbe6c74fd9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BallStateCBER/datacenter-plugin-cakephp4/zipball/04cc9960ebc1b1fe0c0fdcd2f7e14f2d00f60a8f",
-                "reference": "04cc9960ebc1b1fe0c0fdcd2f7e14f2d00f60a8f",
+                "url": "https://api.github.com/repos/BallStateCBER/datacenter-plugin-cakephp4/zipball/de69dd9ec6c5aa0a25c7c11d124460cbe6c74fd9",
+                "reference": "de69dd9ec6c5aa0a25c7c11d124460cbe6c74fd9",
                 "shasum": ""
             },
             "require": {
@@ -87,7 +87,7 @@
                 "MIT"
             ],
             "description": "Ball State CBER DataCenter plugin for CakePHP 4",
-            "time": "2020-10-05T20:30:47+00:00"
+            "time": "2020-10-15T16:25:33+00:00"
         },
         {
             "name": "cakedc/auth",
@@ -156,16 +156,16 @@
         },
         {
             "name": "cakedc/users",
-            "version": "9.0.3",
+            "version": "9.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CakeDC/users.git",
-                "reference": "06a0598b860d364366ff4f4d123835125863e0d7"
+                "reference": "647eb861da1211136bc14c66a2a92c9186c31703"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CakeDC/users/zipball/06a0598b860d364366ff4f4d123835125863e0d7",
-                "reference": "06a0598b860d364366ff4f4d123835125863e0d7",
+                "url": "https://api.github.com/repos/CakeDC/users/zipball/647eb861da1211136bc14c66a2a92c9186c31703",
+                "reference": "647eb861da1211136bc14c66a2a92c9186c31703",
                 "shasum": ""
             },
             "require": {
@@ -230,7 +230,7 @@
                 "cakephp",
                 "oauth2"
             ],
-            "time": "2020-07-06T13:36:17+00:00"
+            "time": "2020-10-16T10:00:44+00:00"
         },
         {
             "name": "cakephp/authentication",
@@ -929,6 +929,64 @@
                 "php mobile detect"
             ],
             "time": "2019-09-18T18:44:20+00:00"
+        },
+        {
+            "name": "muffin/slug",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/UseMuffin/Slug.git",
+                "reference": "3e80ad8a2081fffb5c12d1638b8a77aa28f5327c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/UseMuffin/Slug/zipball/3e80ad8a2081fffb5c12d1638b8a77aa28f5327c",
+                "reference": "3e80ad8a2081fffb5c12d1638b8a77aa28f5327c",
+                "shasum": ""
+            },
+            "require": {
+                "cakephp/orm": "^4.0"
+            },
+            "require-dev": {
+                "cakephp/cakephp": "^4.0",
+                "cocur/slugify": "^1.2",
+                "phpunit/phpunit": "~8.5.0"
+            },
+            "type": "cakephp-plugin",
+            "autoload": {
+                "psr-4": {
+                    "Muffin\\Slug\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jad Bitar",
+                    "homepage": "http://jadb.io",
+                    "role": "Author"
+                },
+                {
+                    "name": "ADmad",
+                    "homepage": "https://github.com/ADmad",
+                    "role": "Author"
+                },
+                {
+                    "name": "Others",
+                    "homepage": "https://github.com/usemuffin/slug/graphs/contributors"
+                }
+            ],
+            "description": "Slugging support for CakePHP ORM",
+            "homepage": "https://github.com/usemuffin/slug",
+            "keywords": [
+                "cakephp",
+                "muffin",
+                "orm",
+                "slug"
+            ],
+            "time": "2020-07-07T17:39:55+00:00"
         },
         {
             "name": "psr/container",
@@ -6365,7 +6423,8 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.4"
+        "php": ">=7.4",
+        "ext-json": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "1.1.0"

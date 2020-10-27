@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -49,6 +48,7 @@ class ReleasesTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
+        $this->addBehavior('Muffin/Slug.Slug');
 
         $this->belongsTo('Partners', [
             'foreignKey' => 'partner_id',
@@ -89,7 +89,6 @@ class ReleasesTable extends Table
         $validator
             ->scalar('slug')
             ->maxLength('slug', 100)
-            ->requirePresence('slug', 'create')
             ->notEmptyString('slug');
 
         $validator
