@@ -64,6 +64,7 @@ class AppController extends Controller
 
         $authenticationConfig = Configure::read('Auth.AuthenticationComponent');
         $this->loadComponent('Authentication.Authentication', $authenticationConfig);
+        $this->loadComponent('Authorization.Authorization');
     }
 
     /**

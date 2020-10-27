@@ -16,12 +16,10 @@ declare(strict_types=1);
  */
 namespace App;
 
-use App\Policy\RequestPolicy;
 use Authorization\AuthorizationService;
 use Authorization\AuthorizationServiceInterface;
 use Authorization\AuthorizationServiceProviderInterface;
-use Authorization\Middleware\AuthorizationMiddleware;
-use Authorization\Policy\MapResolver;
+use Authorization\Policy\OrmResolver;
 use Cake\Core\Configure;
 use Cake\Core\Exception\MissingPluginException;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
@@ -29,7 +27,6 @@ use Cake\Http\BaseApplication;
 use Cake\Http\Middleware\BodyParserMiddleware;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Http\MiddlewareQueue;
-use Cake\Http\ServerRequest;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
 use Psr\Http\Message\ServerRequestInterface;
@@ -49,8 +46,6 @@ class Application extends BaseApplication implements AuthorizationServiceProvide
      */
     public function bootstrap(): void
     {
-
-
         // Call parent to load bootstrap from files.
         parent::bootstrap();
 
@@ -108,9 +103,7 @@ class Application extends BaseApplication implements AuthorizationServiceProvide
             // https://book.cakephp.org/4/en/controllers/middleware.html#cross-site-request-forgery-csrf-middleware
             ->add(new CsrfProtectionMiddleware([
                 'httponly' => true,
-            ]))
-
-            ->add(new AuthorizationMiddleware($this));
+            ]));
 
         return $middlewareQueue;
     }
@@ -143,9 +136,8 @@ class Application extends BaseApplication implements AuthorizationServiceProvide
      */
     public function getAuthorizationService(ServerRequestInterface $request): AuthorizationServiceInterface
     {
-        $mapResolver = new MapResolver();
-        $mapResolver->map(ServerRequest::class, RequestPolicy::class);
+        $resolver = new OrmResolver();
 
-        return new AuthorizationService($mapResolver);
+        return new AuthorizationService($resolver);
     }
 }
