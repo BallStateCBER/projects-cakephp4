@@ -14,7 +14,6 @@ return [
     'Auth' => [
         'Authenticators' => [
             'Cookie' => [
-                'className' => 'Authentication.Cookie',
                 'fields' => [
                     'username' => 'email',
                 ],
@@ -27,19 +26,13 @@ return [
         ],
         'AuthenticationComponent' => [
             'requireIdentity' => false,
-            'loginRedirect' => '/',
-            'logoutRedirect' => '/',
             'Form' => [
                 'fields' => ['username' => 'email'],
             ],
         ],
         'Identifiers' => [
             'Password' => [
-                'className' => 'Authentication.Password',
-                'fields' => [
-                    'username' => 'email',
-                    'password' => 'password',
-                ],
+                'fields' => ['username' => 'email'],
                 'resolver' => [
                     'className' => 'Authentication.Orm',
                     'finder' => 'all',
