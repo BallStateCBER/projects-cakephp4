@@ -24,18 +24,6 @@
     $this->element('DataCenter.font_awesome_init');
     $this->element('DataCenter.rich_text_editor_init', ['selector' => '#description']);
 
-    // Load uploadify library
-    $this->Html->script(
-        'https://code.jquery.com/jquery-3.5.1.min.js',
-        [
-            'block' => 'scriptTop',
-            'integrity' => 'sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=',
-            'crossorigin' => 'anonymous',
-        ]
-    );
-    $this->Html->script('/data_center/uploadifive/jquery.uploadifive.min.js', ['block' => 'scriptTop']);
-    $this->Html->css('/data_center/uploadifive/uploadifive.css', ['block' => true]);
-
     $newPartnerOptions = [
         'id' => 'release-new-partner',
         'label' => 'Client, Partner, or Sponsor',
@@ -44,9 +32,23 @@
     ];
 ?>
 
+<?php $this->append('scriptTop'); ?>
+    <script>
+        window.FileAPI = {
+            debug: true,
+            staticPath: '/fileapi/',
+            support: {
+                html5: true,
+                flash: false,
+            }
+        };
+        window.csrfToken = <?= json_encode($this->request->getAttribute('csrfToken')) ?>;
+    </script>
+<?php $this->end(); ?>
+<?php $this->Html->script('/data_center/fileapi/FileAPI.js', ['block' => 'scriptTop']); ?>
 <?php $this->append('buffered'); ?>
     const releaseForm = new ReleaseForm();
-    releaseForm.setupUploadify({
+    releaseForm.setupUpload({
         fileSizeLimit: <?= json_encode("{$uploadMb}MB") ?>,
         time: <?= json_encode($time) ?>,
         token: <?= json_encode($token) ?>,
@@ -169,7 +171,7 @@
         </li>
     </ul>
     <div class="input-group">
-        <div class="custom-file">
+        <div class="custom-file js-fileapi-wrapper">
             <input type="file" name="file_upload" id="upload_reports" />
             <label class="custom-file-label" for="upload_reports">Choose file</label>
         </div>
@@ -178,6 +180,10 @@
     <label for="overwrite_reports">
         Overwrite reports with the same filename
     </label>
+    <div class="progress" id="upload-reports-progress-container">
+        <div class="progress-bar" role="progressbar" style="width: 0" id="upload-reports-progress"></div>
+    </div>
+    <div id="upload-report-results"></div>
 </fieldset>
 
 <fieldset class="graphics release-form">
@@ -268,13 +274,14 @@
                                 ]
                             ) ?>
                             <?php $this->append('buffered'); ?>
-                                document.getElementById(<?= json_encode("find_report_button_$k") ?>).addEventListener(
-                                    'click',
-                                    function(event) {
-                                        event.preventDefault();
-                                        toggleReportFinder(this, <?= json_encode($k) ?>);
-                                    }
-                                );
+                                document.getElementById(<?= json_encode("find_report_button_$k") ?>)
+                                    .addEventListener(
+                                        'click',
+                                        function(event) {
+                                            event.preventDefault();
+                                            toggleReportFinder(this, <?= json_encode($k) ?>);
+                                        }
+                                    );
                             <?php $this->end(); ?>
                         </td>
                         <td>

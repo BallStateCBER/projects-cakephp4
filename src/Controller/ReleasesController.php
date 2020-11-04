@@ -490,4 +490,68 @@ class ReleasesController extends AppController
         $this->set(compact('filesNewest', 'filesAlphabetic'));
         $this->viewBuilder()->setLayout('ajax');
     }
+
+    /**
+     * The endpoint for uploading reports
+     *
+     * @return void
+     */
+    public function uploadReport()
+    {
+        $this->viewBuilder()->setLayout('ajax');
+
+        // Confirm a file upload
+        if (empty($_POST) || empty($_FILES)) {
+            $msg = 'Error: File was not successfully uploaded. This may be because the file exceeded a size limit.';
+            $this->set('msg', $msg);
+            $this->response = $this->response->withStatus(400, $msg);
+
+            return;
+        }
+
+        // Validate the token
+        $timestamp = $this->request->getData('timestamp');
+        $requestToken = $this->request->getData('token');
+        $validToken = md5(Configure::read('upload_token') . $timestamp);
+        if ($requestToken != $validToken) {
+            $msg = 'Error: Security token incorrect.';
+            $this->set('msg', $msg);
+            $this->response = $this->response->withStatus(400, $msg);
+
+            return;
+        }
+
+        // Validate the file type
+        $filename = $_FILES['report']['name'];
+        $fileParts = pathinfo($filename);
+        $validExtensions = $this->reportFiletypes;
+        $isValid = in_array(strtolower($fileParts['extension']), $validExtensions);
+        if (!$isValid) {
+            $msg = sprintf(
+                'Error: %s does not have one of these allowed extensions: %s',
+                $filename,
+                implode(', ', $validExtensions)
+            );
+            $this->set('msg', $msg);
+            $this->response = $this->response->withStatus(400, $msg);
+
+            return;
+        }
+
+        $targetFolder = 'reports'; // Relative to the root
+        $targetPath = WWW_ROOT . $targetFolder;
+        $targetFile = rtrim($targetPath, '/') . '/' . $filename;
+        $overwrite = (bool)$this->request->getData('overwrite');
+        if (file_exists($targetFile) && !$overwrite) {
+            $msg = "Error: $filename has already been uploaded.";
+            $this->response = $this->response->withStatus(400, $msg);
+        } elseif (move_uploaded_file($_FILES['report']['tmp_name'], $targetFile)) {
+            $msg = "$filename uploaded";
+        } else {
+            $msg = "Error uploading $filename";
+            $this->response = $this->response->withStatus(500, $msg);
+        }
+
+        $this->set('msg', $msg);
+    }
 }

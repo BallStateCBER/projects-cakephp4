@@ -168,33 +168,36 @@ class ReleaseForm {
     slideDown(li);
   }
 
-  setupUploadify(params) {
-    $('#upload_reports').uploadifive({
-      uploadScript: '/releases/upload-reports',
-      fileSizeLimit: params.fileSizeLimit,
-      fileTypeExts: params.validExtensions,
-      formData: {
-        timestamp: params.time,
-        token: params.token,
-        overwrite: false
-      },
-      onUploadFile: function(file) {
-        $('#upload_reports').uploadifive('settings', 'formData', {
-          overwrite: document.getElementById('overwrite_reports').checked
-        });
-      },
-      onUploadComplete: function(file, data, response) {
-        let classname = (data.indexOf('Error') === -1) ? 'success' : 'error';
-        (new FlashMessage()).insert(data, classname);
-      },
-      onError: function(file, errorCode, errorMsg, errorString) {
-        alert('There was an error uploading that file. Details are available in the browser console.');
-        console.log('Upload error...');
-        console.log('file: ' +file);
-        console.log('errorCode: ' +errorCode);
-        console.log('errorMsg: ' +errorMsg);
-        console.log('errorString: ' +errorString);
-      }
+  setupUpload(params) {
+    const choose = document.getElementById('upload_reports');
+    FileAPI.event.on(choose, 'change', function (evt) {
+      const files = FileAPI.getFiles(evt);
+      slideDown(document.getElementById('upload-reports-progress-container'));
+      const progress = document.getElementById('upload-reports-progress');
+
+      FileAPI.upload({
+        url: '/releases/upload-report',
+        files: {report: files},
+        data: {
+          _csrfToken: window.csrfToken,
+          timestamp: params.time,
+          token: params.token,
+          overwrite: document.getElementById('overwrite_reports').checked,
+        },
+        progress: function (evt) {
+          const progressAmount = Math.round((evt.loaded / evt.total) * 100);
+          progress.style.width = progressAmount + '%';
+        },
+        complete: function (err, xhr) {
+          if (err) {
+            (new FlashMessage).insert(err, 'error', '#upload-report-results');
+          } else {
+            (new FlashMessage).insert('Upload successful', 'success', '#upload-report-results');
+          }
+          progress.style.width = '100%';
+          slideUp(progress.parentElement);
+        }
+      });
     });
   }
 
