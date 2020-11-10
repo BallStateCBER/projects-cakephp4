@@ -58,12 +58,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/BallStateCBER/datacenter-plugin-cakephp4.git",
-                "reference": "de69dd9ec6c5aa0a25c7c11d124460cbe6c74fd9"
+                "reference": "dcc15c62a1c4e8e4856b3a06e7e18e4e7e677697"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BallStateCBER/datacenter-plugin-cakephp4/zipball/de69dd9ec6c5aa0a25c7c11d124460cbe6c74fd9",
-                "reference": "de69dd9ec6c5aa0a25c7c11d124460cbe6c74fd9",
+                "url": "https://api.github.com/repos/BallStateCBER/datacenter-plugin-cakephp4/zipball/dcc15c62a1c4e8e4856b3a06e7e18e4e7e677697",
+                "reference": "dcc15c62a1c4e8e4856b3a06e7e18e4e7e677697",
                 "shasum": ""
             },
             "require": {
@@ -87,7 +87,7 @@
                 "MIT"
             ],
             "description": "Ball State CBER DataCenter plugin for CakePHP 4",
-            "time": "2020-10-15T16:25:33+00:00"
+            "time": "2020-11-10T21:55:40+00:00"
         },
         {
             "name": "cakedc/auth",
