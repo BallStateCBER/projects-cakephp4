@@ -15,7 +15,5 @@ $this->assign('sidebar', $this->element('sidebar'));
 <?php $this->end(); ?>
 
 <div id="content">
-    <div id="cri_main">
-        <?= $this->fetch('content') ?>
-    </div>
+    <?= $this->fetch('content') ?>
 </div>
