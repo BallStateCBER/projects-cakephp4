@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Model\Entity\Release;
+use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Database\Expression\QueryExpression;
 use Cake\Event\EventInterface;
@@ -87,6 +88,8 @@ class ReleasesController extends AppController
 
             if ($this->Releases->save($release)) {
                 $this->Flash->success('Release added');
+                Cache::delete('sidebar_tags', 'long');
+                Cache::delete('sidebar_partners', 'long');
                 $this->updateDataCenterHome();
                 $this->redirect([
                     'controller' => 'Releases',
@@ -137,6 +140,8 @@ class ReleasesController extends AppController
 
             if ($this->Releases->save($release)) {
                 $this->Flash->success('Release updated');
+                Cache::delete('sidebar_tags', 'long');
+                Cache::delete('sidebar_partners', 'long');
                 $this->redirect([
                     'controller' => 'Releases',
                     'action' => 'view',

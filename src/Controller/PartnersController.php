@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\Cache\Cache;
 use Cake\ORM\Query;
 
 /**
@@ -60,6 +61,7 @@ class PartnersController extends AppController
             $partner = $this->Partners->patchEntity($partner, $this->request->getData());
             if ($this->Partners->save($partner)) {
                 $this->Flash->success(__('The partner has been saved.'));
+                Cache::delete('sidebar_partners', 'long');
 
                 return $this->redirect(['action' => 'index']);
             }
@@ -84,6 +86,7 @@ class PartnersController extends AppController
             $partner = $this->Partners->patchEntity($partner, $this->request->getData());
             if ($this->Partners->save($partner)) {
                 $this->Flash->success(__('The partner has been saved.'));
+                Cache::delete('sidebar_partners', 'long');
 
                 return $this->redirect(['action' => 'index']);
             }
@@ -105,6 +108,7 @@ class PartnersController extends AppController
         $partner = $this->Partners->get($id);
         if ($this->Partners->delete($partner)) {
             $this->Flash->success(__('The partner has been deleted.'));
+            Cache::delete('sidebar_partners', 'long');
         } else {
             $this->Flash->error(__('The partner could not be deleted. Please, try again.'));
         }

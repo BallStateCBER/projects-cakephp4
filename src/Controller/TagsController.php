@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\Cache\Cache;
 use Cake\ORM\Query;
 
 /**
@@ -63,6 +64,7 @@ class TagsController extends AppController
             $tag = $this->Tags->patchEntity($tag, $this->request->getData());
             if ($this->Tags->save($tag)) {
                 $this->Flash->success(__('The tag has been saved.'));
+                Cache::delete('sidebar_tags', 'long');
 
                 return $this->redirect(['action' => 'index']);
             }
@@ -89,6 +91,7 @@ class TagsController extends AppController
             $tag = $this->Tags->patchEntity($tag, $this->request->getData());
             if ($this->Tags->save($tag)) {
                 $this->Flash->success(__('The tag has been saved.'));
+                Cache::delete('sidebar_tags', 'long');
 
                 return $this->redirect(['action' => 'index']);
             }
@@ -112,6 +115,7 @@ class TagsController extends AppController
         $tag = $this->Tags->get($id);
         if ($this->Tags->delete($tag)) {
             $this->Flash->success(__('The tag has been deleted.'));
+            Cache::delete('sidebar_tags', 'long');
         } else {
             $this->Flash->error(__('The tag could not be deleted. Please, try again.'));
         }
