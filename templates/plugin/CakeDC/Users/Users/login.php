@@ -17,7 +17,7 @@ use Cake\Core\Configure;
     <?= $this->Form->create() ?>
     <fieldset>
         <legend><?= __d('cake_d_c/users', 'Please enter your email address and password') ?></legend>
-        <?= $this->Form->control('username', ['label' => 'Email', 'required' => true]) ?>
+        <?= $this->Form->control('email', ['label' => 'Email', 'required' => true]) ?>
         <?= $this->Form->control('password', ['label' => __d('cake_d_c/users', 'Password'), 'required' => true]) ?>
         <?php
         if (Configure::read('Users.reCaptcha.login')) {

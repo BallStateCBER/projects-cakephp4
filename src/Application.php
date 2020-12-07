@@ -29,6 +29,7 @@ use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Http\MiddlewareQueue;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
+use CakeDC\Users\Plugin as UsersPlugin;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -63,9 +64,11 @@ class Application extends BaseApplication implements AuthorizationServiceProvide
 
         $this->addPlugin('DataCenter');
 
-        $this->addPlugin(\CakeDC\Users\Plugin::class);
-
+        $authenticators = Configure::read('Auth.Authenticators');
+        $authenticators['Form']['fields']['username'] = 'email';
+        Configure::write('Auth.Authenticators', $authenticators);
         Configure::write('Users.config', ['users', 'permissions']);
+        $this->addPlugin(UsersPlugin::class);
     }
 
     /**
