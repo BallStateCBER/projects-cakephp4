@@ -16,6 +16,7 @@ declare(strict_types=1);
  */
 namespace App\Controller;
 
+use Cake\Cache\Cache;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
@@ -85,22 +86,31 @@ class AppController extends Controller
      */
     private function setSidebarVariables()
     {
-        $tags = $this->Tags->find('forSidebar')->all();
+        $cacheConfig = 'long';
+        $tags = Cache::remember('sidebar_tags', function () {
+            return $this->Tags->find('forSidebar')->all();
+        }, $cacheConfig);
 
-        $releases = $this->Releases
-            ->find()
-            ->select(['id', 'released'])
-            ->orderDesc('released')
-            ->all();
-        $years = [];
-        foreach ($releases as $release) {
-            $year = $release->released->format('Y');
-            if (!in_array($year, $years)) {
-                $years[] = $year;
+        $years = Cache::remember('sidebar_years', function () {
+            $releases = $this->Releases
+                ->find()
+                ->select(['id', 'released'])
+                ->orderDesc('released')
+                ->all();
+            $years = [];
+            foreach ($releases as $release) {
+                $year = $release->released->format('Y');
+                if (!in_array($year, $years)) {
+                    $years[] = $year;
+                }
             }
-        }
 
-        $partners = $this->Partners->find('forSidebar')->all();
+            return $years;
+        }, $cacheConfig);
+
+        $partners = Cache::remember('sidebar_partners', function () {
+            return $this->Partners->find('forSidebar')->all();
+        }, $cacheConfig);
 
         $identity = $this->Authentication->getIdentity();
         $user = $identity ? $identity->getOriginalData() : null;
