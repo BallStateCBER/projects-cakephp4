@@ -83,25 +83,22 @@
 <?php endif; ?>
 
 <h2>
-    Clients, Partners, and Sponsors
+    Search
 </h2>
-<ul class="partners unstyled" id="partners-list">
-    <?php foreach ($sidebarVars['partners'] as $partner): ?>
-        <li>
-            <?= $this->Html->link(
-                $partner->short_name,
-                [
-                    'plugin' => false,
-                    'controller' => 'Partners',
-                    'action' => 'view',
-                    'id' => $partner->id,
-                    'slug' => $partner->slug,
-                ],
-                ['title' => $partner->name]
-            ) ?>
-        </li>
-    <?php endforeach; ?>
-</ul>
+<?= $this->Form->create(
+    null,
+    [
+        'method' => 'get',
+        'url' => [
+            'plugin' => false,
+            'controller' => 'Releases',
+            'action' => 'search',
+        ],
+    ]
+) ?>
+<?= $this->Form->control('term', ['label' => false]) ?>
+<?= $this->Form->submit('Search') ?>
+<?= $this->Form->end() ?>
 
 <h2>
     Topics
@@ -125,6 +122,27 @@
 </ul>
 
 <h2>
+    Clients, Partners, and Sponsors
+</h2>
+<ul class="partners unstyled" id="partners-list">
+    <?php foreach ($sidebarVars['partners'] as $partner): ?>
+        <li>
+            <?= $this->Html->link(
+                $partner->short_name,
+                [
+                    'plugin' => false,
+                    'controller' => 'Partners',
+                    'action' => 'view',
+                    'id' => $partner->id,
+                    'slug' => $partner->slug,
+                ],
+                ['title' => $partner->name]
+            ) ?>
+        </li>
+    <?php endforeach; ?>
+</ul>
+
+<h2>
     Publishing Date
 </h2>
 <ul class="unstyled" id="years-list">
@@ -139,24 +157,6 @@
         </li>
     <?php endforeach; ?>
 </ul>
-
-<h2>
-    Search
-</h2>
-<?= $this->Form->create(
-    null,
-    [
-        'method' => 'get',
-        'url' => [
-            'plugin' => false,
-            'controller' => 'Releases',
-            'action' => 'search',
-        ],
-    ]
-) ?>
-<?= $this->Form->control('term', ['label' => false]) ?>
-<?= $this->Form->submit('Search') ?>
-<?= $this->Form->end() ?>
 
 <?php if (!$sidebarVars['user']): ?>
     <?= $this->Html->link(
