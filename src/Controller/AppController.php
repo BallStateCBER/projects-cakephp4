@@ -85,13 +85,7 @@ class AppController extends Controller
      */
     private function setSidebarVariables()
     {
-        $tags = $this->Tags
-            ->find()
-            ->select(['Tags.id', 'Tags.name', 'Tags.slug'])
-            ->distinct(['Tags.name', 'Tags.slug'])
-            ->matching('Releases')
-            ->orderAsc('Tags.name')
-            ->all();
+        $tags = $this->Tags->find('forSidebar')->all();
 
         $releases = $this->Releases
             ->find()
@@ -106,13 +100,7 @@ class AppController extends Controller
             }
         }
 
-        $partners = $this->Partners
-            ->find()
-            ->select(['Partners.id', 'Partners.name', 'Partners.short_name', 'Partners.slug'])
-            ->distinct(['Partners.id', 'Partners.name', 'Partners.short_name', 'Partners.slug'])
-            ->matching('Releases')
-            ->orderAsc('Partners.name')
-            ->all();
+        $partners = $this->Partners->find('forSidebar')->all();
 
         $identity = $this->Authentication->getIdentity();
         $user = $identity ? $identity->getOriginalData() : null;

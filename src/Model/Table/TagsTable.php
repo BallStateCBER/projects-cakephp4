@@ -110,4 +110,19 @@ class TagsTable extends Table
 
         return $rules;
     }
+
+    /**
+     * Custom finder for populating the sidebar
+     *
+     * @param \Cake\ORM\Query $query Query object
+     * @return \Cake\ORM\Query
+     */
+    public function findForSidebar(Query $query)
+    {
+        return $query
+            ->select(['Tags.id', 'Tags.name', 'Tags.slug'])
+            ->distinct(['Tags.name', 'Tags.slug'])
+            ->matching('Releases')
+            ->orderAsc('Tags.name');
+    }
 }

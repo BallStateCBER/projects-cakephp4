@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Model\Table;
 
 use Cake\ORM\Query;
-use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
@@ -83,5 +82,20 @@ class PartnersTable extends Table
             ->notEmptyString('slug');
 
         return $validator;
+    }
+
+    /**
+     * Custom finder for populating the sidebar
+     *
+     * @param \Cake\ORM\Query $query Query object
+     * @return \Cake\ORM\Query
+     */
+    public function findForSidebar(Query $query)
+    {
+        return $query
+            ->select(['Partners.id', 'Partners.name', 'Partners.short_name', 'Partners.slug'])
+            ->distinct(['Partners.id', 'Partners.name', 'Partners.short_name', 'Partners.slug'])
+            ->matching('Releases')
+            ->orderAsc('Partners.name');
     }
 }
