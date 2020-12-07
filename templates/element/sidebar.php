@@ -4,83 +4,7 @@
  * @var array $sidebarVars
  */
 ?>
-<h2>
-    Clients, Partners, and Sponsors
-</h2>
-<ul class="partners unstyled" id="partners-list">
-    <?php foreach ($sidebarVars['partners'] as $partner) : ?>
-        <li>
-            <?= $this->Html->link(
-                $partner->short_name,
-                [
-                    'plugin' => false,
-                    'controller' => 'Partners',
-                    'action' => 'view',
-                    'id' => $partner->id,
-                    'slug' => $partner->slug,
-                ],
-                ['title' => $partner->name]
-            ) ?>
-        </li>
-    <?php endforeach; ?>
-</ul>
-
-<h2>
-    Topics
-</h2>
-<ul class="tags unstyled" id="tags-list">
-    <?php foreach ($sidebarVars['tags'] as $tag) : ?>
-        <li>
-            <?php
-                $tagName = ucwords($tag['name']);
-                $tagName = str_replace(' And ', ' and ', $tagName);
-                echo $this->Html->link($tagName, [
-                    'plugin' => false,
-                    'controller' => 'Tags',
-                    'action' => 'view',
-                    'id' => $tag->id,
-                    'slug' => $tag->slug,
-                ]);
-            ?>
-        </li>
-    <?php endforeach; ?>
-</ul>
-
-<h2>
-    Publishing Date
-</h2>
-<ul class="unstyled" id="years-list">
-    <?php foreach ($sidebarVars['years'] as $year) : ?>
-        <li>
-            <?= $this->Html->link($year, [
-                'plugin' => false,
-                'controller' => 'Releases',
-                'action' => 'year',
-                'year' => $year,
-            ]) ?>
-        </li>
-    <?php endforeach; ?>
-</ul>
-
-<h2>
-    Search
-</h2>
-<?= $this->Form->create(
-    null,
-    [
-        'method' => 'get',
-        'url' => [
-            'plugin' => false,
-            'controller' => 'Releases',
-            'action' => 'search',
-        ],
-    ]
-) ?>
-<?= $this->Form->control('term', ['label' => false]) ?>
-<?= $this->Form->submit('Search') ?>
-<?= $this->Form->end() ?>
-
-<?php if ($sidebarVars['user']) : ?>
+<?php if ($sidebarVars['user']): ?>
     <h2>
         Administration
     </h2>
@@ -156,7 +80,85 @@
             ) ?>
         </li>
     </ul>
-<?php else : ?>
+<?php endif; ?>
+
+<h2>
+    Clients, Partners, and Sponsors
+</h2>
+<ul class="partners unstyled" id="partners-list">
+    <?php foreach ($sidebarVars['partners'] as $partner): ?>
+        <li>
+            <?= $this->Html->link(
+                $partner->short_name,
+                [
+                    'plugin' => false,
+                    'controller' => 'Partners',
+                    'action' => 'view',
+                    'id' => $partner->id,
+                    'slug' => $partner->slug,
+                ],
+                ['title' => $partner->name]
+            ) ?>
+        </li>
+    <?php endforeach; ?>
+</ul>
+
+<h2>
+    Topics
+</h2>
+<ul class="tags unstyled" id="tags-list">
+    <?php foreach ($sidebarVars['tags'] as $tag): ?>
+        <li>
+            <?php
+                $tagName = ucwords($tag['name']);
+                $tagName = str_replace(' And ', ' and ', $tagName);
+                echo $this->Html->link($tagName, [
+                    'plugin' => false,
+                    'controller' => 'Tags',
+                    'action' => 'view',
+                    'id' => $tag->id,
+                    'slug' => $tag->slug,
+                ]);
+            ?>
+        </li>
+    <?php endforeach; ?>
+</ul>
+
+<h2>
+    Publishing Date
+</h2>
+<ul class="unstyled" id="years-list">
+    <?php foreach ($sidebarVars['years'] as $year): ?>
+        <li>
+            <?= $this->Html->link($year, [
+                'plugin' => false,
+                'controller' => 'Releases',
+                'action' => 'year',
+                'year' => $year,
+            ]) ?>
+        </li>
+    <?php endforeach; ?>
+</ul>
+
+<h2>
+    Search
+</h2>
+<?= $this->Form->create(
+    null,
+    [
+        'method' => 'get',
+        'url' => [
+            'plugin' => false,
+            'controller' => 'Releases',
+            'action' => 'search',
+        ],
+    ]
+) ?>
+<?= $this->Form->control('term', ['label' => false]) ?>
+<?= $this->Form->submit('Search') ?>
+<?= $this->Form->end() ?>
+
+<?php if (!$sidebarVars['user']): ?>
     <?= $this->Html->link(
         'Admin login',
         [
