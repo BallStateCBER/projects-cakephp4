@@ -14,6 +14,8 @@ use Cake\ORM\Query;
  */
 class TagsController extends AppController
 {
+    public const ALLOW = ['index', 'view'];
+
     /**
      * Index method
      *

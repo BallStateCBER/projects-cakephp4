@@ -18,7 +18,6 @@ namespace App\Controller;
 
 use Cake\Cache\Cache;
 use Cake\Controller\Controller;
-use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 
 /**
@@ -36,6 +35,9 @@ use Cake\Event\EventInterface;
  */
 class AppController extends Controller
 {
+    // A list of actions that unauthenticated users can access
+    public const ALLOW = [];
+
     /**
      * Initialization hook method.
      *
@@ -63,9 +65,10 @@ class AppController extends Controller
         $this->loadModel('Releases');
         $this->loadModel('Partners');
 
-        $authenticationConfig = Configure::read('Auth.AuthenticationComponent');
-        $this->loadComponent('Authentication.Authentication', $authenticationConfig);
+        $this->loadComponent('Authentication.Authentication');
         $this->loadComponent('Authorization.Authorization');
+
+        $this->Authentication->allowUnauthenticated(static::ALLOW);
     }
 
     /**

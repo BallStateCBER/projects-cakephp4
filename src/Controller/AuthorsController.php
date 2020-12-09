@@ -13,6 +13,8 @@ use Cake\ORM\Query;
  */
 class AuthorsController extends AppController
 {
+    public const ALLOW = ['index', 'view'];
+
     /**
      * Index method
      *

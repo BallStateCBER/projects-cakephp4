@@ -23,6 +23,14 @@ use SplFileInfo;
  */
 class ReleasesController extends AppController
 {
+    public const ALLOW = [
+        'index',
+        'listReports',
+        'search',
+        'updateDataCenterHome',
+        'view',
+        'year',
+    ];
     private array $reportFiletypes = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'csv'];
 
     /**
@@ -443,15 +451,15 @@ class ReleasesController extends AppController
             '{{content}}{{error}}',
             $alternateTemplates['inputContainerError']
         );
-        $defaultTemplates = include(str_replace(
+        $defaultTemplates = include str_replace(
             '\\',
             DS,
             ROOT . '\vendor\ballstatecber\datacenter-plugin-cakephp4\config\bootstrap_form.php'
-        ));
+        );
 
         $buttonAppendTemplate = [
             'inputContainer' => '<div class="input-group {{type}}{{required}}">{{content}}' .
-                '<div class="input-group-append">{{after}}</div></div>'
+                '<div class="input-group-append">{{after}}</div></div>',
         ];
 
         $this->set(compact(

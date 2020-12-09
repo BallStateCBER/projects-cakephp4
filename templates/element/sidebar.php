@@ -73,7 +73,7 @@
             <?= $this->Html->link(
                 'Logout',
                 [
-                    'plugin' => 'CakeDC/Users',
+                    'plugin' => false,
                     'controller' => 'Users',
                     'action' => 'logout',
                 ]
@@ -162,7 +162,7 @@
     <?= $this->Html->link(
         'Admin login',
         [
-            'plugin' => 'CakeDC/Users',
+            'plugin' => false,
             'controller' => 'Users',
             'action' => 'login',
         ],
