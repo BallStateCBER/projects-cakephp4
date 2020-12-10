@@ -180,8 +180,7 @@ class Application extends BaseApplication implements
             IdentifierInterface::CREDENTIAL_USERNAME => 'email',
             IdentifierInterface::CREDENTIAL_PASSWORD => 'password',
         ];
-        // Load the authenticators. Session should be first.
-        $service->loadAuthenticator('Authentication.Session');
+
         $service->loadAuthenticator('Authentication.Form', [
             'fields' => $fields,
             'loginUrl' => Router::url([
@@ -190,6 +189,11 @@ class Application extends BaseApplication implements
                 'controller' => 'Users',
                 'action' => 'login',
             ]),
+        ]);
+        $service->loadAuthenticator('Authentication.Session');
+        $service->loadAuthenticator('Authentication.Cookie', [
+            'fields' => $fields,
+            'loginUrl' => '/login',
         ]);
 
         // Load identifiers
