@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
+use Cake\Utility\Text;
 
 /**
  * Partner Entity
@@ -36,4 +37,17 @@ class Partner extends Entity
         'modified' => true,
         'releases' => true,
     ];
+
+    /**
+     * Automatically set the slug field
+     *
+     * @param string $shortName Password
+     * @return string|null
+     */
+    protected function _setShortName(string $shortName): ?string
+    {
+        $this->slug = strtolower(Text::slug($shortName));
+
+        return $shortName;
+    }
 }
