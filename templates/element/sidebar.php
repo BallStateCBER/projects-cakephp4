@@ -21,11 +21,11 @@
         </li>
         <li>
             <?= $this->Html->link(
-                'New User',
+                'Users',
                 [
                     'plugin' => false,
                     'controller' => 'Users',
-                    'action' => 'add',
+                    'action' => 'index',
                 ]
             ) ?>
         </li>
