@@ -26,7 +26,7 @@ class UsersController extends AppController
     public function index()
     {
         $this->set([
-            'pageTitle' => 'Add User',
+            'pageTitle' => 'Users',
             'users' => $this->Users
                 ->find()
                 ->orderAsc('name')
