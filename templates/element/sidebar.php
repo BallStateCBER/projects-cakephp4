@@ -31,7 +31,7 @@
         </li>
         <li>
             <?= $this->Html->link(
-                'Clients / Partners / Sponsors',
+                'Partners',
                 [
                     'plugin' => false,
                     'controller' => 'Partners',
