@@ -89,7 +89,6 @@ class ReleasesController extends AppController
         $this->loadModel('Partners');
         $this->loadModel('Authors');
         $release = $this->Releases->newEmptyEntity();
-        $this->Authorization->authorize($release);
 
         if ($this->request->is('post')) {
             $release = $this->processForm($release);
