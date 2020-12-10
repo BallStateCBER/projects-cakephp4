@@ -73,7 +73,10 @@ class PartnersController extends AppController
             }
             $this->Flash->error(__('The partner could not be saved. Please, try again.'));
         }
-        $this->set(compact('partner'));
+        $this->set([
+            'partner' => $partner,
+            'pageTitle' => 'Add Client, Partner, or Sponsor',
+        ]);
     }
 
     /**

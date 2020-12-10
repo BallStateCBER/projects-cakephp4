@@ -10,6 +10,14 @@
     <?= $pageTitle ?>
 </h1>
 
+<p>
+    <?= $this->Html->link(
+        'Add a New Client, Partner, or Sponsor',
+        ['action' => 'add'],
+        ['class' => 'btn btn-secondary'],
+    ) ?>
+</p>
+
 <table class="partners table">
     <?php foreach ($partners as $partner): ?>
         <tr>
