@@ -79,6 +79,16 @@ $routes->scope('/', function (RouteBuilder $builder) {
         ['id' => '[0-9]+', 'pass' => ['id']],
     );
 
+    // Users
+    $builder->connect(
+        '/login',
+        ['controller' => 'Users', 'action' => 'login'],
+    );
+    $builder->connect(
+        '/logout',
+        ['controller' => 'Users', 'action' => 'logout'],
+    );
+
     $builder->fallbacks();
 });
 
