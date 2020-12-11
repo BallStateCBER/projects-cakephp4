@@ -45,7 +45,7 @@
                 [
                     'plugin' => false,
                     'controller' => 'Tags',
-                    'action' => 'edit',
+                    'action' => 'index',
                 ]
             ) ?>
         </li>

@@ -23,12 +23,14 @@ class TagsController extends AppController
      */
     public function index()
     {
-        $this->paginate = [
-            'contain' => ['ParentTags'],
-        ];
-        $tags = $this->paginate($this->Tags);
-
-        $this->set(compact('tags'));
+        $this->set([
+            'pageTitle' => 'Tags',
+            'tags' => $this->Tags
+                ->find()
+                ->contain(['Releases'])
+                ->orderAsc('name')
+                ->all(),
+        ]);
     }
 
     /**
