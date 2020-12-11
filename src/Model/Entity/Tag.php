@@ -8,18 +8,19 @@ use Cake\ORM\Entity;
 /**
  * Tag Entity
  *
+ * @property \Cake\I18n\FrozenTime|null $created
+ * @property \Cake\I18n\FrozenTime|null $modified
+ * @property bool $selectable
  * @property int $id
- * @property string $name
- * @property string $slug
  * @property int $parent_id
  * @property int|null $lft
  * @property int|null $rght
- * @property bool $selectable
- * @property \Cake\I18n\FrozenTime|null $created
- * @property \Cake\I18n\FrozenTime|null $modified
+ * @property string $name
+ * @property string $slug
+ * @property string $uc_name
  *
- * @property \App\Model\Entity\ParentTag $parent_tag
- * @property \App\Model\Entity\ChildTag[] $child_tags
+ * @property \App\Model\Entity\Tag $parent_tag
+ * @property \App\Model\Entity\Tag[] $child_tags
  * @property \App\Model\Entity\Release[] $releases
  */
 class Tag extends Entity
@@ -46,4 +47,20 @@ class Tag extends Entity
         'child_tags' => true,
         'releases' => true,
     ];
+
+    /**
+     * Virtual field for capitalized name
+     *
+     * @return string
+     */
+    protected function _getUcName(): string
+    {
+        $ucName = ucwords($this->name);
+        $lcWords = ['and'];
+        foreach ($lcWords as $lcWord) {
+            $ucName = str_ireplace(" $lcWord ", " $lcWord ", $ucName);
+        }
+
+        return $ucName;
+    }
 }

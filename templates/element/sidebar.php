@@ -107,9 +107,7 @@
     <?php foreach ($sidebarVars['tags'] as $tag): ?>
         <li>
             <?php
-                $tagName = ucwords($tag['name']);
-                $tagName = str_replace(' And ', ' and ', $tagName);
-                echo $this->Html->link($tagName, [
+                echo $this->Html->link($tag->uc_name, [
                     'plugin' => false,
                     'controller' => 'Tags',
                     'action' => 'view',
