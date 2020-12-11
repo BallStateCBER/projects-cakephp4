@@ -71,6 +71,8 @@ class UsersController extends AppController
             'pageTitle' => 'Add User',
             'user' => $user,
         ]);
+
+        return $this->render('form');
     }
 
     /**
@@ -82,19 +84,27 @@ class UsersController extends AppController
      */
     public function edit($id = null)
     {
-        $user = $this->Users->get($id, [
-            'contain' => [],
-        ]);
+        $user = $this->Users->get($id);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $user = $this->Users->patchEntity($user, $this->request->getData());
+            $data = $this->request->getData();
+            $newPassword = $this->request->getData('new_password');
+            if ($newPassword) {
+                $data['password'] = $newPassword;
+            }
+            $user = $this->Users->patchEntity($user, $data);
             if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
+                $this->Flash->success('The user has been saved.');
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            $this->Flash->error('The user could not be saved. Please, try again.');
         }
-        $this->set(compact('user'));
+        $this->set([
+            'pageTitle' => 'Edit User',
+            'user' => $user,
+        ]);
+
+        return $this->render('form');
     }
 
     /**

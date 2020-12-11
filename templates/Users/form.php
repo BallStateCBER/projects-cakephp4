@@ -4,6 +4,8 @@
  * @var \App\View\AppView $this
  * @var string $pageTitle
  */
+
+$isAddForm = $this->request->getParam('action') == 'add';
 ?>
 
 <h1 class="page_title">
@@ -25,7 +27,13 @@
         <?php
             echo $this->Form->control('name');
             echo $this->Form->control('email');
-            echo $this->Form->control('password');
+            echo $this->Form->control(
+                $isAddForm ? 'password' : 'new_password',
+                [
+                    'label' => $isAddForm ? 'Password' : 'New Password (leave blank for no change)',
+                    'type' => 'password',
+                ]
+            );
         ?>
     </fieldset>
     <?= $this->Form->submit('Submit', ['class' => 'btn btn-primary']) ?>
