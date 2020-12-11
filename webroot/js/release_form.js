@@ -2,14 +2,14 @@ class ReleaseForm {
   constructor() {
     const self = this;
 
-    const addAuthorToggler = document.getElementById('add_author_toggler');
+    const addAuthorToggler = document.getElementById('add-author-toggler');
     addAuthorToggler.addEventListener('click', function (event) {
       event.preventDefault();
-      const newAuthor = document.getElementById('new_author');
+      const newAuthor = document.getElementById('new-author');
       slideToggle(newAuthor);
     });
 
-    const removeButtons = document.querySelectorAll('#authors_container button');
+    const removeButtons = document.querySelectorAll('#authors-container button');
     removeButtons.forEach(function (removeButton) {
       removeButton.addEventListener('click', function (event) {
         event.preventDefault();
@@ -22,16 +22,16 @@ class ReleaseForm {
       });
     });
 
-    const addAuthorButton = document.getElementById('add_author_button');
+    const addAuthorButton = document.getElementById('add-author-button');
     addAuthorButton.addEventListener('click', function (event) {
       event.preventDefault();
       self.addAuthor();
     });
 
-    const cancelAddAuthorButton = document.getElementById('cancel_add_author_button');
+    const cancelAddAuthorButton = document.getElementById('cancel-add-author-button');
     cancelAddAuthorButton.addEventListener('click', function (event) {
       event.preventDefault();
-      const newAuthorContainer = document.getElementById('new_author');
+      const newAuthorContainer = document.getElementById('new-author');
       const newAuthorNameField = newAuthorContainer.querySelector('input[type=text]');
       const duration = 300;
       slideUp(newAuthorContainer, duration);
@@ -49,42 +49,42 @@ class ReleaseForm {
     form.addEventListener('submit', function (event) {
       if (self.hasUnaddedAuthor()) {
         event.preventDefault();
-        const authorName = document.querySelector('#new_author input').value;
+        const authorName = document.querySelector('#new-author input').value;
         alert('Please click "add" to add ' + authorName + ' to this release.');
       }
     });
 
-    const addPartnerButton = document.getElementById('add_partner_button');
+    const addPartnerButton = document.getElementById('add-partner-button');
     addPartnerButton.addEventListener('click', function (event) {
       event.preventDefault();
       document.getElementById('release-partner-id').selectedIndex = 0;
-      document.getElementById('choose_partner').style.display = 'none';
-      document.getElementById('add_partner').style.display = 'block';
+      document.getElementById('choose-partner').style.display = 'none';
+      document.getElementById('add-partner').style.display = 'block';
     });
 
-    const choosePartnerButton = document.getElementById('choose_partner_button');
+    const choosePartnerButton = document.getElementById('choose-partner-button');
     choosePartnerButton.addEventListener('click', function (event) {
       event.preventDefault();
       document.getElementById('release-new-partner').value = '';
-      document.getElementById('choose_partner').style.display = 'block';
-      document.getElementById('add_partner').style.display = 'none';
+      document.getElementById('choose-partner').style.display = 'block';
+      document.getElementById('add-partner').style.display = 'none';
     });
 
-    const uploadReportNoteButton = document.getElementById('footnote_upload_reports_handle');
+    const uploadReportNoteButton = document.getElementById('footnote-upload-reports-handle');
     uploadReportNoteButton.addEventListener('click', function (event) {
       event.preventDefault();
-      const uploadNote = document.getElementById('footnote_upload_reports');
+      const uploadNote = document.getElementById('footnote-upload-reports');
       uploadNote.style.display = uploadNote.style.display === 'none' ? 'block' : 'none';
     });
 
-    const uploadGraphicsNoteButton = document.getElementById('footnote_upload_graphics_handle');
+    const uploadGraphicsNoteButton = document.getElementById('footnote-upload-graphics-handle');
     uploadGraphicsNoteButton.addEventListener('click', function (event) {
       event.preventDefault();
-      const uploadNote = document.getElementById('footnote_upload_graphics');
+      const uploadNote = document.getElementById('footnote-upload-graphics');
       uploadNote.style.display = uploadNote.style.display === 'none' ? 'block' : 'none';
     });
 
-    const removeGraphicButtons = document.querySelectorAll('button.remove_graphic');
+    const removeGraphicButtons = document.querySelectorAll('button.remove-graphic');
     removeGraphicButtons.forEach(function (button) {
       button.addEventListener('click', function (event) {
         event.preventDefault();
@@ -93,7 +93,7 @@ class ReleaseForm {
 
     });
 
-    const addGraphicButton = document.querySelector('button.add_graphic');
+    const addGraphicButton = document.querySelector('button.add-graphic');
     addGraphicButton.addEventListener('click', function (event) {
       event.preventDefault();
       self.addGraphic('ReleaseAddForm');
@@ -101,13 +101,13 @@ class ReleaseForm {
   }
 
   hasUnaddedAuthor() {
-    const input = document.querySelector('#new_author input');
+    const input = document.querySelector('#new-author input');
 
     return input.style.display !== 'none' && input.value !== '';
   }
 
   addAuthor() {
-    const authorName = document.querySelector('#new_author input');
+    const authorName = document.querySelector('#new-author input');
     authorName.value.replace('"', '\'');
     if (authorName.value === '') {
       return;
@@ -125,9 +125,9 @@ class ReleaseForm {
     li.innerHTML = authorName.value + '<input type="hidden" name="new_authors[]" value="' + authorName.value + '" />';
     li.appendChild(button);
     li.style.display = 'none';
-    document.getElementById('authors_container').appendChild(li);
+    document.getElementById('authors-container').appendChild(li);
     slideDown(li);
-    const newAuthor = document.getElementById('new_author');
+    const newAuthor = document.getElementById('new-author');
     const duration = 300;
     slideUp(newAuthor, 300);
     setTimeout(function () {
@@ -146,7 +146,7 @@ class ReleaseForm {
     }
 
     // Do nothing if author is already selected
-    const authorIsSelected = document.querySelector(`#authors_container input[value="${authorId}"]`);
+    const authorIsSelected = document.querySelector(`#authors-container input[value="${authorId}"]`);
     if (authorIsSelected !== null) {
       return;
     }
@@ -164,12 +164,12 @@ class ReleaseForm {
     });
     li.appendChild(button);
     li.style.display = 'none';
-    document.getElementById('authors_container').appendChild(li);
+    document.getElementById('authors-container').appendChild(li);
     slideDown(li);
   }
 
   setupUpload(params) {
-    const choose = document.getElementById('upload_reports');
+    const choose = document.getElementById('upload-reports');
     FileAPI.event.on(choose, 'change', function (evt) {
       const files = FileAPI.getFiles(evt);
       slideDown(document.getElementById('upload-reports-progress-container'));
@@ -182,7 +182,7 @@ class ReleaseForm {
           _csrfToken: window.csrfToken,
           timestamp: params.time,
           token: params.token,
-          overwrite: document.getElementById('overwrite_reports').checked,
+          overwrite: document.getElementById('overwrite-reports').checked,
         },
         progress: function (evt) {
           const progressAmount = Math.round((evt.loaded / evt.total) * 100);
@@ -255,7 +255,7 @@ class ReleaseForm {
 
     // Set up the remove button
     const self = this;
-    newRow.querySelectorAll('button.remove_graphic').forEach(function (button) {
+    newRow.querySelectorAll('button.remove-graphic').forEach(function (button) {
       button.addEventListener('click', function (event) {
         event.preventDefault();
         self.removeGraphic(event.target);
@@ -263,7 +263,7 @@ class ReleaseForm {
     });
 
     // Set up the 'find report' button
-    newRow.querySelector('button.find_report').addEventListener('click', function (event) {
+    newRow.querySelector('button.find-report').addEventListener('click', function (event) {
       event.preventDefault();
       let button = event.target;
       if (!button.classList.contains('btn')) {
@@ -292,7 +292,7 @@ class ReleaseForm {
    * button: the button clicked
    * i: the unique key for the corresponding 'linked graphics' row */
   toggleReportFinder(button, i) {
-    const existingSelectionBox = document.getElementById(`report_choices_${i}`);
+    const existingSelectionBox = document.getElementById(`report-choices-${i}`);
 
     // Open
     if (existingSelectionBox === null) {
@@ -322,7 +322,7 @@ class ReleaseForm {
    * i: the unique key of the row in the 'add/edit linked graphics' box */
   setupReportFinder(html, cell, i) {
     const newRow = document.createElement('tr');
-    newRow.innerHTML = `<td colspan="4" class="report_choices"><div id="report_choices_${i}">${html}</div></td>`;
+    newRow.innerHTML = `<td colspan="4" class="report-choices"><div id="report-choices-${i}">${html}</div></td>`;
     cell.closest('tr').after(newRow);
     newRow.querySelector('button.report').addEventListener('click', function (event) {
       event.preventDefault();

@@ -81,7 +81,7 @@
 ?>
 
 <?php if ($partners): ?>
-    <div id="choose_partner">
+    <div id="choose-partner">
         <?= $this->Form->control('partner_id', [
             'class' => 'partner validate[funcCall[checkPartner]]',
             'empty' => true,
@@ -90,16 +90,17 @@
             'options' => Hash::combine($partners->toArray(), '{n}.id', '{n}.name'),
             'templates' => $alternateTemplates,
             'templateVars' => [
-                'after' => ' <button id="add_partner_button" class="btn btn-secondary">Add new</button>'
+                'after' => ' <button id="add-partner-button" class="btn btn-secondary">Add new</button>',
             ],
         ]) ?>
     </div>
-    <div id="add_partner" style="display: none;">
+    <div id="add-partner" style="display: none;">
         <?= $this->Form->control(
             'new_partner',
             $newPartnerOptions + [
                 'templateVars' => [
-                    'after' => ' <button id="choose_partner_button" class="btn btn-secondary">Choose from list</button>'
+                    'after' => ' <button id="choose-partner-button" class="btn btn-secondary">' .
+                        'Choose from list</button>',
                 ],
             ]
         ) ?>
@@ -114,23 +115,23 @@
     'label' => 'Author(s)',
     'options' => Hash::combine($authors->toArray(), '{n}.id', '{n}.name'),
     'templates' => $alternateTemplates,
-    'templateVars' => ['after' => ' <button id="add_author_toggler" class="btn btn-secondary">Add new</button>'],
+    'templateVars' => ['after' => ' <button id="add-author-toggler" class="btn btn-secondary">Add new</button>'],
 ]) ?>
 
-<div id="new_author" style="display: none;">
+<div id="new-author" style="display: none;">
     <?= $this->Form->control('new_author', [
         'label' => false,
         'type' => 'text',
         'placeholder' => 'Author\'s name',
         'templates' => $alternateTemplates,
         'templateVars' => [
-            'after' => '<button id="add_author_button" class="btn btn-sm btn-secondary">Add</button> ' .
-                '<button id="cancel_add_author_button" class="btn btn-sm btn-secondary">Cancel</button>',
+            'after' => '<button id="add-author-button" class="btn btn-sm btn-secondary">Add</button> ' .
+                '<button id="cancel-add-author-button" class="btn btn-sm btn-secondary">Cancel</button>',
         ],
     ]) ?>
 </div>
 
-<ul id="authors_container">
+<ul id="authors-container">
     <?php if ($release->authors): ?>
         <?php foreach ($release->authors as $author): ?>
             <li>
@@ -149,11 +150,11 @@
 <fieldset class="reports release-form">
     <legend>
         Upload Reports
-        <a href="#" id="footnote_upload_reports_handle">
+        <a href="#" id="footnote-upload-reports-handle">
             <i class="fas fa-info-circle" title="More info"></i>
         </a>
     </legend>
-    <ul class="footnote" style="display: none;" id="footnote_upload_reports">
+    <ul class="footnote" style="display: none;" id="footnote-upload-reports">
         <li>
             Click on <strong>Select Files</strong> above to upload one or more documents.
         </li>
@@ -172,12 +173,12 @@
     </ul>
     <div class="input-group">
         <div class="custom-file js-fileapi-wrapper">
-            <input type="file" name="file_upload" id="upload_reports" />
-            <label class="custom-file-label" for="upload_reports">Choose file</label>
+            <input type="file" name="file_upload" id="upload-reports" />
+            <label class="custom-file-label" for="upload-reports">Choose file</label>
         </div>
     </div>
-    <input type="checkbox" name="overwrite" value="1" id="overwrite_reports" />
-    <label for="overwrite_reports">
+    <input type="checkbox" name="overwrite" value="1" id="overwrite-reports" />
+    <label for="overwrite-reports">
         Overwrite reports with the same filename
     </label>
     <div class="progress" id="upload-reports-progress-container">
@@ -189,11 +190,11 @@
 <fieldset class="graphics release-form">
     <legend>
         Linked Graphics
-        <a href="#" id="footnote_upload_graphics_handle">
+        <a href="#" id="footnote-upload-graphics-handle">
             <i class="fas fa-info-circle" title="More info"></i>
         </a>
     </legend>
-    <ul class="footnote" style="display: none;" id="footnote_upload_graphics">
+    <ul class="footnote" style="display: none;" id="footnote-upload-graphics">
         <li>Images must be .jpg, .jpeg, .gif, or .png.</li>
         <li>Thumbnails (max 195&times;195px) will be automatically generated.</li>
         <li>Graphics with lower order-numbers are displayed first.</li>
@@ -212,7 +213,7 @@
                     <tr>
                         <?php if ($action == 'add'): ?>
                             <td>
-                                <button class="remove_graphic">
+                                <button class="remove-graphic">
                                     <i class="fas fa-times-circle" title="Remove"></i>
                                 </button>
                             </td>
@@ -266,7 +267,7 @@
                                     'class' => "validate[condRequired[Graphic{$k}Image]]",
                                     'templates' => $buttonAppendTemplate,
                                     'templateVars' => ['after' => sprintf(
-                                        '<button title="Find report" class="btn btn-outline-secondary find_report" id="find_report_button_%d">' .
+                                        '<button title="Find report" class="btn btn-outline-secondary find-report" id="find-report-button_%d">' .
                                             '<i class="fas fa-search" title="Find report"></i>' .
                                         '</button>',
                                         $k
@@ -274,7 +275,7 @@
                                 ]
                             ) ?>
                             <?php $this->append('buffered'); ?>
-                                document.getElementById(<?= json_encode("find_report_button_$k") ?>)
+                                document.getElementById(<?= json_encode("find-report-button-$k") ?>)
                                     .addEventListener(
                                         'click',
                                         function(event) {
@@ -299,16 +300,16 @@
             <?php endif; ?>
         </tbody>
         <tfoot>
-            <tr class="add_graphic">
+            <tr class="add-graphic">
                 <th colspan="4">
-                    <button class="add_graphic btn btn-secondary">
+                    <button class="add-graphic btn btn-secondary">
                         <i class="fas fa-plus-circle"></i> Add a linked graphic
                     </button>
                 </th>
             </tr>
             <tr class="dummy-row">
                 <td>
-                    <button class="remove_graphic btn btn-link">
+                    <button class="remove-graphic btn btn-link">
                         <i class="fas fa-times-circle" title="Remove"></i>
                     </button>
                 </td>
@@ -343,7 +344,7 @@
                             'class' => 'validate[condRequired[Graphic{i}Image]',
                             'templates' => $buttonAppendTemplate,
                             'templateVars' => [
-                                'after' => '<button title="Find report" class="btn btn-outline-secondary find_report">' .
+                                'after' => '<button title="Find report" class="btn btn-outline-secondary find-report">' .
                                     '<i class="fas fa-search" title="Find report"></i></button>',
                             ],
                         ]
