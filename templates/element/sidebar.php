@@ -61,11 +61,12 @@
         </li>
         <li>
             <?= $this->Html->link(
-                'Change my password',
+                'Update login info',
                 [
                     'plugin' => false,
                     'controller' => 'Users',
-                    'action' => 'changePassword',
+                    'action' => 'edit',
+                    $sidebarVars['user']['id'],
                 ]
             ) ?>
         </li>
