@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
+use Cake\Utility\Text;
 
 /**
  * Tag Entity
@@ -62,5 +63,18 @@ class Tag extends Entity
         }
 
         return $ucName;
+    }
+
+    /**
+     * Automatically set the slug field
+     *
+     * @param string $name Password
+     * @return string|null
+     */
+    protected function _setName(string $name): ?string
+    {
+        $this->slug = strtolower(Text::slug($name));
+
+        return $name;
     }
 }
