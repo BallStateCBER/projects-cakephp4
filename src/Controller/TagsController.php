@@ -65,18 +65,21 @@ class TagsController extends AppController
     {
         $tag = $this->Tags->newEmptyEntity();
         if ($this->request->is('post')) {
-            $tag = $this->Tags->patchEntity($tag, $this->request->getData());
+            $data = $this->request->getData();
+            $data['selectable'] = true;
+            $tag = $this->Tags->patchEntity($tag, $data);
             if ($this->Tags->save($tag)) {
-                $this->Flash->success(__('The tag has been saved.'));
+                $this->Flash->success('The tag has been saved.');
                 Cache::delete('sidebar_tags', 'long');
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The tag could not be saved. Please, try again.'));
+            $this->Flash->error('The tag could not be saved. Please, try again.');
         }
-        $parentTags = $this->Tags->ParentTags->find('list', ['limit' => 200]);
-        $releases = $this->Tags->Releases->find('list', ['limit' => 200]);
-        $this->set(compact('tag', 'parentTags', 'releases'));
+        $pageTitle = 'Add a New Tag';
+        $this->set(compact('tag', 'pageTitle'));
+
+        return $this->render('form');
     }
 
     /**
@@ -88,22 +91,21 @@ class TagsController extends AppController
      */
     public function edit($id = null)
     {
-        $tag = $this->Tags->get($id, [
-            'contain' => ['Releases'],
-        ]);
+        $tag = $this->Tags->get($id);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $tag = $this->Tags->patchEntity($tag, $this->request->getData());
             if ($this->Tags->save($tag)) {
-                $this->Flash->success(__('The tag has been saved.'));
+                $this->Flash->success('The tag has been saved.');
                 Cache::delete('sidebar_tags', 'long');
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The tag could not be saved. Please, try again.'));
+            $this->Flash->error('The tag could not be saved. Please try again.');
         }
-        $parentTags = $this->Tags->ParentTags->find('list', ['limit' => 200]);
-        $releases = $this->Tags->Releases->find('list', ['limit' => 200]);
-        $this->set(compact('tag', 'parentTags', 'releases'));
+        $pageTitle = 'Edit Tag';
+        $this->set(compact('tag', 'pageTitle'));
+
+        return $this->render('form');
     }
 
     /**
