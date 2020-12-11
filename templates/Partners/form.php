@@ -10,6 +10,14 @@
     <?= $pageTitle ?>
 </h1>
 
+<p>
+    <?= $this->Html->link(
+        'List Clients, Partners, and Sponsors',
+        ['action' => 'index'],
+        ['class' => 'btn btn-secondary'],
+    ) ?>
+</p>
+
 <div class="partners form">
     <?= $this->Form->create($partner) ?>
     <?= $this->Form->control('name', ['label' => 'Full Name']) ?>

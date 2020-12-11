@@ -77,6 +77,8 @@ class PartnersController extends AppController
             'partner' => $partner,
             'pageTitle' => 'Add Client, Partner, or Sponsor',
         ]);
+
+        return $this->render('form');
     }
 
     /**
@@ -88,20 +90,23 @@ class PartnersController extends AppController
      */
     public function edit($id = null)
     {
-        $partner = $this->Partners->get($id, [
-            'contain' => [],
-        ]);
+        $partner = $this->Partners->get($id);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $partner = $this->Partners->patchEntity($partner, $this->request->getData());
             if ($this->Partners->save($partner)) {
-                $this->Flash->success(__('The partner has been saved.'));
+                $this->Flash->success('The partner has been saved.');
                 Cache::delete('sidebar_partners', 'long');
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The partner could not be saved. Please, try again.'));
+            $this->Flash->error('The partner could not be saved. Please try again.');
         }
-        $this->set(compact('partner'));
+        $this->set([
+            'partner' => $partner,
+            'pageTitle' => 'Edit Client, Partner, or Sponsor',
+        ]);
+
+        return $this->render('form');
     }
 
     /**
