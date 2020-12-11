@@ -21,21 +21,18 @@ $isAddForm = $this->request->getParam('action') == 'add';
 </p>
 
 <div class="users form">
-    <?= $this->Form->create($user) ?>
-    <fieldset>
-        <legend>Add User</legend>
-        <?php
-            echo $this->Form->control('name');
-            echo $this->Form->control('email');
-            echo $this->Form->control(
-                $isAddForm ? 'password' : 'new_password',
-                [
-                    'label' => $isAddForm ? 'Password' : 'New Password (leave blank for no change)',
-                    'type' => 'password',
-                ]
-            );
-        ?>
-    </fieldset>
-    <?= $this->Form->submit('Submit', ['class' => 'btn btn-primary']) ?>
-    <?= $this->Form->end() ?>
+    <?php
+        echo $this->Form->create($user);
+        echo $this->Form->control('name');
+        echo $this->Form->control('email');
+        echo $this->Form->control(
+            $isAddForm ? 'password' : 'new_password',
+            [
+                'label' => $isAddForm ? 'Password' : 'New Password (leave blank for no change)',
+                'type' => 'password',
+            ]
+        );
+        echo $this->Form->submit('Submit', ['class' => 'btn btn-primary']);
+        echo $this->Form->end();
+    ?>
 </div>
