@@ -22,9 +22,14 @@ class AuthorsController extends AppController
      */
     public function index()
     {
-        $authors = $this->paginate($this->Authors);
-
-        $this->set(compact('authors'));
+        $this->set([
+            'pageTitle' => 'Authors',
+            'authors' => $this->Authors
+                ->find()
+                ->contain(['Releases'])
+                ->orderAsc('name')
+                ->all(),
+        ]);
     }
 
     /**
@@ -61,14 +66,16 @@ class AuthorsController extends AppController
         if ($this->request->is('post')) {
             $author = $this->Authors->patchEntity($author, $this->request->getData());
             if ($this->Authors->save($author)) {
-                $this->Flash->success(__('The author has been saved.'));
+                $this->Flash->success('The author has been saved.');
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The author could not be saved. Please, try again.'));
+            $this->Flash->error('The author could not be saved. Please try again.');
         }
-        $releases = $this->Authors->Releases->find('list', ['limit' => 200]);
-        $this->set(compact('author', 'releases'));
+        $pageTitle = 'Add a New Author';
+        $this->set(compact('author', 'pageTitle'));
+
+        return $this->render('form');
     }
 
     /**
@@ -86,14 +93,16 @@ class AuthorsController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $author = $this->Authors->patchEntity($author, $this->request->getData());
             if ($this->Authors->save($author)) {
-                $this->Flash->success(__('The author has been saved.'));
+                $this->Flash->success('The author has been saved.');
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The author could not be saved. Please, try again.'));
+            $this->Flash->error('The author could not be saved. Please, try again.');
         }
-        $releases = $this->Authors->Releases->find('list', ['limit' => 200]);
-        $this->set(compact('author', 'releases'));
+        $pageTitle = 'Edit Author';
+        $this->set(compact('author', 'pageTitle'));
+
+        return $this->render('form');
     }
 
     /**
