@@ -87,7 +87,6 @@ class TagsTable extends Table
         $validator
             ->scalar('slug')
             ->maxLength('slug', 100)
-            ->requirePresence('slug', 'create')
             ->notEmptyString('slug');
 
         $validator
