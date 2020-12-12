@@ -50,6 +50,7 @@ class TagsTable extends Table
 
         $this->addBehavior('Timestamp');
         $this->addBehavior('Tree');
+        $this->addBehavior('Muffin/Slug.Slug');
 
         $this->belongsTo('ParentTags', [
             'className' => 'Tags',

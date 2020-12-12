@@ -45,6 +45,7 @@ class PartnersTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
+        $this->addBehavior('Muffin/Slug.Slug');
 
         $this->hasMany('Releases', [
             'foreignKey' => 'partner_id',

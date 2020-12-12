@@ -64,17 +64,4 @@ class Tag extends Entity
 
         return $ucName;
     }
-
-    /**
-     * Automatically set the slug field
-     *
-     * @param string $name Password
-     * @return string|null
-     */
-    protected function _setName(string $name): ?string
-    {
-        $this->slug = strtolower(Text::slug($name));
-
-        return $name;
-    }
 }

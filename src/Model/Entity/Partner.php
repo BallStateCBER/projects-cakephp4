@@ -37,17 +37,4 @@ class Partner extends Entity
         'modified' => true,
         'releases' => true,
     ];
-
-    /**
-     * Automatically set the slug field
-     *
-     * @param string $shortName Password
-     * @return string|null
-     */
-    protected function _setShortName(string $shortName): ?string
-    {
-        $this->slug = strtolower(Text::slug($shortName));
-
-        return $shortName;
-    }
 }
