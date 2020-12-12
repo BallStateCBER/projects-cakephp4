@@ -282,6 +282,7 @@ class ReleasesController extends AppController
                 ->first();
             $release->partner = $partner;
         } else {
+            $partnerData['short_name'] = $newPartnerName;
             $partner = $this->Partners->newEntity($partnerData);
             if ($this->Partners->save($partner)) {
                 $release->partner = $partner;
