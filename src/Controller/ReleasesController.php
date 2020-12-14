@@ -161,6 +161,9 @@ class ReleasesController extends AppController
                 );
             }
         }
+        $this->loadModel('Authors');
+        $this->loadModel('Partners');
+
         $this->set([
             'authors' => $this->Authors->find()->orderAsc('name')->all(),
             'pageTitle' => 'Edit ' . $release->title,
