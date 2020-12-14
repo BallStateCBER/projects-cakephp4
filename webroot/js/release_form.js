@@ -252,6 +252,9 @@ class ReleaseForm {
       element.className = element.className.replace('{i}', i);
       element.disabled = false;
     });
+    newRow.querySelectorAll('label').forEach(function (element) {
+      element.htmlFor = element.htmlFor.replace('{i}', i);
+    });
 
     // Set up the remove button
     const self = this;
