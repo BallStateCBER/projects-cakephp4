@@ -111,20 +111,7 @@ class ReleasesController extends AppController
             }
         }
 
-        $validExtensions = [];
-        foreach ($this->reportFiletypes as $ext) {
-            $validExtensions[] = "*.$ext";
-        }
-
-        $this->set([
-            'authors' => $this->Authors->find()->orderAsc('name')->all(),
-            'pageTitle' => 'Add a New Release',
-            'partners' => $this->Partners->find()->orderAsc('name')->all(),
-            'release' => $release,
-            'reportFiletypes' => $this->reportFiletypes,
-            'validExtensions' => $validExtensions,
-        ]);
-        $this->setAvailableTags();
+        $this->set(['pageTitle' => 'Add a New Release']);
         $this->setReleaseFormVars($release);
 
         return $this->render('/Releases/form');
@@ -161,17 +148,8 @@ class ReleasesController extends AppController
                 );
             }
         }
-        $this->loadModel('Authors');
-        $this->loadModel('Partners');
 
-        $this->set([
-            'authors' => $this->Authors->find()->orderAsc('name')->all(),
-            'pageTitle' => 'Edit ' . $release->title,
-            'partners' => $this->Partners->find()->orderAsc('name')->all(),
-            'release' => $release,
-            'reportFiletypes' => $this->reportFiletypes,
-        ]);
-        $this->setAvailableTags();
+        $this->set(['pageTitle' => 'Edit ' . $release->title]);
         $this->setReleaseFormVars($release);
 
         return $this->render('/Releases/form');
@@ -426,7 +404,7 @@ class ReleasesController extends AppController
      * @param \App\Model\Entity\Release $release Release entity
      * @return void
      */
-    private function setReleaseFormVars($release)
+    private function setReleaseFormVars(Release $release)
     {
         // Determine file upload limit
         $maxUpload = (int)(ini_get('upload_max_filesize'));
@@ -465,16 +443,35 @@ class ReleasesController extends AppController
                 '<div class="input-group-append">{{after}}</div></div>',
         ];
 
+        $this->loadModel('Authors');
+        $this->loadModel('Partners');
+        $authors = $this->Authors->find()->orderAsc('name')->all();
+        $partners = $this->Partners->find()->orderAsc('name')->all();
+
+        $validExtensions = [];
+        foreach ($this->reportFiletypes as $ext) {
+            $validExtensions[] = "*.$ext";
+        }
+
+        $reportFiletypes = $this->reportFiletypes;
+
         $this->set(compact(
             'action',
             'alternateTemplates',
+            'authors',
             'buttonAppendTemplate',
             'defaultTemplates',
             'hasGraphics',
+            'partners',
+            'release',
+            'reportFiletypes',
             'time',
             'token',
             'uploadMb',
+            'validExtensions',
         ));
+
+        $this->setAvailableTags();
     }
 
     /**
