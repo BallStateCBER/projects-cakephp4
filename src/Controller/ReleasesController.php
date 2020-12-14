@@ -567,4 +567,21 @@ class ReleasesController extends AppController
 
         $this->set('msg', $msg);
     }
+
+    /**
+     * Index page for admins
+     *
+     * @return \Cake\Http\Response|null|void Renders view
+     */
+    public function admin()
+    {
+        $query = $this->Releases
+            ->find()
+            ->orderDesc('Releases.id');
+
+        $releases = $this->paginate($query);
+        $pageTitle = 'Releases';
+
+        $this->set(compact('pageTitle', 'releases'));
+    }
 }

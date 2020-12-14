@@ -328,3 +328,12 @@ fieldset.release-form {
 #upload-reports-progress-container {
   display: none;
 }
+
+#releases-admin {
+  tbody {
+    td:nth-child(2),
+    td:nth-child(3) {
+      white-space: nowrap;
+    }
+  }
+}

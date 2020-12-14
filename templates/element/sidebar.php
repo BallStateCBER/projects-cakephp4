@@ -21,6 +21,16 @@
         </li>
         <li>
             <?= $this->Html->link(
+                'Releases',
+                [
+                    'plugin' => false,
+                    'controller' => 'Releases',
+                    'action' => 'admin',
+                ]
+            ) ?>
+        </li>
+        <li>
+            <?= $this->Html->link(
                 'Users',
                 [
                     'plugin' => false,
