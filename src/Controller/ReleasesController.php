@@ -191,7 +191,7 @@ class ReleasesController extends AppController
             $this->Flash->error('There was an error deleting this release');
         }
 
-        return $this->redirect(['action' => 'index']);
+        return $this->redirect($this->request->referer());
     }
 
     /**
