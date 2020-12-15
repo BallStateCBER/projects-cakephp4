@@ -15,7 +15,6 @@
  * @var string[] $buttonAppendTemplate
  * @var string[] $defaultTemplates
  * @var string[] $reportFiletypes
- * @var string[] $validExtensions
  */
 
     use Cake\Utility\Hash;
@@ -30,6 +29,20 @@
         'type' => 'text',
         'templates' => $alternateTemplates,
     ];
+
+    $validReportExtensions = array_map(
+        function ($extension) {
+            return ".$extension";
+        },
+        $reportFiletypes
+    );
+
+    $validReportWildcardExtensions = array_map(
+        function ($extension) {
+            return "*.$extension";
+        },
+        $reportFiletypes
+    );
 ?>
 
 <?php $this->append('scriptTop'); ?>
@@ -52,7 +65,7 @@
         fileSizeLimit: <?= json_encode("{$uploadMb}MB") ?>,
         time: <?= json_encode($time) ?>,
         token: <?= json_encode($token) ?>,
-        validExtensions: <?= json_encode(implode('|', $validExtensions)) ?>,
+        validExtensions: <?= json_encode(implode('|', $validReportWildcardExtensions)) ?>,
     });
 <?php $this->end(); ?>
 
@@ -173,7 +186,8 @@
     </ul>
     <div class="input-group">
         <div class="custom-file js-fileapi-wrapper">
-            <input type="file" name="file_upload" id="upload-reports" />
+            <input type="file" name="file_upload" id="upload-reports"
+                   accept="<?= implode(',', $validReportExtensions) ?>" />
             <label class="custom-file-label" for="upload-reports">Choose file</label>
         </div>
     </div>
@@ -316,7 +330,7 @@
                 <td>
                     <div class="input-group">
                         <div class="custom-file">
-                            <input type="file" name="graphics[{i}][image]" id="upload-graphic-{i}" />
+                            <input type="file" name="graphics[{i}][image]" id="upload-graphic-{i}" accept="image/*" />
                             <label class="custom-file-label" for="upload-graphic-{i}">
                                 Choose file
                             </label>

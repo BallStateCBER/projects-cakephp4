@@ -448,11 +448,6 @@ class ReleasesController extends AppController
         $authors = $this->Authors->find()->orderAsc('name')->all();
         $partners = $this->Partners->find()->orderAsc('name')->all();
 
-        $validExtensions = [];
-        foreach ($this->reportFiletypes as $ext) {
-            $validExtensions[] = "*.$ext";
-        }
-
         $reportFiletypes = $this->reportFiletypes;
 
         $this->set(compact(
@@ -468,7 +463,6 @@ class ReleasesController extends AppController
             'time',
             'token',
             'uploadMb',
-            'validExtensions',
         ));
 
         $this->setAvailableTags();
