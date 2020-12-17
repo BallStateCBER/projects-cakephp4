@@ -3,10 +3,13 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Imagine\Gd\Imagine;
+use Imagine\Image\Box;
+use Imagine\Image\ImageInterface;
+use Josegonzalez\Upload\Validation\UploadValidation;
 
 /**
  * Graphics Model
@@ -46,6 +49,46 @@ class GraphicsTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
+        $this->addBehavior('Josegonzalez/Upload.Upload', [
+            'image' => [
+                'path' => 'webroot{DS}img{DS}releases{DS}{field-value:dir}',
+                'fields' => ['dir' => 'dir'],
+                'fileNameFunction' => 'sanitizeFileName',
+                'keepFilesOnDelete' => false,
+                'transformer' => function ($table, $entity, $data, $field, $settings, $filename) {
+                    /** @var \App\Model\Entity\Graphic $entity */
+                    $extension = pathinfo($filename, PATHINFO_EXTENSION);
+
+                    // Store the thumbnail in a temporary file
+                    $tmp = tempnam(sys_get_temp_dir(), 'upload') . '.' . $extension;
+
+                    // Use the Imagine library to DO THE THING
+                    $size = new Box(195, 195);
+                    $mode = ImageInterface::THUMBNAIL_INSET;
+                    $imagine = new Imagine();
+
+                    // Save that modified file to our temp file
+                    $imagine->open($data->getStream()->getMetadata('uri'))
+                        ->thumbnail($size, $mode)
+                        ->save($tmp);
+
+                    // Now return the original *and* the thumbnail
+                    return [
+                        $data->getStream()->getMetadata('uri') => $filename,
+                        $tmp => $entity->thumbnail,
+                    ];
+                },
+                'deleteCallback' => function ($path, $entity, $field, $settings) {
+                    /** @var \App\Model\Entity\Graphic $entity */
+                    // When deleting the entity, both the original and the thumbnail will be removed
+                    // when keepFilesOnDelete is set to false
+                    return [
+                        $path . $entity->{$field},
+                        $path . $entity->thumbnail,
+                    ];
+                },
+            ],
+        ]);
 
         $this->belongsTo('Releases', [
             'foreignKey' => 'release_id',
@@ -81,7 +124,28 @@ class GraphicsTable extends Table
             ->scalar('image')
             ->maxLength('image', 255)
             ->requirePresence('image', 'create')
-            ->notEmptyFile('image');
+            ->notEmptyFile('image')
+            ->setProvider('upload', UploadValidation::class)
+            ->add('image', 'fileUnderPhpSizeLimit', [
+                'rule' => 'isUnderPhpSizeLimit',
+                'message' => 'The uploaded image exceeds the filesize limit',
+                'provider' => 'upload',
+            ])
+            ->add('image', 'fileCompletedUpload', [
+                'rule' => 'isCompletedUpload',
+                'message' => 'This image could not be uploaded completely',
+                'provider' => 'upload',
+            ])
+            ->add('image', 'fileFileUpload', [
+                'rule' => 'isFileUpload',
+                'message' => 'No image file was uploaded',
+                'provider' => 'upload',
+            ])
+            ->add('file', 'fileSuccessfulWrite', [
+                'rule' => 'isSuccessfulWrite',
+                'message' => 'This upload could not be saved to the server',
+                'provider' => 'upload',
+            ]);
 
         $validator
             ->scalar('dir')
@@ -108,5 +172,19 @@ class GraphicsTable extends Table
         $rules->add($rules->existsIn(['release_id'], 'Releases'), ['errorField' => 'release_id']);
 
         return $rules;
+    }
+
+    /**
+     * Returns a directory number for the next release's graphics
+     *
+     * @return int
+     */
+    public function getNextDirNumber()
+    {
+        return $this
+                ->find()
+                ->select(['dir'])
+                ->last()
+                ->dir + 1;
     }
 }

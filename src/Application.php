@@ -75,6 +75,7 @@ class Application extends BaseApplication implements
         $this->addPlugin('DataCenter');
         $this->addPlugin('Authentication');
         $this->addPlugin('Authorization');
+        $this->addPlugin('Josegonzalez/Upload');
     }
 
     /**

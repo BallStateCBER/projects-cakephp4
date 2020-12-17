@@ -207,33 +207,41 @@ class ReleasesController extends AppController
      */
     private function processNewGraphics(Release $release)
     {
-        // Note if images were uploaded, and ignore any graphics without uploaded images
-        $this->loadModel('Graphics');
         $graphicsData = $this->request->getData('graphics');
-        if ($graphicsData) {
-            foreach ($graphicsData as $i => $graphic) {
-                if (empty($graphic['name'])) {
-                    // Ignore any graphics without uploaded images
-                    continue;
-                } else {
-                    $graphicEntity = $this->Graphics->newEntity([
-                        'title' => $graphic['title'],
-                        'url' => $graphic['url'],
-                        'image' => $graphic['name'],
-                        'dir' => $graphic['name'],
-                        'weight' => $graphic['weight'],
-                    ]);
-                    if ($this->Graphics->save($graphicEntity)) {
-                        $release->graphics[] = $graphicEntity;
-                    } else {
-                        $this->Flash->error(sprintf(
-                            'Error uploading "%s" graphic. Details: %s',
-                            $graphic['title'],
-                            print_r($graphicEntity->getErrors(), true)
-                        ));
-                    }
-                }
+        if (!$graphicsData) {
+            return $release;
+        }
+
+        $this->loadModel('Graphics');
+        $nextDirNum = $this->Graphics->getNextDirNumber();
+
+        foreach ($graphicsData as $i => $graphic) {
+            /** @var \Laminas\Diactoros\UploadedFile $file */
+            $file = $graphic['image'];
+            $filename = $file->getClientFilename();
+
+            // Ignore any graphics without uploaded images
+            if (!$filename) {
+                continue;
             }
+
+            $graphicEntity = $this->Graphics->newEntity([
+                'title' => $graphic['title'],
+                'url' => $graphic['url'],
+                'image' => $filename,
+                'dir' => $nextDirNum,
+                'weight' => $graphic['weight'],
+            ]);
+            if ($this->Graphics->save($graphicEntity)) {
+                $release->graphics[] = $graphicEntity;
+                continue;
+            }
+
+            $this->Flash->error(sprintf(
+                'Error uploading "%s" graphic. Details: %s',
+                $graphic['title'],
+                print_r($graphicEntity->getErrors(), true)
+            ));
         }
         $release->graphics = $graphicsData;
 
