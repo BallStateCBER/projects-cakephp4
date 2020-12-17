@@ -330,7 +330,8 @@
                 <td>
                     <div class="input-group">
                         <div class="custom-file">
-                            <input type="file" name="graphics[{i}][image]" id="upload-graphic-{i}" accept="image/*" />
+                            <input type="file" name="graphics[{i}][image]" id="upload-graphic-{i}" accept="image/*"
+                                   disabled="disabled" />
                             <label class="custom-file-label" for="upload-graphic-{i}">
                                 Choose file
                             </label>
