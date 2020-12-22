@@ -217,7 +217,7 @@ class ReleaseForm {
     const selectElements = document.querySelectorAll('table.graphics tbody select');
     selectElements.forEach(function (select) {
       const selected = select.querySelector('option:checked').value;
-      select.innerHtml = '';
+      select.innerHTML = '';
       for (let n = 1; n <= rowCount; n++) {
         const option = document.createElement('option');
         option.innerHTML = n.toString();
@@ -279,7 +279,6 @@ class ReleaseForm {
     document.querySelector('table.graphics tbody').append(newRow);
 
     // Reset 'order' options
-    console.log('Updating order selectors');
     this.updateOrderSelectors();
 
     // Restart the validation engine so that this row is included
