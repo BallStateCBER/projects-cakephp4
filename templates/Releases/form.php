@@ -117,7 +117,6 @@ use Cake\Utility\Hash;
 <?php if ($partners): ?>
     <div id="choose-partner">
         <?= $this->Form->control('partner_id', [
-            'class' => 'partner validate[funcCall[checkPartner]]',
             'empty' => true,
             'id' => 'release-partner-id',
             'label' => 'Client, Partner, or Sponsor',
@@ -294,10 +293,7 @@ use Cake\Utility\Hash;
                         <td>
                             <?= $this->Form->control(
                                 "graphics.$k.title",
-                                [
-                                    'label' => false,
-                                    'class' => "validate[condRequired[Graphic{$k}Image]]",
-                                ]
+                                ['label' => false],
                             ) ?>
                         </td>
                         <td>
@@ -305,7 +301,6 @@ use Cake\Utility\Hash;
                                 "graphics.$k.url",
                                 [
                                     'label' => false,
-                                    'class' => "validate[condRequired[Graphic{$k}Image]]",
                                     'templates' => $buttonAppendTemplate,
                                     'templateVars' => ['after' => sprintf(
                                         '<button title="Find report" id="find-report-button-%d" ' .
@@ -371,7 +366,6 @@ use Cake\Utility\Hash;
                             'label' => false,
                             'disabled' => true,
                             'required' => true,
-                            'class' => 'validate[condRequired[Graphic{i}Image]]',
                         ]
                     ) ?>
                 </td>
@@ -382,7 +376,6 @@ use Cake\Utility\Hash;
                             'label' => false,
                             'disabled' => true,
                             'required' => true,
-                            'class' => 'validate[condRequired[Graphic{i}Image]',
                             'templates' => $buttonAppendTemplate,
                             'templateVars' => [
                                 'after' => '<button title="Find report" ' .
