@@ -262,14 +262,12 @@ use Cake\Utility\Hash;
                                 </button>
                             </td>
                             <td>
-                                <div class="input-group">
-                                    <div class="custom-file">
-                                        <input type="file" name="graphics[<?= $k ?>][image]"
-                                               id="upload-graphic-<?= $k ?>" />
-                                        <label class="custom-file-label" for="upload-graphic-<?= $k ?>">
-                                            Choose file
-                                        </label>
-                                    </div>
+                                <div class="form-group">
+                                    <input type="file" name="graphics[<?= $k ?>][image]" accept="image/*"
+                                           id="upload-graphic-<?= $k ?>" class="form-control-file" />
+                                    <label class="sr-only" for="upload-graphic-<?= $k ?>">
+                                        Choose file
+                                    </label>
                                 </div>
                             </td>
                         <?php elseif ($action == 'edit'): ?>
@@ -358,14 +356,12 @@ use Cake\Utility\Hash;
                     </button>
                 </td>
                 <td>
-                    <div class="input-group">
-                        <div class="custom-file">
-                            <input type="file" name="graphics[{i}][image]" id="upload-graphic-{i}" accept="image/*"
-                                   disabled="disabled" />
-                            <label class="custom-file-label" for="upload-graphic-{i}">
-                                Choose file
-                            </label>
-                        </div>
+                    <div class="form-group">
+                        <input type="file" name="graphics[{i}][image]" accept="image/*"
+                               id="upload-graphic-{i}" class="form-control-file" />
+                        <label class="sr-only" for="upload-graphic-{i}">
+                            Choose file
+                        </label>
                     </div>
                 </td>
                 <td>

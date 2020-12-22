@@ -337,3 +337,12 @@ fieldset.release-form {
     }
   }
 }
+
+#ReleaseForm {
+  table.graphics {
+    input[type=file] {
+      max-width: fit-content;
+      overflow: hidden;
+    }
+  }
+}
