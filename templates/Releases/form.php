@@ -352,16 +352,16 @@ use Cake\Utility\Hash;
                 </td>
                 <td>
                     <div class="form-group">
-                        <input type="file" name="graphics[{i}][image]" accept="image/*"
-                               id="upload-graphic-{i}" class="form-control-file" />
-                        <label class="sr-only" for="upload-graphic-{i}">
+                        <input type="file" name="graphics[dummy][image]" accept="image/*"
+                               id="upload-graphic-dummy" class="form-control-file" />
+                        <label class="sr-only" for="upload-graphic-dummy">
                             Choose file
                         </label>
                     </div>
                 </td>
                 <td>
                     <?= $this->Form->control(
-                        'graphics.{i}.title',
+                        'graphics.dummy.title',
                         [
                             'label' => false,
                             'disabled' => true,
@@ -371,7 +371,7 @@ use Cake\Utility\Hash;
                 </td>
                 <td>
                     <?= $this->Form->control(
-                        'graphics.{i}.url',
+                        'graphics.dummy.url',
                         [
                             'label' => false,
                             'disabled' => true,
@@ -387,7 +387,7 @@ use Cake\Utility\Hash;
                 </td>
                 <td>
                     <?= $this->Form->control(
-                        'graphics.{i}.weight',
+                        'graphics.dummy.weight',
                         [
                             'label' => false,
                             'disabled' => true,
