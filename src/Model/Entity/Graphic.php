@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace App\Model\Entity;
 
+use Cake\Http\Exception\InternalErrorException;
 use Cake\ORM\Entity;
+use Psr\Http\Message\UploadedFileInterface;
 
 /**
  * Graphic Entity
@@ -51,10 +53,15 @@ class Graphic extends Entity
      * Returns the filename of this graphic's thumbnail
      *
      * @return string
+     * @throws \Cake\Http\Exception\InternalErrorException
      */
     protected function _getThumbnail()
     {
-        $filenameSplit = explode('.', $this->image ?? '');
+        $filename = $this->image instanceof UploadedFileInterface ? $this->image->getClientFilename() : $this->image;
+        if (!is_string($filename)) {
+            throw new InternalErrorException('Cannot determine filename from ' . get_class($this->image) . ' object');
+        }
+        $filenameSplit = explode('.', $filename ?? '');
         $thumbnailFilename = array_slice($filenameSplit, 0, count($filenameSplit) - 1);
         $thumbnailFilename[] = 'thumb';
         $thumbnailFilename[] = end($filenameSplit);
