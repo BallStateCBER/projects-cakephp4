@@ -200,55 +200,6 @@ class ReleasesController extends AppController
     }
 
     /**
-     * Reads request data, creates Graphic entities, adds them to the current release, and returns it
-     *
-     * @param \App\Model\Entity\Release $release Release entity
-     * @return \App\Model\Entity\Release
-     */
-    private function processNewGraphics(Release $release)
-    {
-        $graphicsData = $this->request->getData('graphics');
-        if (!$graphicsData) {
-            return $release;
-        }
-
-        $this->loadModel('Graphics');
-        $nextDirNum = $this->Graphics->getNextDirNumber();
-
-        foreach ($graphicsData as $i => $graphic) {
-            /** @var \Laminas\Diactoros\UploadedFile $file */
-            $file = $graphic['image'];
-            $filename = $file->getClientFilename();
-
-            // Ignore any graphics without uploaded images
-            if (!$filename) {
-                continue;
-            }
-
-            $graphicEntity = $this->Graphics->newEntity([
-                'title' => $graphic['title'],
-                'url' => $graphic['url'],
-                'image' => $filename,
-                'dir' => $nextDirNum,
-                'weight' => $graphic['weight'],
-            ]);
-            if ($this->Graphics->save($graphicEntity)) {
-                $release->graphics[] = $graphicEntity;
-                continue;
-            }
-
-            $this->Flash->error(sprintf(
-                'Error uploading "%s" graphic. Details: %s',
-                $graphic['title'],
-                print_r($graphicEntity->getErrors(), true)
-            ));
-        }
-        $release->graphics = $graphicsData;
-
-        return $release;
-    }
-
-    /**
      * Reads request data, finds or creates a Partner entity, adds it to the current release, and returns the release
      *
      * @param \App\Model\Entity\Release $release Release entity
@@ -325,13 +276,20 @@ class ReleasesController extends AppController
      */
     private function processForm(Release $release)
     {
-        $release = $this->Releases->patchEntity($release, $this->request->getData());
+        $this->loadModel('Graphics');
+        $nextGraphicsDir = $this->Graphics->getNextDirNumber();
+        $data = $this->request->getData();
+        if ($data['graphics'] ?? false) {
+            foreach ($data['graphics'] as &$graphic) {
+                $graphic['dir'] = $nextGraphicsDir;
+            }
+        }
+        $release = $this->Releases->patchEntity($release, $data);
 
         $this->loadModel('Tags');
         $release->tags = $this->TagManager->processTagInput($this->request->getData(), $this->Tags);
         $release = $this->processNewAuthors($release);
         $release = $this->processNewPartner($release);
-        $release = $this->processNewGraphics($release);
 
         return $release;
     }

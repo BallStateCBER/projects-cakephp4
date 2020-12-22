@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use App\Upload\GraphicsPathProcessor;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -15,7 +16,6 @@ use Josegonzalez\Upload\Validation\UploadValidation;
  * Graphics Model
  *
  * @property \App\Model\Table\ReleasesTable&\Cake\ORM\Association\BelongsTo $Releases
- *
  * @method \App\Model\Entity\Graphic newEmptyEntity()
  * @method \App\Model\Entity\Graphic newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\Graphic[] newEntities(array $data, array $options = [])
@@ -29,7 +29,6 @@ use Josegonzalez\Upload\Validation\UploadValidation;
  * @method \App\Model\Entity\Graphic[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
  * @method \App\Model\Entity\Graphic[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
  * @method \App\Model\Entity\Graphic[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
- *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class GraphicsTable extends Table
@@ -51,9 +50,12 @@ class GraphicsTable extends Table
         $this->addBehavior('Timestamp');
         $this->addBehavior('Josegonzalez/Upload.Upload', [
             'image' => [
-                'path' => 'webroot{DS}img{DS}releases{DS}{field-value:dir}',
+                'path' => '', // filesystem.root + getNextDirNumber(), appended by GraphicsPathProcessor
+                'pathProcessor' => GraphicsPathProcessor::class,
+                'filesystem' => [
+                    'root' => ROOT . DS . 'webroot' . DS . 'img' . DS . 'releases' . DS,
+                ],
                 'fields' => ['dir' => 'dir'],
-                'fileNameFunction' => 'sanitizeFileName',
                 'keepFilesOnDelete' => false,
                 'transformer' => function ($table, $entity, $data, $field, $settings, $filename) {
                     /** @var \App\Model\Entity\Graphic $entity */
@@ -121,8 +123,6 @@ class GraphicsTable extends Table
             ->notEmptyString('url');
 
         $validator
-            ->scalar('image')
-            ->maxLength('image', 255)
             ->requirePresence('image', 'create')
             ->notEmptyFile('image')
             ->setProvider('upload', UploadValidation::class)
@@ -182,9 +182,10 @@ class GraphicsTable extends Table
     public function getNextDirNumber()
     {
         return $this
-                ->find()
-                ->select(['dir'])
-                ->last()
-                ->dir + 1;
+            ->find()
+            ->select(['dir'])
+            ->orderDesc('dir')
+            ->first()
+            ->dir + 1;
     }
 }

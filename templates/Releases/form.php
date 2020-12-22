@@ -17,7 +17,8 @@
  * @var string[] $reportFiletypes
  */
 
-    use Cake\Utility\Hash;
+use Cake\Datasource\EntityInterface;
+use Cake\Utility\Hash;
 
     $this->Html->script('release_form', ['block' => 'scriptTop']);
     $this->element('DataCenter.font_awesome_init');
@@ -43,6 +44,26 @@
         },
         $reportFiletypes
     );
+
+    /**
+     * Returns a string that will display any of this entity's errors
+     *
+     * @param \Cake\Datasource\EntityInterface $entity Entity object
+     * @return string|null
+     */
+    function displayErrors(EntityInterface $entity)
+    {
+        if (!$entity->hasErrors()) {
+            return null;
+        }
+        $errors = $entity->getErrors();
+        $errorMsgsPerField = array_map(function ($errorMsgs, $field) {
+            return $field . ': ' . implode('; ', $errorMsgs);
+        }, $errors, array_keys($errors));
+
+        return '<p class="alert alert-danger">' . implode('<br />', $errorMsgsPerField) . '</p>';
+    }
+
 ?>
 
 <?php $this->append('scriptTop'); ?>
@@ -148,7 +169,8 @@
     <?php if ($release->authors): ?>
         <?php foreach ($release->authors as $author): ?>
             <li>
-                <?= $author['name'] ?>
+                <?= displayErrors($author) ?>
+                <?= $author->name ?>
                 <input type="hidden" name="author[]" value="<?= $author->id ?>" />
                 <button>
                     X
@@ -224,6 +246,14 @@
         <tbody>
             <?php if ($hasGraphics): ?>
                 <?php foreach ($release->graphics as $k => $g): ?>
+                    <?php $errors = displayErrors($g); ?>
+                    <?php if ($errors): ?>
+                        <tr>
+                            <td colspan="5">
+                                <?= $errors ?>
+                            </td>
+                        </tr>
+                    <?php endif; ?>
                     <tr>
                         <?php if ($action == 'add'): ?>
                             <td>
@@ -234,7 +264,8 @@
                             <td>
                                 <div class="input-group">
                                     <div class="custom-file">
-                                        <input type="file" name="graphics[<?= $k ?>][image]" id="upload-graphic-<?= $k ?>" />
+                                        <input type="file" name="graphics[<?= $k ?>][image]"
+                                               id="upload-graphic-<?= $k ?>" />
                                         <label class="custom-file-label" for="upload-graphic-<?= $k ?>">
                                             Choose file
                                         </label>
@@ -253,15 +284,13 @@
                             </td>
                             <td>
                                 <img src="<?= $release->graphics[$k]->thumbnailFullPath ?>" />
-                                <?php foreach (['id', 'dir', 'image'] as $field): ?>
-                                    <?= $this->Form->control(
-                                        "graphics.$k.$field",
-                                        [
-                                            'value' => $release->graphics[$k]->$field,
-                                            'type' => 'hidden',
-                                        ]
-                                    ) ?>
-                                <?php endforeach; ?>
+                                <?= $this->Form->control(
+                                    "graphics.$k.id",
+                                    [
+                                        'value' => $release->graphics[$k]->id,
+                                        'type' => 'hidden',
+                                    ]
+                                ) ?>
                             </td>
                         <?php endif; ?>
                         <td>
@@ -281,7 +310,8 @@
                                     'class' => "validate[condRequired[Graphic{$k}Image]]",
                                     'templates' => $buttonAppendTemplate,
                                     'templateVars' => ['after' => sprintf(
-                                        '<button title="Find report" class="btn btn-outline-secondary find-report" id="find-report-button_%d">' .
+                                        '<button title="Find report" id="find-report-button_%d" ' .
+                                        'class="btn btn-outline-secondary find-report">' .
                                             '<i class="fas fa-search" title="Find report"></i>' .
                                         '</button>',
                                         $k
@@ -292,7 +322,7 @@
                                 document.getElementById(<?= json_encode("find-report-button-$k") ?>)
                                     .addEventListener(
                                         'click',
-                                        function(event) {
+                                        function (event) {
                                             event.preventDefault();
                                             toggleReportFinder(this, <?= json_encode($k) ?>);
                                         }
@@ -359,7 +389,8 @@
                             'class' => 'validate[condRequired[Graphic{i}Image]',
                             'templates' => $buttonAppendTemplate,
                             'templateVars' => [
-                                'after' => '<button title="Find report" class="btn btn-outline-secondary find-report">' .
+                                'after' => '<button title="Find report" ' .
+                                    'class="btn btn-outline-secondary find-report">' .
                                     '<i class="fas fa-search" title="Find report"></i></button>',
                             ],
                         ]
