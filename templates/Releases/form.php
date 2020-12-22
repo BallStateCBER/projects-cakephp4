@@ -308,7 +308,7 @@ use Cake\Utility\Hash;
                                     'class' => "validate[condRequired[Graphic{$k}Image]]",
                                     'templates' => $buttonAppendTemplate,
                                     'templateVars' => ['after' => sprintf(
-                                        '<button title="Find report" id="find-report-button_%d" ' .
+                                        '<button title="Find report" id="find-report-button-%d" ' .
                                         'class="btn btn-outline-secondary find-report">' .
                                             '<i class="fas fa-search" title="Find report"></i>' .
                                         '</button>',
