@@ -342,6 +342,7 @@ fieldset.release-form {
   table.graphics {
     input[type=file] {
       max-width: fit-content;
+      min-width: 190px;
       overflow: hidden;
     }
   }
