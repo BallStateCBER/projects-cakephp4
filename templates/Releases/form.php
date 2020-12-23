@@ -350,7 +350,7 @@ use Cake\Utility\Hash;
                 <td>
                     <div class="form-group">
                         <input type="file" name="graphics[dummy][image]" accept="image/*"
-                               id="upload-graphic-dummy" class="form-control-file" />
+                               id="upload-graphic-dummy" class="form-control-file" disabled="disabled" />
                         <label class="sr-only" for="upload-graphic-dummy">
                             Choose file
                         </label>
