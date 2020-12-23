@@ -282,9 +282,6 @@ class ReleaseForm {
     // Reset 'order' options
     this.updateOrderSelectors();
 
-    // Restart the validation engine so that this row is included
-    // document.getElementById(`#${formId}`).validationEngine('attach');
-
     // Show the table head
     const thead = document.querySelector('table.graphics thead');
     if (thead.style.display === 'none') {
