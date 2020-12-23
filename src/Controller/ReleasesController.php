@@ -381,7 +381,6 @@ class ReleasesController extends AppController
         $time = time();
         $token = md5(Configure::read('upload_token') . $time);
         $action = $this->request->getParam('action');
-        $hasGraphics = (bool)$release->graphics;
 
         $alternateTemplates = [
             'inputContainer' => '<div class="form-group form-row {{type}}{{required}}">' .
@@ -422,7 +421,6 @@ class ReleasesController extends AppController
             'authors',
             'buttonAppendTemplate',
             'defaultTemplates',
-            'hasGraphics',
             'partners',
             'release',
             'reportFiletypes',

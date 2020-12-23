@@ -5,7 +5,6 @@
  * @var \Cake\ORM\ResultSet|\App\Model\Entity\Author[] $authors
  * @var \Cake\ORM\ResultSet|\App\Model\Entity\Partner[] $partners
  * @var \Cake\ORM\ResultSet|\App\Model\Entity\Tag[] $availableTags
- * @var bool $hasGraphics
  * @var int $time
  * @var int $uploadMb
  * @var string $action
@@ -235,7 +234,7 @@ use Cake\Utility\Hash;
         <li>Graphics with lower order-numbers are displayed first.</li>
     </ul>
     <table class="graphics">
-        <thead <?php if (!$hasGraphics): ?>style="display: none;"<?php endif; ?>>
+        <thead <?php if (!$release->graphics): ?>style="display: none;"<?php endif; ?>>
             <th>Remove</th>
             <th>File</th>
             <th>Title</th>
@@ -243,98 +242,96 @@ use Cake\Utility\Hash;
             <th>Order</th>
         </thead>
         <tbody>
-            <?php if ($hasGraphics): ?>
-                <?php foreach ($release->graphics as $k => $g): ?>
-                    <?php $errors = displayErrors($g); ?>
-                    <?php if ($errors): ?>
-                        <tr>
-                            <td colspan="5">
-                                <?= $errors ?>
-                            </td>
-                        </tr>
-                    <?php endif; ?>
+            <?php foreach ($release->graphics ?? [] as $k => $g): ?>
+                <?php $errors = displayErrors($g); ?>
+                <?php if ($errors): ?>
                     <tr>
-                        <?php if ($action == 'add'): ?>
-                            <td>
-                                <button class="remove-graphic">
-                                    <i class="fas fa-times-circle" title="Remove"></i>
-                                </button>
-                            </td>
-                            <td>
-                                <div class="form-group">
-                                    <input type="file" name="graphics[<?= $k ?>][image]" accept="image/*"
-                                           id="upload-graphic-<?= $k ?>" class="form-control-file" />
-                                    <label class="sr-only" for="upload-graphic-<?= $k ?>">
-                                        Choose file
-                                    </label>
-                                </div>
-                            </td>
-                        <?php elseif ($action == 'edit'): ?>
-                            <td>
-                                <?= $this->Form->control(
-                                    "graphics.$k.remove",
-                                    [
-                                        'type' => 'checkbox',
-                                        'label' => false,
-                                    ]
-                                ) ?>
-                            </td>
-                            <td>
-                                <img src="<?= $release->graphics[$k]->thumbnailFullPath ?>" />
-                                <?= $this->Form->control(
-                                    "graphics.$k.id",
-                                    [
-                                        'value' => $release->graphics[$k]->id,
-                                        'type' => 'hidden',
-                                    ]
-                                ) ?>
-                            </td>
-                        <?php endif; ?>
-                        <td>
-                            <?= $this->Form->control(
-                                "graphics.$k.title",
-                                ['label' => false],
-                            ) ?>
-                        </td>
-                        <td>
-                            <?= $this->Form->control(
-                                "graphics.$k.url",
-                                [
-                                    'label' => false,
-                                    'templates' => $buttonAppendTemplate,
-                                    'templateVars' => ['after' => sprintf(
-                                        '<button title="Find report" id="find-report-button-%d" ' .
-                                        'class="btn btn-outline-secondary find-report">' .
-                                            '<i class="fas fa-search" title="Find report"></i>' .
-                                        '</button>',
-                                        $k
-                                    )],
-                                ]
-                            ) ?>
-                            <?php $this->append('buffered'); ?>
-                                document.getElementById(<?= json_encode("find-report-button-$k") ?>)
-                                    .addEventListener(
-                                        'click',
-                                        function (event) {
-                                            event.preventDefault();
-                                            toggleReportFinder(this, <?= json_encode($k) ?>);
-                                        }
-                                    );
-                            <?php $this->end(); ?>
-                        </td>
-                        <td>
-                            <?= $this->Form->control(
-                                "graphics.$k.weight",
-                                [
-                                    'label' => false,
-                                    'type' => 'select',
-                                    'options' => range(1, count($release->graphics)),
-                                ]
-                            ) ?>
+                        <td colspan="5">
+                            <?= $errors ?>
                         </td>
                     </tr>
-                <?php endforeach; ?>
-            <?php endif; ?>
+                <?php endif; ?>
+                <tr>
+                    <?php if ($action == 'add'): ?>
+                        <td>
+                            <button class="remove-graphic">
+                                <i class="fas fa-times-circle" title="Remove"></i>
+                            </button>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <input type="file" name="graphics[<?= $k ?>][image]" accept="image/*"
+                                       id="upload-graphic-<?= $k ?>" class="form-control-file" />
+                                <label class="sr-only" for="upload-graphic-<?= $k ?>">
+                                    Choose file
+                                </label>
+                            </div>
+                        </td>
+                    <?php elseif ($action == 'edit'): ?>
+                        <td>
+                            <?= $this->Form->control(
+                                "graphics.$k.remove",
+                                [
+                                    'type' => 'checkbox',
+                                    'label' => false,
+                                ]
+                            ) ?>
+                        </td>
+                        <td>
+                            <img src="<?= $release->graphics[$k]->thumbnailFullPath ?>" />
+                            <?= $this->Form->control(
+                                "graphics.$k.id",
+                                [
+                                    'value' => $release->graphics[$k]->id,
+                                    'type' => 'hidden',
+                                ]
+                            ) ?>
+                        </td>
+                    <?php endif; ?>
+                    <td>
+                        <?= $this->Form->control(
+                            "graphics.$k.title",
+                            ['label' => false],
+                        ) ?>
+                    </td>
+                    <td>
+                        <?= $this->Form->control(
+                            "graphics.$k.url",
+                            [
+                                'label' => false,
+                                'templates' => $buttonAppendTemplate,
+                                'templateVars' => ['after' => sprintf(
+                                    '<button title="Find report" id="find-report-button-%d" ' .
+                                    'class="btn btn-outline-secondary find-report">' .
+                                        '<i class="fas fa-search" title="Find report"></i>' .
+                                    '</button>',
+                                    $k
+                                )],
+                            ]
+                        ) ?>
+                        <?php $this->append('buffered'); ?>
+                            document.getElementById(<?= json_encode("find-report-button-$k") ?>)
+                                .addEventListener(
+                                    'click',
+                                    function (event) {
+                                        event.preventDefault();
+                                        toggleReportFinder(this, <?= json_encode($k) ?>);
+                                    }
+                                );
+                        <?php $this->end(); ?>
+                    </td>
+                    <td>
+                        <?= $this->Form->control(
+                            "graphics.$k.weight",
+                            [
+                                'label' => false,
+                                'type' => 'select',
+                                'options' => range(1, count($release->graphics)),
+                            ]
+                        ) ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
         </tbody>
         <tfoot>
             <tr class="add-graphic">
