@@ -235,7 +235,7 @@ class ReleaseForm {
   /**
    * Create another row of input fields under 'linked graphics'
    */
-  addGraphic(formId) {
+  addGraphic() {
     // Get and advance the key
     const body = document.querySelector('body');
     let i = this.getGraphicsCount();
