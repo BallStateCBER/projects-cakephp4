@@ -246,9 +246,10 @@ class ReleaseForm {
     newRow.classList.add('graphic');
 
     // Apply a unique key to each row
-    newRow.querySelectorAll('input, select').forEach(function (element) {
+    newRow.querySelectorAll('input, select, label').forEach(function (element) {
       element.id = element.id.replace('dummy', i);
-      element.name = element.name.replace('dummy', i);
+      element.name = element.name ? element.name.replace('dummy', i) : null;
+      element.htmlFor = element.htmlFor ? element.htmlFor.replace('dummy', i) : null;
       element.className = element.className.replace('dummy', i);
       element.disabled = false;
     });
