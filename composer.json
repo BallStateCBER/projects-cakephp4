@@ -9,7 +9,7 @@
         "ext-json": "*",
         "ballstatecber/datacenter-plugin-cakephp4": "dev-master",
         "cakedc/users": "^9.0",
-        "cakephp/cakephp": "~4.1.0",
+        "cakephp/cakephp": "^4.2",
         "cakephp/migrations": "^3.0",
         "cakephp/plugin-installer": "^1.2",
         "imagine/imagine": "^1.2",
