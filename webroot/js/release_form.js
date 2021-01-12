@@ -279,8 +279,9 @@ class ReleaseForm {
     // Add the now-unique row
     document.querySelector('table.graphics tbody').append(newRow);
 
-    // Reset 'order' options
+    // Update 'order' options
     this.updateOrderSelectors();
+    this.advanceLastOrderSelector();
 
     // Show the table head
     const thead = document.querySelector('table.graphics thead');
@@ -376,5 +377,18 @@ class ReleaseForm {
     setTimeout(function () {
       container.remove();
     }, duration);
+  }
+
+  advanceLastOrderSelector() {
+    const selectElements = document.querySelectorAll('table.graphics tbody select');
+    let highestSelectedWeight = 0;
+    selectElements.forEach(function (select) {
+      const selectedWeight = select.querySelector('option:checked').value;
+      if (selectedWeight > highestSelectedWeight) {
+        highestSelectedWeight = parseInt(selectedWeight);
+      }
+    });
+    const lastSelect = document.querySelector('table.graphics tbody tr:last-child select');
+    lastSelect.querySelector('option[value="' + (highestSelectedWeight + 1) + '"]').selected = true;
   }
 }
