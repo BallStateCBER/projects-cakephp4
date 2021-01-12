@@ -4,9 +4,13 @@ declare(strict_types=1);
 namespace App\Model\Table;
 
 use App\Upload\GraphicsPathProcessor;
+use ArrayObject;
+use Cake\Datasource\EntityInterface;
+use Cake\Event\EventInterface;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use DirectoryIterator;
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
 use Imagine\Image\ImageInterface;
@@ -33,6 +37,8 @@ use Josegonzalez\Upload\Validation\UploadValidation;
  */
 class GraphicsTable extends Table
 {
+    const GRAPHICS_DIR_ROOT = ROOT . DS . 'webroot' . DS . 'img' . DS . 'releases' . DS;
+
     /**
      * Initialize method
      *
@@ -53,7 +59,7 @@ class GraphicsTable extends Table
                 'path' => '', // filesystem.root + getNextDirNumber(), appended by GraphicsPathProcessor
                 'pathProcessor' => GraphicsPathProcessor::class,
                 'filesystem' => [
-                    'root' => ROOT . DS . 'webroot' . DS . 'img' . DS . 'releases' . DS,
+                    'root' => self::GRAPHICS_DIR_ROOT,
                 ],
                 'fields' => ['dir' => 'dir'],
                 'keepFilesOnDelete' => false,
@@ -188,5 +194,31 @@ class GraphicsTable extends Table
             ->orderDesc('dir')
             ->first()
             ->dir + 1;
+    }
+
+    /**
+     * Deletes empty directories
+     *
+     * @param \Cake\Event\EventInterface $event Delete event
+     * @param \Cake\Datasource\EntityInterface $entity Graphic entity
+     * @param \ArrayObject $options Options array
+     * @return void
+     */
+    public function afterDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    {
+        /** @var \App\Model\Entity\Graphic $entity */
+        $fullPath = self::GRAPHICS_DIR_ROOT . $entity->dir;
+
+        foreach (new DirectoryIterator($fullPath) as $item) {
+            if ($item->isDot()) {
+                continue;
+            }
+
+            // Do nothing if files are found
+            return;
+        }
+
+        // Delete directory if no files were found in it
+        rmdir($fullPath);
     }
 }
