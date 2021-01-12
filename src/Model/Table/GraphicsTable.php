@@ -82,11 +82,12 @@ class GraphicsTable extends Table
                 },
                 'deleteCallback' => function ($path, $entity, $field, $settings) {
                     /** @var \App\Model\Entity\Graphic $entity */
-                    // When deleting the entity, both the original and the thumbnail will be removed
-                    // when keepFilesOnDelete is set to false
+                    /* When deleting the entity, both the original and the thumbnail will be removed when
+                     * keepFilesOnDelete is set to false */
+
                     return [
-                        $path . $entity->{$field},
-                        $path . $entity->thumbnail,
+                        $path . DS . $entity->{$field},
+                        $path . DS . $entity->thumbnail,
                     ];
                 },
             ],

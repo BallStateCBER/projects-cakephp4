@@ -276,15 +276,17 @@ class ReleasesController extends AppController
      */
     private function processForm(Release $release)
     {
-        // Set the 'dir' value for all new graphics
         $this->loadModel('Graphics');
         $nextGraphicsDir = $this->Graphics->getNextDirNumber();
         $data = $this->request->getData();
-        if ($data['graphics'] ?? false) {
-            foreach ($data['graphics'] as &$graphic) {
-                if (!($graphic['id'] ?? false)) {
-                    $graphic['dir'] = $nextGraphicsDir;
+        foreach ($data['graphics'] ?? [] as $k => $graphic) {
+            if ($graphic['id'] ?? false) {
+                if ($graphic['remove']) {
+                    $this->Releases->Graphics->delete($this->Releases->Graphics->get($graphic['id']));
+                    unset($data['graphics'][$k]);
                 }
+            } else {
+                $data['graphics'][$k]['dir'] = $nextGraphicsDir;
             }
         }
 
