@@ -245,13 +245,13 @@ use Cake\Utility\Hash;
             <?php foreach ($release->graphics ?? [] as $k => $g): ?>
                 <?php $errors = displayErrors($g); ?>
                 <?php if ($errors): ?>
-                    <tr>
+                    <tr class="errors">
                         <td colspan="5">
                             <?= $errors ?>
                         </td>
                     </tr>
                 <?php endif; ?>
-                <tr>
+                <tr class="graphic">
                     <?php if ($action == 'add'): ?>
                         <td>
                             <button class="remove-graphic">
