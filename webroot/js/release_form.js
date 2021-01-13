@@ -60,12 +60,15 @@ class ReleaseForm {
       document.getElementById('release-partner-id').selectedIndex = 0;
       document.getElementById('choose-partner').style.display = 'none';
       document.getElementById('add-partner').style.display = 'block';
+      document.getElementById('release-new-partner').required = true;
     });
 
     const choosePartnerButton = document.getElementById('choose-partner-button');
     choosePartnerButton.addEventListener('click', function (event) {
       event.preventDefault();
-      document.getElementById('release-new-partner').value = '';
+      const newPartnerField = document.getElementById('release-new-partner');
+      newPartnerField.value = '';
+      newPartnerField.required = false;
       document.getElementById('choose-partner').style.display = 'block';
       document.getElementById('add-partner').style.display = 'none';
     });
