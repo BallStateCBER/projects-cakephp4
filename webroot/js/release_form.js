@@ -219,7 +219,6 @@ class ReleaseForm {
     // Add and remove <option>s as necessary
     const rowCount = document.querySelectorAll('table.graphics tbody tr').length;
     const selectElements = document.querySelectorAll('table.graphics tbody select');
-    const self = this;
     selectElements.forEach(function (select) {
       // Add options
       let optionCount = select.querySelectorAll('option').length
@@ -254,7 +253,6 @@ class ReleaseForm {
    */
   addGraphic() {
     // Get and advance the key
-    const body = document.querySelector('body');
     let i = this.getGraphicsCount();
 
     // Get the row to be copied
