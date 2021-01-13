@@ -26,9 +26,9 @@ class RequestPolicy
             return true;
         }
 
-        // All DataCenter actions are accessible to unauthenticated users
+        // All DataCenter and DebugKit actions are accessible to unauthenticated users
         $plugin = $request->getParam('plugin');
-        if ($plugin === 'DataCenter') {
+        if (in_array($plugin, ['DataCenter', 'DebugKit'])) {
             return true;
         }
 
