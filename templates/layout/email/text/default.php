@@ -15,3 +15,9 @@
  */
 
 echo $this->fetch('content');
+?>
+
+Projects and Publications
+Center for Business and Economic Research
+Ball State University
+https://projects.cberdata.org/
