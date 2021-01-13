@@ -213,18 +213,32 @@ class ReleaseForm {
   }
 
   updateOrderSelectors() {
+    // Add and remove <option>s as necessary
     const rowCount = document.querySelectorAll('table.graphics tbody tr').length;
     const selectElements = document.querySelectorAll('table.graphics tbody select');
+    const self = this;
     selectElements.forEach(function (select) {
-      const selected = select.querySelector('option:checked').value;
-      select.innerHTML = '';
-      for (let n = 1; n <= rowCount; n++) {
+      // Add options
+      let optionCount = select.querySelectorAll('option').length
+      while (optionCount < rowCount) {
         const option = document.createElement('option');
-        option.innerHTML = n.toString();
-        option.value = (n - 1).toString();
-        option.selected = selected === option.value;
+        option.innerHTML = (optionCount + 1).toString();
+        option.value = optionCount.toString();
         select.appendChild(option);
+        optionCount++;
       }
+
+      // Remove options
+      const selectedValue = parseInt(select.querySelector('option:checked').value);
+      while (select.querySelector('option').length > rowCount) {
+        select.querySelector('option:last-child').remove();
+
+        // Fix invalid selections
+        if (selectedValue + 1 > rowCount) {
+          select.querySelector('option:last-child').selected = true;
+        }
+      }
+
     });
   }
 
@@ -281,7 +295,8 @@ class ReleaseForm {
 
     // Update 'order' options
     this.updateOrderSelectors();
-    this.advanceLastOrderSelector();
+    const lastSelect = document.querySelector('table.graphics tbody tr:last-child select');
+    this.selectNextOrder(lastSelect);
 
     // Show the table head
     const thead = document.querySelector('table.graphics thead');
@@ -379,16 +394,27 @@ class ReleaseForm {
     }, duration);
   }
 
-  advanceLastOrderSelector() {
+  getHighestSelectedOrder() {
     const selectElements = document.querySelectorAll('table.graphics tbody select');
-    let highestSelectedWeight = 0;
+    let highestSelectedOrder = 0;
     selectElements.forEach(function (select) {
       const selectedWeight = select.querySelector('option:checked').value;
-      if (selectedWeight > highestSelectedWeight) {
-        highestSelectedWeight = parseInt(selectedWeight);
+      if (selectedWeight > highestSelectedOrder) {
+        highestSelectedOrder = parseInt(selectedWeight);
       }
     });
-    const lastSelect = document.querySelector('table.graphics tbody tr:last-child select');
-    lastSelect.querySelector('option[value="' + (highestSelectedWeight + 1) + '"]').selected = true;
+
+    return highestSelectedOrder;
+  }
+
+  selectNextOrder(select) {
+    const highestSelectedOrder = this.getHighestSelectedOrder();
+    for (let order = (highestSelectedOrder + 1); order > 0; order--) {
+      const option = select.querySelector('option[value="' + order + '"]');
+      if (option) {
+        option.selected = true;
+        break;
+      }
+    }
   }
 }
