@@ -13,6 +13,8 @@ use Cake\ORM\Entity;
  * @property string $name
  * @property string $email
  * @property string $password
+ * @property string $token
+ * @property \Cake\I18n\FrozenTime $token_expires
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
  */

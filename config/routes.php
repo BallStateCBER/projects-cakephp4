@@ -88,6 +88,15 @@ $routes->scope('/', function (RouteBuilder $builder) {
         '/logout',
         ['controller' => 'Users', 'action' => 'logout'],
     );
+    $builder->connect(
+        '/request-reset-password',
+        ['controller' => 'Users', 'action' => 'requestResetPassword']
+    );
+    $builder->connect(
+        '/reset-password/:token',
+        ['controller' => 'Users', 'action' => 'resetPassword'],
+        ['pass' => ['token']]
+    );
 
     $builder->fallbacks();
 });

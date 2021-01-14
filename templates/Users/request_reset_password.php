@@ -1,15 +1,19 @@
 <?php
 /**
  * @var \App\Model\Entity\User $user
+ * @var string $pageTitle
  */
 ?>
+<h1 class="page_title">
+    <?= $pageTitle ?>
+</h1>
+
 <div class="users form">
-    <?= $this->Flash->render('auth') ?>
     <?= $this->Form->create($user) ?>
     <fieldset>
         <legend>Please enter your email address to reset your password</legend>
-        <?= $this->Form->control('reference', ['label' => 'Email address']) ?>
+        <?= $this->Form->control('email', ['label' => 'Email address']) ?>
     </fieldset>
-    <?= $this->Form->button(__d('cake_d_c/users', 'Submit'), ['class' => 'btn btn-primary']); ?>
+    <?= $this->Form->button('Submit', ['class' => 'btn btn-primary']); ?>
     <?= $this->Form->end() ?>
 </div>

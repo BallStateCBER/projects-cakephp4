@@ -23,7 +23,8 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\User[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
  * @method \App\Model\Entity\User[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
  * @method \App\Model\Entity\User[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
- *
+ * @method \App\Model\Entity\User[]|\Cake\Datasource\ResultSetInterface findByEmail(string $email)
+ * @method \App\Model\Entity\User[]|\Cake\Datasource\ResultSetInterface findByToken(string $token)
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class UsersTable extends Table
@@ -74,6 +75,8 @@ class UsersTable extends Table
             ->requirePresence('password', 'create')
             ->notEmptyString('password');
 
+        $validator = $this->validationPasswordConfirm($validator);
+
         return $validator;
     }
 
@@ -89,5 +92,30 @@ class UsersTable extends Table
         $rules->add($rules->isUnique(['email']), ['errorField' => 'email']);
 
         return $rules;
+    }
+
+    /**
+     * Adds rules for confirming a password
+     *
+     * @param \Cake\Validation\Validator $validator Cake validator object.
+     * @return \Cake\Validation\Validator
+     */
+    public function validationPasswordConfirm(Validator $validator)
+    {
+        $validator
+            ->requirePresence('password_confirm', 'create')
+            ->notBlank('password_confirm');
+
+        $validator
+            ->requirePresence('new_password', 'create')
+            ->notBlank('new_password')
+            ->add('new_password', [
+                'password_confirm_check' => [
+                    'rule' => ['compareWith', 'password_confirm'],
+                    'message' => 'Those two passwords did not match',
+                    'allowEmpty' => false,
+                ]]);
+
+        return $validator;
     }
 }

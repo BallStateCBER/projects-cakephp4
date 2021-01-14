@@ -3,6 +3,11 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\Http\Response;
+use Cake\I18n\Time;
+use Cake\Mailer\MailerAwareTrait;
+use Cake\Utility\Security;
+
 /**
  * Users Controller
  *
@@ -11,10 +16,14 @@ namespace App\Controller;
  */
 class UsersController extends AppController
 {
+    use MailerAwareTrait;
+
     public const ALLOW = [
         'index',
         'login',
         'logout',
+        'requestResetPassword',
+        'resetPassword',
         'view',
     ];
 
@@ -158,5 +167,98 @@ class UsersController extends AppController
         $this->Authentication->logout();
 
         return $this->redirect(['controller' => 'Users', 'action' => 'login']);
+    }
+
+    /**
+     * Sends the user an email with a password-resetting link
+     *
+     * @return void
+     */
+    public function requestResetPassword()
+    {
+        $user = $this->Users->newEmptyEntity();
+        $this->set([
+            'pageTitle' => 'Request Password Reset',
+            'user' => $user,
+        ]);
+
+        if (!$this->getRequest()->is('post')) {
+            return;
+        }
+
+        $email = $this->request->getData('email');
+        /** @var \App\Model\Entity\User $user */
+        $user = $this->Users->findByEmail($email)->first();
+        if (!$user) {
+            $this->Flash->error('Email address not found');
+
+            return;
+        }
+
+        // Update token
+        $expiration = new Time('now');
+        $day = 86400;
+        $user->token_expires = $expiration->addSeconds($day);
+        $user->token = bin2hex(Security::randomBytes(16));
+        if (!$this->Users->save($user)) {
+            $this->Flash->error('An error prevented your password reset token from being generated');
+
+            return;
+        }
+
+        $this->getMailer('User')->send('resetPassword', [$user]);
+        $this->Flash->success('Please check your email for a password reset message');
+    }
+
+    /**
+     * Sends the user an email with a password-resetting link
+     *
+     * @param string $token Password-reset token
+     * @return null|\Cake\Http\Response
+     */
+    public function resetPassword(string $token): ?Response
+    {
+        $loginUrl = ['controller' => 'Users', 'action' => 'login'];
+
+        /** @var \App\Model\Entity\User $user */
+        $user = $this->Users->findByToken($token)->first();
+        if (!$user) {
+            $this->Flash->error('The provided password reset token is invalid or has already been used.');
+
+            return $this->redirect($loginUrl);
+        }
+
+        $expired = $user->token_expires->wasWithinLast('1 day');
+        if ($expired) {
+            $this->Flash->error(
+                'The provided password reset token has expired. ' .
+                'Click on the "Reset Password" link to receive a new link to reset your password.'
+            );
+
+            return $this->redirect($loginUrl);
+        }
+
+        $data = $this->request->getData();
+        $data['password'] = $data['new_password'];
+        $user = $this->Users->patchEntity($user, $data, [
+            'fields' => [
+                'new_password',
+                'password',
+                'password_confirm',
+            ],
+        ]);
+
+        if ($this->Users->save($user)) {
+            $this->Flash->success('Your password has been successfully updated. You may now log in.');
+
+            return $this->redirect($loginUrl);
+        }
+
+        $this->set([
+            'pageTitle' => 'Reset Password',
+            'user' => $user,
+        ]);
+
+        return null;
     }
 }
