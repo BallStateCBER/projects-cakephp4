@@ -167,9 +167,10 @@ class UsersController extends AppController
      */
     public function logout()
     {
-        $this->Authentication->logout();
+        $logoutRedirect = $this->Authentication->logout();
+        $this->Flash->success('You have been logged out');
 
-        return $this->redirect(['controller' => 'Users', 'action' => 'login']);
+        return $this->redirect($logoutRedirect ?? ['controller' => 'Users', 'action' => 'login']);
     }
 
     /**
