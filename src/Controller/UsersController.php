@@ -55,8 +55,9 @@ class UsersController extends AppController
         $user = $this->Users->get($id, [
             'contain' => ['SocialAccounts'],
         ]);
+        $pageTitle = $user->name;
 
-        $this->set(compact('user'));
+        $this->set(compact('user', 'pageTitle'));
     }
 
     /**
@@ -109,7 +110,7 @@ class UsersController extends AppController
             $this->Flash->error('The user could not be saved. Please, try again.');
         }
         $this->set([
-            'pageTitle' => 'Edit User',
+            'pageTitle' => 'Edit ' . $user->name,
             'user' => $user,
         ]);
 
@@ -153,6 +154,8 @@ class UsersController extends AppController
         if ($this->request->is('post') && !$result->isValid()) {
             $this->Flash->error('Invalid email or password');
         }
+
+        $this->set('pageTitle', 'Log in');
 
         return null;
     }

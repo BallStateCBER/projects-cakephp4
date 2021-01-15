@@ -99,7 +99,7 @@ class AuthorsController extends AppController
             }
             $this->Flash->error('The author could not be saved. Please, try again.');
         }
-        $pageTitle = 'Edit Author';
+        $pageTitle = 'Edit ' . $author->name;
         $this->set(compact('author', 'pageTitle'));
 
         return $this->render('form');

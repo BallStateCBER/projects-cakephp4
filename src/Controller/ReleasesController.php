@@ -59,8 +59,9 @@ class ReleasesController extends AppController
             ->orderDesc('Releases.id');
 
         $releases = $this->paginate($query);
+        $pageTitle = false;
 
-        $this->set(compact('releases'));
+        $this->set(compact('releases', 'pageTitle'));
     }
 
     /**
@@ -75,8 +76,9 @@ class ReleasesController extends AppController
         $release = $this->Releases->get($id, [
             'contain' => ['Partners', 'Graphics', 'Authors', 'Tags'],
         ]);
+        $pageTitle = $release->title;
 
-        $this->set(compact('release'));
+        $this->set(compact('release', 'pageTitle'));
     }
 
     /**
