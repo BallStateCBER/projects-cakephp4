@@ -1,8 +1,12 @@
 <?php
+declare(strict_types=1);
+
 namespace App\Mailer;
 
 use App\Model\Entity\User;
+use Cake\Core\Configure;
 use Cake\Mailer\Mailer;
+use Cake\Mailer\Message;
 use Cake\Routing\Router;
 
 class UserMailer extends Mailer
@@ -15,9 +19,11 @@ class UserMailer extends Mailer
      */
     public function resetPassword(User $user)
     {
+        $siteTitle = Configure::read('DataCenter.siteTitle');
         $this
             ->setTo($user->email)
-            ->setSubject('CBER Projects and Publications - Reset password')
+            ->setSubject("$siteTitle - Reset password")
+            ->setEmailFormat(Message::MESSAGE_BOTH)
             ->setViewVars([
                 'url' => Router::url([
                     'controller' => 'Users',
