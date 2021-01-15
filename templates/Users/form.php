@@ -2,15 +2,10 @@
 /**
  * @var \App\Model\Entity\User $user
  * @var \App\View\AppView $this
- * @var string $pageTitle
  */
 
 $isAddForm = $this->request->getParam('action') == 'add';
 ?>
-
-<h1 class="page_title">
-    <?= $pageTitle ?>
-</h1>
 
 <p>
     <?= $this->Html->link(
