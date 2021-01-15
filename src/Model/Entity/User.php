@@ -3,8 +3,7 @@ declare(strict_types=1);
 
 namespace App\Model\Entity;
 
-use Authentication\PasswordHasher\DefaultPasswordHasher;
-use Cake\ORM\Entity;
+use DataCenter\Model\Entity\User as DataCenterUser;
 
 /**
  * User Entity
@@ -18,7 +17,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
  */
-class User extends Entity
+class User extends DataCenterUser
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -45,19 +44,4 @@ class User extends Entity
     protected $_hidden = [
         'password',
     ];
-
-    /**
-     * Automatically hash non-blank passwords
-     *
-     * @param string $password Password
-     * @return string|null
-     */
-    protected function _setPassword(string $password): ?string
-    {
-        if (strlen($password) > 0) {
-            return (new DefaultPasswordHasher())->hash($password);
-        }
-
-        return null;
-    }
 }

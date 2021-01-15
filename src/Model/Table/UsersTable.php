@@ -3,9 +3,7 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\ORM\RulesChecker;
-use Cake\ORM\Table;
-use Cake\Validation\Validator;
+use DataCenter\Model\Table\UsersTable as PluginUsersTable;
 
 /**
  * Users Model
@@ -27,95 +25,7 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\User[]|\Cake\Datasource\ResultSetInterface findByToken(string $token)
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
-class UsersTable extends Table
+class UsersTable extends PluginUsersTable
 {
-    /**
-     * Initialize method
-     *
-     * @param array $config The configuration for the Table.
-     * @return void
-     */
-    public function initialize(array $config): void
-    {
-        parent::initialize($config);
 
-        $this->setTable('users');
-        $this->setDisplayField('name');
-        $this->setPrimaryKey('id');
-
-        $this->addBehavior('Timestamp');
-    }
-
-    /**
-     * Default validation rules.
-     *
-     * @param \Cake\Validation\Validator $validator Validator instance.
-     * @return \Cake\Validation\Validator
-     */
-    public function validationDefault(Validator $validator): Validator
-    {
-        $validator
-            ->integer('id')
-            ->allowEmptyString('id', null, 'create');
-
-        $validator
-            ->scalar('name')
-            ->maxLength('name', 100)
-            ->requirePresence('name', 'create')
-            ->notEmptyString('name');
-
-        $validator
-            ->email('email')
-            ->requirePresence('email', 'create')
-            ->notEmptyString('email');
-
-        $validator
-            ->scalar('password')
-            ->maxLength('password', 64)
-            ->requirePresence('password', 'create')
-            ->notEmptyString('password');
-
-        $validator = $this->validationPasswordConfirm($validator);
-
-        return $validator;
-    }
-
-    /**
-     * Returns a rules checker object that will be used for validating
-     * application integrity.
-     *
-     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
-     * @return \Cake\ORM\RulesChecker
-     */
-    public function buildRules(RulesChecker $rules): RulesChecker
-    {
-        $rules->add($rules->isUnique(['email']), ['errorField' => 'email']);
-
-        return $rules;
-    }
-
-    /**
-     * Adds rules for confirming a password
-     *
-     * @param \Cake\Validation\Validator $validator Cake validator object.
-     * @return \Cake\Validation\Validator
-     */
-    public function validationPasswordConfirm(Validator $validator)
-    {
-        $validator
-            ->requirePresence('password_confirm', 'create')
-            ->notBlank('password_confirm');
-
-        $validator
-            ->requirePresence('new_password', 'create')
-            ->notBlank('new_password')
-            ->add('new_password', [
-                'password_confirm_check' => [
-                    'rule' => ['compareWith', 'password_confirm'],
-                    'message' => 'Those two passwords did not match',
-                    'allowEmpty' => false,
-                ]]);
-
-        return $validator;
-    }
 }

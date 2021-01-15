@@ -17,8 +17,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Cache\Cache;
-use Cake\Controller\Controller;
 use Cake\Event\EventInterface;
+use DataCenter\Controller\AppController as PluginController;
 
 /**
  * Application Controller
@@ -30,14 +30,9 @@ use Cake\Event\EventInterface;
  * @property \App\Model\Table\PartnersTable $Partners
  * @property \App\Model\Table\ReleasesTable $Releases
  * @property \App\Model\Table\TagsTable $Tags
- * @property \Authentication\Controller\Component\AuthenticationComponent $Authentication
- * @property \Authorization\Controller\Component\AuthorizationComponent $Authorization
  */
-class AppController extends Controller
+class AppController extends PluginController
 {
-    // A list of actions that unauthenticated users can access
-    public const ALLOW = [];
-
     /**
      * Initialization hook method.
      *
@@ -64,11 +59,6 @@ class AppController extends Controller
         $this->loadModel('Tags');
         $this->loadModel('Releases');
         $this->loadModel('Partners');
-
-        $this->loadComponent('Authentication.Authentication');
-        $this->loadComponent('Authorization.Authorization');
-
-        $this->Authentication->allowUnauthenticated(static::ALLOW);
     }
 
     /**
