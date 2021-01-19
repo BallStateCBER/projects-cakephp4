@@ -50,8 +50,11 @@ class PartnersController extends AppController
         ]);
 
         $this->set([
-            'partner' => $partner,
+            'ogMetaTags' => [
+                'og:description' => "Projects and publications with $partner->name",
+            ],
             'pageTitle' => "Projects and Publications with $partner->name",
+            'partner' => $partner,
         ]);
     }
 

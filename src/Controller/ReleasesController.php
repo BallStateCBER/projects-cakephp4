@@ -8,6 +8,7 @@ use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Database\Expression\QueryExpression;
 use Cake\Event\EventInterface;
+use Cake\Routing\Router;
 use SplFileInfo;
 
 /**
@@ -77,8 +78,25 @@ class ReleasesController extends AppController
             'contain' => ['Partners', 'Graphics', 'Authors', 'Tags'],
         ]);
         $pageTitle = $release->title;
+        $ogMetaTags = [
+            'og:description' => $release->description,
+            'og:type' => 'article',
+            'og:url' => Router::url([
+                'controller' => 'Releases',
+                'action' => 'view',
+                'id' => $release->id,
+                'slug' => $release->slug,
+            ], true),
+        ];
+        foreach ($release->graphics as $graphic) {
+            $ogMetaTags['og:image'][] = sprintf(
+                Router::url('/img/releases/%s/%s', true),
+                $graphic->dir,
+                $graphic->image
+            );
+        }
 
-        $this->set(compact('release', 'pageTitle'));
+        $this->set(compact('release', 'ogMetaTags', 'pageTitle'));
     }
 
     /**
@@ -319,9 +337,12 @@ class ReleasesController extends AppController
             ->orderAsc('released');
 
         $this->set([
-            'year' => $year,
-            'releases' => $releases,
+            'ogMetaTags' => [
+                'og:description' => "Projects and publications published in $year",
+            ],
             'pageTitle' => "$year Projects and Publications",
+            'releases' => $releases,
+            'year' => $year,
         ]);
     }
 

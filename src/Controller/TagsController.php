@@ -51,8 +51,11 @@ class TagsController extends AppController
         ]);
 
         $this->set([
-            'tag' => $tag,
+            'ogMetaTags' => [
+                'og:description' => "Projects and publications related to $tag->name",
+            ],
             'pageTitle' => str_replace(' And ', ' and ', ucwords($tag->name)),
+            'tag' => $tag,
         ]);
     }
 

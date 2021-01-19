@@ -51,6 +51,9 @@ class AuthorsController extends AppController
 
         $this->set([
             'author' => $author,
+            'ogMetaTags' => [
+                'og:description' => "Projects and publications by $author->name",
+            ],
             'pageTitle' => $author->name,
         ]);
     }
