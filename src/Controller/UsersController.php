@@ -13,9 +13,7 @@ use DataCenter\Controller\UsersController as PluginUsersController;
  */
 class UsersController extends PluginUsersController
 {
-    public const ALLOW = [
-        'index',
-    ];
+    public const ALLOW = [];
 
     /**
      * Index method
