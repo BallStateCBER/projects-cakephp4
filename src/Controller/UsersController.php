@@ -15,7 +15,6 @@ class UsersController extends PluginUsersController
 {
     public const ALLOW = [
         'index',
-        'view',
     ];
 
     /**
@@ -32,23 +31,6 @@ class UsersController extends PluginUsersController
                 ->orderAsc('name')
                 ->all(),
         ]);
-    }
-
-    /**
-     * View method
-     *
-     * @param string|null $id User id.
-     * @return \Cake\Http\Response|null|void Renders view
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $user = $this->Users->get($id, [
-            'contain' => ['SocialAccounts'],
-        ]);
-        $pageTitle = $user->name;
-
-        $this->set(compact('user', 'pageTitle'));
     }
 
     /**
