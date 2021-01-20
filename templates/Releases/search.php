@@ -6,17 +6,16 @@
  * @var string $searchTerm
  */
 
-$count = $this->Paginator->counter('{{count}}');
+$count = $releases ? $this->Paginator->counter('{{count}}') : 0;
 ?>
 <?php if ($searchTerm): ?>
-    <h1 class="page_title">
+    <h2>
         <?= sprintf(
-            '%s %s for "%s"',
+            '%s %s',
             $count,
-            __n('Result', 'Results', count($releases)),
-            $searchTerm
+            __n('Result', 'Results', count($releases))
         ) ?>
-    </h1>
+    </h2>
 
     <?php if ($tags): ?>
         <p class="search_results_tags">
@@ -92,10 +91,6 @@ $count = $this->Paginator->counter('{{count}}');
         </p>
     <?php endif; ?>
 <?php else: ?>
-    <h1 class="page_title">
-        Search
-    </h1>
-
     <p>
         Please enter a search term to find related projects and publications.
     </p>
