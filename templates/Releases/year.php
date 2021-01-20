@@ -5,10 +5,6 @@
  */
 ?>
 
-<h1 class="page_title">
-    Projects and Publications in <?= $year ?>
-</h1>
-
 <?php if ($releases) : ?>
     <table class="releases-list table">
         <?php foreach ($releases as $release): ?>

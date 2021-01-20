@@ -89,9 +89,6 @@ use Cake\Utility\Hash;
     });
 <?php $this->end(); ?>
 
-<h1 class="page_title">
-    <?= $pageTitle ?>
-</h1>
 <?php
     echo $this->Form->create(
         $release,
