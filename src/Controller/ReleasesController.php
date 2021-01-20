@@ -386,7 +386,7 @@ class ReleasesController extends AppController
         }
 
         $this->set([
-            'pageTitle' => "Search Results: $searchTerm",
+            'pageTitle' => 'Search Results' . ($searchTerm ? ": $searchTerm" : ''),
             'releases' => $releases,
             'tags' => $tags,
             'searchTerm' => $searchTerm,
