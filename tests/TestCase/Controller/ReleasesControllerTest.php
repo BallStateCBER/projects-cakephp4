@@ -21,7 +21,14 @@ class ReleasesControllerTest extends TestCase
      * @var array
      */
     protected $fixtures = [
+        'app.Authors',
+        'app.AuthorsReleases',
+        'app.Graphics',
+        'app.Partners',
         'app.Releases',
+        'app.ReleasesTags',
+        'app.Tags',
+        'app.Users',
     ];
 
     /**
@@ -31,7 +38,11 @@ class ReleasesControllerTest extends TestCase
      */
     public function testIndex(): void
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->get([
+            'controller' => 'Releases',
+            'action' => 'index',
+        ]);
+        $this->assertResponseOk();
     }
 
     /**
@@ -41,7 +52,15 @@ class ReleasesControllerTest extends TestCase
      */
     public function testView(): void
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $release = $this->fixtureManager->loaded()['app.Releases']->records[0];
+        $url = [
+            'controller' => 'Releases',
+            'action' => 'view',
+            'id' => $release['id'],
+            'slug' => $release['slug'],
+        ];
+        $this->get($url);
+        $this->assertResponseOk();
     }
 
     /**
