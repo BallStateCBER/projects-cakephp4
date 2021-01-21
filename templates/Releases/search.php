@@ -1,7 +1,7 @@
 <?php
 /**
- * @var \App\Model\Entity\Release[] $releases
- * @var \App\Model\Entity\Tag[] $tags
+ * @var \App\Model\Entity\Release[]|\Cake\Collection\CollectionInterface $releases
+ * @var \App\Model\Entity\Tag[]|\Cake\Collection\CollectionInterface $tags
  * @var \App\View\AppView $this
  * @var string $searchTerm
  */

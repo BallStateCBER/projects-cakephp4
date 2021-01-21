@@ -1,7 +1,8 @@
 <?php
 /**
  * @var string $year
- * @var \App\Model\Entity\Release[] $releases
+ * @var \App\Model\Entity\Release[]|\Cake\Collection\CollectionInterface $releases
+ * @var \App\View\AppView $this
  */
 ?>
 

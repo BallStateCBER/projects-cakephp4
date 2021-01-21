@@ -34,6 +34,7 @@ use Josegonzalez\Upload\Validation\UploadValidation;
  * @method \App\Model\Entity\Graphic[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
  * @method \App\Model\Entity\Graphic[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
+ * @mixin \Josegonzalez\Upload\Model\Behavior\UploadBehavior
  */
 class GraphicsTable extends Table
 {

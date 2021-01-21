@@ -27,6 +27,7 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\Partner[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
+ * @mixin \Muffin\Slug\Model\Behavior\SlugBehavior
  */
 class PartnersTable extends Table
 {

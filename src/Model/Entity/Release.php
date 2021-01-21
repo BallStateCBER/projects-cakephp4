@@ -17,7 +17,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
  *
- * @property \App\Model\Entity\Partner $partner
+ * @property \App\Model\Entity\Partner|null $partner
  * @property \App\Model\Entity\Graphic[] $graphics
  * @property \App\Model\Entity\Author[] $authors
  * @property \App\Model\Entity\Tag[] $tags

@@ -12,7 +12,7 @@ use Psr\Http\Message\UploadedFileInterface;
  *
  * @property int $id
  * @property int $release_id
- * @property string $dir
+ * @property int $dir
  * @property string $image
  * @property string $thumbnail
  * @property string $thumbnailFullPath
@@ -23,6 +23,7 @@ use Psr\Http\Message\UploadedFileInterface;
  * @property \Cake\I18n\FrozenTime $modified
  *
  * @property \App\Model\Entity\Release $release
+ * @property string $thumbnail_full_path
  */
 class Graphic extends Entity
 {

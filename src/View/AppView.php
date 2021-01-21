@@ -23,6 +23,7 @@ use DataCenter\View\DataCenterView;
  * Your application's default view class
  *
  * @link https://book.cakephp.org/4/en/views.html#the-app-view
+ * @property \DataCenter\View\Helper\TagHelper $Tag
  */
 class AppView extends DataCenterView
 {

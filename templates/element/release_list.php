@@ -1,7 +1,7 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \App\Model\Entity\Release[] $releases
+ * @var \App\Model\Entity\Release[]|\Cake\Collection\CollectionInterface $releases
  */
 ?>
 <table class="releases-list table">

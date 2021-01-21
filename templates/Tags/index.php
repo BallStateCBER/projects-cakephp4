@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \App\Model\Entity\Tag[]|\Cake\ORM\ResultSet $tags
+ * @var \App\Model\Entity\Tag[]|\Cake\Collection\CollectionInterface $tags
  * @var \App\View\AppView $this
  */
 ?>

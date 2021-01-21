@@ -14,6 +14,10 @@
  * @var string[] $buttonAppendTemplate
  * @var string[] $defaultTemplates
  * @var string[] $reportFiletypes
+ * @var object $entity
+ * @var mixed $errorMsgs
+ * @var mixed $extension
+ * @var mixed $field
  */
 
 use Cake\Datasource\EntityInterface;

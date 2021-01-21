@@ -31,6 +31,8 @@ use Cake\Validation\Validator;
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  * @mixin \Cake\ORM\Behavior\TreeBehavior
+ * @property \Cake\ORM\Table&\Cake\ORM\Association\HasMany $ReleasesTags
+ * @mixin \Muffin\Slug\Model\Behavior\SlugBehavior
  */
 class TagsTable extends Table
 {

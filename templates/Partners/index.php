@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \App\Model\Entity\Partner[]|\Cake\ORM\ResultSet $partners
+ * @var \App\Model\Entity\Partner[]|\Cake\Collection\CollectionInterface $partners
  * @var \App\View\AppView $this
  */
 ?>

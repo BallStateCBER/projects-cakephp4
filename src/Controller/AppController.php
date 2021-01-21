@@ -30,6 +30,8 @@ use DataCenter\Controller\AppController as PluginController;
  * @property \App\Model\Table\PartnersTable $Partners
  * @property \App\Model\Table\ReleasesTable $Releases
  * @property \App\Model\Table\TagsTable $Tags
+ * @property \Authentication\Controller\Component\AuthenticationComponent $Authentication
+ * @property \Authorization\Controller\Component\AuthorizationComponent $Authorization
  */
 class AppController extends PluginController
 {

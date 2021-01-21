@@ -118,6 +118,10 @@ class Application extends BaseApplication implements
     {
         try {
             $this->addPlugin('Bake');
+
+            if (Configure::read('debug')) {
+                $this->addPlugin('IdeHelper');
+            }
         } catch (MissingPluginException $e) {
             // Do not halt if the plugin is missing
         }

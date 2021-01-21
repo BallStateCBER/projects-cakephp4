@@ -30,6 +30,9 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\Release[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
+ * @property \Cake\ORM\Table&\Cake\ORM\Association\HasMany $AuthorsReleases
+ * @property \Cake\ORM\Table&\Cake\ORM\Association\HasMany $ReleasesTags
+ * @mixin \Muffin\Slug\Model\Behavior\SlugBehavior
  */
 class ReleasesTable extends Table
 {

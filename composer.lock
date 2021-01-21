@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "df9611ff8cf6c16d35a8a2b822f0c0b6",
+    "content-hash": "8027d093985ca8bac2367a3fbe3e451f",
     "packages": [
         {
             "name": "ballstatecber/datacenter-plugin-cakephp4",
@@ -3989,6 +3989,84 @@
                 "source": "https://github.com/dealerdirect/phpcodesniffer-composer-installer"
             },
             "time": "2020-12-07T18:04:37+00:00"
+        },
+        {
+            "name": "dereuromark/cakephp-ide-helper",
+            "version": "1.10.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dereuromark/cakephp-ide-helper.git",
+                "reference": "ca78d0ea662e63f3a80e927b9ac252b486f7adac"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dereuromark/cakephp-ide-helper/zipball/ca78d0ea662e63f3a80e927b9ac252b486f7adac",
+                "reference": "ca78d0ea662e63f3a80e927b9ac252b486f7adac",
+                "shasum": ""
+            },
+            "require": {
+                "cakephp/bake": "^2.1.0",
+                "cakephp/cakephp": "^4.0.2",
+                "php": ">=7.2",
+                "sebastian/diff": "^3.0.1 || ^4.0.1",
+                "squizlabs/php_codesniffer": "^3.5.2"
+            },
+            "require-dev": {
+                "cakephp/migrations": "^3.0.0",
+                "cakephp/plugin-installer": "^1.3",
+                "dereuromark/cakephp-shim": "dev-master as 2.0.0",
+                "fig-r/psr2r-sniffer": "dev-master"
+            },
+            "type": "cakephp-plugin",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "IdeHelper\\": "src/",
+                    "IdeHelper\\Test\\Fixture\\": "tests/Fixture/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mark Scherer",
+                    "homepage": "https://www.dereuromark.de",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Other contributors",
+                    "homepage": "https://github.com/dereuromark/cakephp-ide-helper/graphs/contributors",
+                    "role": "Developer"
+                }
+            ],
+            "description": "CakePHP IdeHelper Plugin to improve auto-completion",
+            "homepage": "https://github.com/dereuromark/cakephp-ide-helper/",
+            "keywords": [
+                "annotations",
+                "autocomplete",
+                "cakephp",
+                "ide",
+                "phpdoc",
+                "phpstorm",
+                "plugin"
+            ],
+            "support": {
+                "issues": "https://github.com/dereuromark/cakephp-ide-helper/issues",
+                "source": "https://github.com/dereuromark/cakephp-ide-helper/"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/dereuromark",
+                    "type": "github"
+                }
+            ],
+            "time": "2021-01-05T11:32:44+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",

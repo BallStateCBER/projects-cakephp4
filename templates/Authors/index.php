@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \App\Model\Entity\Author[]|\Cake\ORM\ResultSet $authors
+ * @var \App\Model\Entity\Author[]|\Cake\Collection\CollectionInterface $authors
  * @var \App\View\AppView $this
  */
 ?>

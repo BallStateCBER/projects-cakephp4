@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \App\Model\Entity\User[]|\Cake\ORM\ResultSet $users
+ * @var \App\Model\Entity\User[]|\Cake\Collection\CollectionInterface $users
  * @var \App\View\AppView $this
  */
 ?>

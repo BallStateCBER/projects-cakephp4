@@ -2,6 +2,7 @@
 /**
  * @var array $filesAlphabetic
  * @var array $filesNewest
+ * @var \App\View\AppView $this
  */
 ?>
 

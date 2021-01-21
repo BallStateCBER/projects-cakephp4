@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \App\Model\Entity\Release[]|\Cake\ORM\ResultSet $releases
+ * @var \App\Model\Entity\Release[]|\Cake\Collection\CollectionInterface $releases
  * @var \App\View\AppView $this
  */
 ?>
