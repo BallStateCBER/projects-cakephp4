@@ -95,8 +95,14 @@ class ReleasesController extends AppController
                 $graphic->image
             );
         }
+        $linkPageTitle = true;
 
-        $this->set(compact('release', 'ogMetaTags', 'pageTitle'));
+        $this->set(compact(
+            'linkPageTitle',
+            'ogMetaTags',
+            'pageTitle',
+            'release',
+        ));
     }
 
     /**
