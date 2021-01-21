@@ -8,17 +8,19 @@ $loggedIn = $this->request->getSession()->read('User');
 $graphicsColClass = count($release->graphics ?? []) > 1 ? 'graphics_col_double' : 'graphics_col_single';
 ?>
 <div class="release">
-    <h1>
-        <?= $this->Html->link(
-            $release->title,
-            [
-                'controller' => 'Releases',
-                'action' => 'view',
-                'id' => $release->id,
-                'slug' => $release->slug,
-            ]
-        ) ?>
-    </h1>
+    <?php if ($this->request->getParam('action') !== 'view'): ?>
+        <h1>
+            <?= $this->Html->link(
+                $release->title,
+                [
+                    'controller' => 'Releases',
+                    'action' => 'view',
+                    'id' => $release->id,
+                    'slug' => $release->slug,
+                ]
+            ) ?>
+        </h1>
+    <?php endif; ?>
 
     <p class="partner">
         <?= $this->Html->link(
