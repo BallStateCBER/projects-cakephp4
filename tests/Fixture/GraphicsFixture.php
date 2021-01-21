@@ -3,12 +3,10 @@ declare(strict_types=1);
 
 namespace App\Test\Fixture;
 
-use Cake\TestSuite\Fixture\TestFixture;
-
 /**
  * GraphicsFixture
  */
-class GraphicsFixture extends TestFixture
+class GraphicsFixture extends AppFixture
 {
     /**
      * Fields
@@ -35,6 +33,18 @@ class GraphicsFixture extends TestFixture
         ],
     ];
     // phpcs:enable
+
+    protected array $defaultRecord = [
+        'release_id' => ReleasesFixture::RELEASE_WITH_GRAPHICS,
+        'title' => 'Image title',
+        'url' => '/reports/report.docx',
+        'image' => 'image.png',
+        'dir' => '1',
+        'weight' => 1,
+        'created' => '2021-01-01 01:01:00',
+        'modified' => '2021-01-01 01:01:00',
+    ];
+
     /**
      * Init method
      *
@@ -42,19 +52,9 @@ class GraphicsFixture extends TestFixture
      */
     public function init(): void
     {
-        $this->records = [
-            [
-                'id' => 1,
-                'release_id' => 1,
-                'title' => 'Lorem ipsum dolor sit amet',
-                'url' => 'Lorem ipsum dolor sit amet',
-                'image' => 'Lorem ipsum dolor sit amet',
-                'dir' => 'Lorem ipsum dolor sit amet',
-                'weight' => 1,
-                'created' => '2020-09-23 19:12:31',
-                'modified' => '2020-09-23 19:12:31',
-            ],
-        ];
+        $this->addRecord([
+            'id' => 1,
+        ]);
         parent::init();
     }
 }

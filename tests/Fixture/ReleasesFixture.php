@@ -3,12 +3,10 @@ declare(strict_types=1);
 
 namespace App\Test\Fixture;
 
-use Cake\TestSuite\Fixture\TestFixture;
-
 /**
  * ReleasesFixture
  */
-class ReleasesFixture extends TestFixture
+class ReleasesFixture extends AppFixture
 {
     /**
      * Fields
@@ -34,6 +32,19 @@ class ReleasesFixture extends TestFixture
         ],
     ];
     // phpcs:enable
+
+    protected array $defaultRecord = [
+        'title' => 'Release Title',
+        'slug' => 'release-title',
+        'description' => 'Release description.',
+        'released' => '2021-01-01',
+        'partner_id' => 1,
+        'created' => '2021-01-01 01:01:00',
+        'modified' => '2021-01-01 01:01:00',
+    ];
+
+    public const RELEASE_WITH_GRAPHICS = 1;
+
     /**
      * Init method
      *
@@ -41,18 +52,9 @@ class ReleasesFixture extends TestFixture
      */
     public function init(): void
     {
-        $this->records = [
-            [
-                'id' => 1,
-                'title' => 'Lorem ipsum dolor sit amet',
-                'slug' => 'lorem-ipsum-dolor-sit-amet',
-                'description' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
-                'released' => '2020-09-23',
-                'partner_id' => 1,
-                'created' => '2020-09-23 19:10:00',
-                'modified' => '2020-09-23 19:10:00',
-            ],
-        ];
+        $this->addRecord([
+            'id' => self::RELEASE_WITH_GRAPHICS,
+        ]);
         parent::init();
     }
 }

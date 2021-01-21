@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Controller;
 
+use App\Test\Fixture\ReleasesFixture;
+use Cake\Routing\Router;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 
@@ -52,15 +54,24 @@ class ReleasesControllerTest extends TestCase
      */
     public function testView(): void
     {
-        $release = $this->fixtureManager->loaded()['app.Releases']->records[0];
+        $releasesTable = $this->getTableLocator()->get('Releases');
+        /** @var \App\Model\Entity\Release $release */
+        $release = $releasesTable->get(ReleasesFixture::RELEASE_WITH_GRAPHICS, ['contain' => ['Graphics']]);
         $url = [
             'controller' => 'Releases',
             'action' => 'view',
-            'id' => $release['id'],
-            'slug' => $release['slug'],
+            'id' => $release->id,
+            'slug' => $release->slug,
         ];
         $this->get($url);
         $this->assertResponseOk();
+        $this->assertResponseContains($release->title);
+        $this->assertResponseContains('<meta property="og:type" content="article"');
+        foreach ($release->graphics as $graphic) {
+            $imgPath = Router::url("/img/releases/$graphic->dir/$graphic->image", true);
+            $this->assertResponseContains(sprintf('<meta property="og:image" content="%s"', $imgPath));
+            $this->assertResponseContains(sprintf('src="%s"', $graphic->thumbnailFullPath));
+        }
     }
 
     /**
