@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
+use Cake\Routing\Router;
 use Cake\Utility\Text;
 
 /**
@@ -13,6 +14,7 @@ use Cake\Utility\Text;
  * @property string $name
  * @property string $short_name
  * @property string $slug
+ * @property string $url
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
  *
@@ -37,4 +39,21 @@ class Partner extends Entity
         'modified' => true,
         'releases' => true,
     ];
+
+    /**
+     * Returns this partner's /partners/view URL
+     *
+     * @return string
+     */
+    protected function _getUrl()
+    {
+        return Router::url([
+            'plugin' => false,
+            'prefix' => false,
+            'controller' => 'Partners',
+            'action' => 'view',
+            'id' => $this->id,
+            'slug' => $this->slug,
+        ]);
+    }
 }

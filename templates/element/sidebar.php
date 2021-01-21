@@ -138,13 +138,7 @@
         <li>
             <?= $this->Html->link(
                 $partner->short_name,
-                [
-                    'plugin' => false,
-                    'controller' => 'Partners',
-                    'action' => 'view',
-                    'id' => $partner->id,
-                    'slug' => $partner->slug,
-                ],
+                $partner->url,
                 ['title' => $partner->name]
             ) ?>
         </li>

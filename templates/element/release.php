@@ -25,12 +25,7 @@ $graphicsColClass = count($release->graphics ?? []) > 1 ? 'graphics_col_double' 
     <p class="partner">
         <?= $this->Html->link(
             $release->partner->name,
-            [
-                'controller' => 'Partners',
-                'action' => 'view',
-                'id' => $release->partner->id,
-                'slug' => $release->partner->slug,
-            ]
+            $release->partner->url
         ) ?>
     </p>
 
