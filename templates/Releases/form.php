@@ -172,7 +172,7 @@ use Cake\Utility\Hash;
                 <?= $author->name ?>
                 <input type="hidden" name="author[]" value="<?= $author->id ?>" />
                 <button>
-                    X
+                    &times;
                 </button>
             </li>
         <?php endforeach; ?>
@@ -255,7 +255,7 @@ use Cake\Utility\Hash;
                 <tr class="graphic">
                     <?php if ($action == 'add'): ?>
                         <td>
-                            <button class="remove-graphic">
+                            <button class="remove-graphic btn btn-outline-danger">
                                 <i class="fas fa-times-circle" title="Remove"></i>
                             </button>
                         </td>
