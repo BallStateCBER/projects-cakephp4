@@ -57,6 +57,8 @@ class Release extends Entity
     protected function _getUrl(): string
     {
         return Router::url([
+            'prefix' => false,
+            'plugin' => false,
             'controller' => 'Releases',
             'action' => 'view',
             'id' => $this->id,
