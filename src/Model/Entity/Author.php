@@ -4,12 +4,14 @@ declare(strict_types=1);
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
+use Cake\Routing\Router;
 
 /**
  * Author Entity
  *
  * @property int $id
  * @property string $name
+ * @property string $url
  *
  * @property \App\Model\Entity\Release[] $releases
  */
@@ -28,4 +30,20 @@ class Author extends Entity
         'name' => true,
         'releases' => true,
     ];
+
+    /**
+     * Returns this author's /authors/view URL
+     *
+     * @return string
+     */
+    protected function _getUrl(): string
+    {
+        return Router::url([
+            'prefix' => false,
+            'plugin' => false,
+            'controller' => 'Authors',
+            'action' => 'view',
+            'id' => $this->id,
+        ]);
+    }
 }

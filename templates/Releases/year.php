@@ -16,12 +16,7 @@
                 <td>
                     <?= $this->Html->link(
                         $release->title,
-                        [
-                            'controller' => 'Releases',
-                            'action' => 'view',
-                            'id' => $release->id,
-                            'slug' => $release->slug,
-                        ]
+                        $release->url
                     ) ?>
                 </td>
             </tr>

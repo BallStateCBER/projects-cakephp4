@@ -4,14 +4,16 @@ declare(strict_types=1);
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
+use Cake\Routing\Router;
 
 /**
  * Release Entity
  *
  * @property int $id
- * @property string $title
- * @property string $slug
  * @property string $description
+ * @property string $slug
+ * @property string $title
+ * @property string $url
  * @property \Cake\I18n\FrozenDate $released
  * @property int|null $partner_id
  * @property \Cake\I18n\FrozenTime $created
@@ -46,4 +48,19 @@ class Release extends Entity
         'authors' => true,
         'tags' => true,
     ];
+
+    /**
+     * Returns this release's /releases/view URL
+     *
+     * @return string
+     */
+    protected function _getUrl(): string
+    {
+        return Router::url([
+            'controller' => 'Releases',
+            'action' => 'view',
+            'id' => $this->id,
+            'slug' => $this->slug,
+        ]);
+    }
 }

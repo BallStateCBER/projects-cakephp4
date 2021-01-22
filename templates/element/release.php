@@ -12,12 +12,7 @@ $graphicsColClass = count($release->graphics ?? []) > 1 ? 'graphics_col_double' 
         <h1>
             <?= $this->Html->link(
                 $release->title,
-                [
-                    'controller' => 'Releases',
-                    'action' => 'view',
-                    'id' => $release->id,
-                    'slug' => $release->slug,
-                ]
+                $release->url
             ) ?>
         </h1>
     <?php endif; ?>
@@ -94,11 +89,7 @@ $graphicsColClass = count($release->graphics ?? []) > 1 ? 'graphics_col_double' 
                                 foreach ($release->authors as $author) {
                                     $authorLinks[] = $this->Html->link(
                                         $author->name,
-                                        [
-                                            'controller' => 'Authors',
-                                            'action' => 'view',
-                                            'id' => $author->id,
-                                        ]
+                                        $author->url
                                     );
                                 }
                                 echo implode(', ', $authorLinks);

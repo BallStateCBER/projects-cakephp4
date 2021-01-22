@@ -53,12 +53,7 @@ $count = $releases ? $this->Paginator->counter('{{count}}') : 0;
                                 $searchTerm,
                                 ['format' => '<strong>\1</strong>']
                             ),
-                            [
-                                'controller' => 'Releases',
-                                'action' => 'view',
-                                'id' => $release->id,
-                                'slug' => $release->slug,
-                            ],
+                            $release->url,
                             [
                                 'class' => 'title',
                                 'escape' => false,
