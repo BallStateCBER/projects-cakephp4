@@ -81,12 +81,7 @@ class ReleasesController extends AppController
         $ogMetaTags = [
             'og:description' => $release->description,
             'og:type' => 'article',
-            'og:url' => Router::url([
-                'controller' => 'Releases',
-                'action' => 'view',
-                'id' => $release->id,
-                'slug' => $release->slug,
-            ], true),
+            'og:url' => Router::url($release->url, true),
         ];
         foreach ($release->graphics as $graphic) {
             $ogMetaTags['og:image'][] = sprintf(
@@ -124,12 +119,7 @@ class ReleasesController extends AppController
                 Cache::delete('sidebar_tags', 'long');
                 Cache::delete('sidebar_partners', 'long');
                 $this->updateDataCenterHome();
-                $this->redirect([
-                    'controller' => 'Releases',
-                    'action' => 'view',
-                    'id' => $release->id,
-                    'slug' => $release->slug,
-                ]);
+                $this->redirect($release->url);
             } else {
                 $this->Flash->error(
                     'The release could not be saved. Please correct any indicated errors and try again.'
@@ -162,12 +152,7 @@ class ReleasesController extends AppController
                 $this->Flash->success('Release updated');
                 Cache::delete('sidebar_tags', 'long');
                 Cache::delete('sidebar_partners', 'long');
-                $this->redirect([
-                    'controller' => 'Releases',
-                    'action' => 'view',
-                    'id' => $release->id,
-                    'slug' => $release->slug,
-                ]);
+                $this->redirect($release->url);
             } else {
                 $this->Flash->error(
                     'The release could not be updated. Please correct any indicated errors and try again.'
