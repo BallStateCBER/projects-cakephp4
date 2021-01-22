@@ -34,6 +34,17 @@ class ReleasesControllerTest extends TestCase
     ];
 
     /**
+     * Sets up the test case
+     *
+     * @return void
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->loadRoutes();
+    }
+
+    /**
      * Test index method
      *
      * @return void
@@ -56,21 +67,51 @@ class ReleasesControllerTest extends TestCase
     {
         $releasesTable = $this->getTableLocator()->get('Releases');
         /** @var \App\Model\Entity\Release $release */
-        $release = $releasesTable->get(ReleasesFixture::RELEASE_WITH_GRAPHICS, ['contain' => ['Graphics']]);
-        $url = [
-            'controller' => 'Releases',
-            'action' => 'view',
-            'id' => $release->id,
-            'slug' => $release->slug,
-        ];
-        $this->get($url);
+        $release = $releasesTable->get(
+            ReleasesFixture::RELEASE_WITH_GRAPHICS,
+            ['contain' => ['Authors', 'Graphics', 'Partners']]
+        );
+
+        $this->get($release->url);
         $this->assertResponseOk();
         $this->assertResponseContains($release->title);
         $this->assertResponseContains('<meta property="og:type" content="article"');
+
+        // Assert partner link inside of p.partner
+        $this->assertResponseRegExp(sprintf(
+            '/%s%s%s%s%s/',
+            preg_quote('<p class="partner">'),
+            '\\s*',
+            preg_quote(sprintf(
+                '<a href="%s">%s</a>',
+                $release->partner->url,
+                $release->partner->name
+            ), '/'),
+            '\\s*',
+            preg_quote('</p>', '/')
+        ));
+
+        // Assert all author links inside of p.authors
+        foreach ($release->authors as $author) {
+            $this->assertResponseRegExp(sprintf(
+                '/%s%s%s%s%s/',
+                preg_quote('<p class="authors">'),
+                '[\s\S]*',
+                preg_quote(sprintf(
+                    '<a href="%s">%s</a>',
+                    $author->url,
+                    $author->name
+                ), '/'),
+                '[\s\S]*',
+                preg_quote('</p>', '/')
+            ));
+        }
+
+        // Assert that every image has a matching meta tag and image tag
         foreach ($release->graphics as $graphic) {
             $imgPath = Router::url("/img/releases/$graphic->dir/$graphic->image", true);
             $this->assertResponseContains(sprintf('<meta property="og:image" content="%s"', $imgPath));
-            $this->assertResponseContains(sprintf('src="%s"', $graphic->thumbnailFullPath));
+            $this->assertResponseContains(sprintf('<img src="%s"', $graphic->thumbnailFullPath));
         }
     }
 
