@@ -5,7 +5,7 @@ class ReleaseForm {
     const addAuthorToggler = document.getElementById('add-author-toggler');
     addAuthorToggler.addEventListener('click', function (event) {
       event.preventDefault();
-      const newAuthor = document.getElementById('new-author');
+      const newAuthor = document.getElementById('new-author-container');
       slideToggle(newAuthor);
     });
 
@@ -31,7 +31,7 @@ class ReleaseForm {
     const cancelAddAuthorButton = document.getElementById('cancel-add-author-button');
     cancelAddAuthorButton.addEventListener('click', function (event) {
       event.preventDefault();
-      const newAuthorContainer = document.getElementById('new-author');
+      const newAuthorContainer = document.getElementById('new-author-container');
       const newAuthorNameField = newAuthorContainer.querySelector('input[type=text]');
       const duration = 300;
       slideUp(newAuthorContainer, duration);
@@ -49,7 +49,7 @@ class ReleaseForm {
     form.addEventListener('submit', function (event) {
       if (self.hasUnaddedAuthor()) {
         event.preventDefault();
-        const authorName = document.querySelector('#new-author input').value;
+        const authorName = document.querySelector('#new-author-container input').value;
         alert('Please click "add" to add ' + authorName + ' to this release.');
       }
     });
@@ -104,13 +104,13 @@ class ReleaseForm {
   }
 
   hasUnaddedAuthor() {
-    const input = document.querySelector('#new-author input');
+    const input = document.querySelector('#new-author-container input');
 
     return input.style.display !== 'none' && input.value !== '';
   }
 
   addAuthor() {
-    const authorName = document.querySelector('#new-author input');
+    const authorName = document.querySelector('#new-author-container input');
     authorName.value.replace('"', '\'');
     if (authorName.value === '') {
       return;
@@ -130,7 +130,7 @@ class ReleaseForm {
     li.style.display = 'none';
     document.getElementById('authors-container').appendChild(li);
     slideDown(li);
-    const newAuthor = document.getElementById('new-author');
+    const newAuthor = document.getElementById('new-author-container');
     const duration = 300;
     slideUp(newAuthor, 300);
     setTimeout(function () {
@@ -158,7 +158,7 @@ class ReleaseForm {
     const li = document.createElement('li');
     li.innerHTML = `${authorName}<input type="hidden" name="authors[_ids][]" value="${authorId}" />`;
     const button = document.createElement('button');
-    button.innerHTML = 'X';
+    button.innerHTML = '&times;';
     button.addEventListener('click', function (event) {
       event.preventDefault();
       const container = event.target.parentElement;

@@ -142,7 +142,7 @@ use Cake\Utility\Hash;
     <?= $this->Form->control('new_partner', $newPartnerOptions) ?>
 <?php endif; ?>
 
-<?= $this->Form->control('author', [
+<?= $this->Form->control('author_select', [
     'empty' => true,
     'id' => 'author-select',
     'label' => 'Author(s)',
@@ -151,8 +151,8 @@ use Cake\Utility\Hash;
     'templateVars' => ['after' => ' <button id="add-author-toggler" class="btn btn-secondary">Add new</button>'],
 ]) ?>
 
-<div id="new-author" style="display: none;">
-    <?= $this->Form->control('new_author', [
+<div id="new-author-container" style="display: none;">
+    <?= $this->Form->control('new_author_input', [
         'label' => false,
         'type' => 'text',
         'placeholder' => 'Author\'s name',
@@ -170,9 +170,9 @@ use Cake\Utility\Hash;
             <li>
                 <?= displayErrors($author) ?>
                 <?= $author->name ?>
-                <input type="hidden" name="author[]" value="<?= $author->id ?>" />
+                <input type="hidden" name="authors[_ids][]" value="<?= $author->id ?>" />
                 <button>
-                    &times;
+                    <i class="fas fa-times" title="Remove"></i>
                 </button>
             </li>
         <?php endforeach; ?>
