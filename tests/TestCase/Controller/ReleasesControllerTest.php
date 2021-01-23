@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Test\TestCase\Controller;
 
 use App\Test\Fixture\ReleasesFixture;
+use App\Test\Fixture\UsersFixture;
 use Cake\Routing\Router;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
@@ -12,6 +13,7 @@ use Cake\TestSuite\TestCase;
  * App\Controller\ReleasesController Test Case
  *
  * @uses \App\Controller\ReleasesController
+ * @property \App\Model\Table\ReleasesTable $Releases
  */
 class ReleasesControllerTest extends TestCase
 {
@@ -33,6 +35,22 @@ class ReleasesControllerTest extends TestCase
         'app.Users',
     ];
 
+    private array $releasePostData = [
+        'title' => 'Release Title',
+        'released' => '2021-01-01',
+        'partner_id' => '1',
+        'new_partner' => '',
+        'author_select' => '',
+        'new_author_input' => '',
+        'authors' => ['_ids' => ['1']],
+        'new_authors' => ['New Author 1', 'New Author 2'],
+        'description' => '<p>Release description</p>',
+        'tags' => ['1', '2'],
+        'custom_tags' => 'New Tag 3, New Tag 4',
+    ];
+
+    private string $addUrl = '/releases/add';
+
     /**
      * Sets up the test case
      *
@@ -42,6 +60,22 @@ class ReleasesControllerTest extends TestCase
     {
         parent::setUp();
         $this->loadRoutes();
+        $this->Releases = $this->getTableLocator()->get('Releases');
+    }
+
+    /**
+     * Simulates the session of a logged-in user
+     *
+     * @return void
+     */
+    private function setUserSession(): void
+    {
+        $usersFixture = new UsersFixture();
+        $userData = $usersFixture->records[0];
+        $this->session([
+            'Auth' => ['User' => $userData],
+            //'Auth' => ['User' => $this->getTableLocator()->get('Users')->find()->first()],
+        ]);
     }
 
     /**
@@ -65,9 +99,7 @@ class ReleasesControllerTest extends TestCase
      */
     public function testView(): void
     {
-        $releasesTable = $this->getTableLocator()->get('Releases');
-        /** @var \App\Model\Entity\Release $release */
-        $release = $releasesTable->get(
+        $release = $this->Releases->get(
             ReleasesFixture::RELEASE_WITH_GRAPHICS,
             ['contain' => ['Authors', 'Graphics', 'Partners']]
         );
@@ -116,13 +148,20 @@ class ReleasesControllerTest extends TestCase
     }
 
     /**
-     * Test add method
+     * Tests that valid data can be POSTed successfully
      *
      * @return void
      */
-    public function testAdd(): void
+    public function testAddSuccess(): void
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->setUserSession();
+        $this->post($this->addUrl, $this->releasePostData);
+        /** @var \App\Model\Entity\Release $newRelease */
+        $newRelease = $this->Releases
+            ->find()
+            ->orderDesc('id')
+            ->first();
+        $this->assertRedirect($newRelease->url);
     }
 
     /**

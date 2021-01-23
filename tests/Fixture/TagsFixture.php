@@ -3,12 +3,10 @@ declare(strict_types=1);
 
 namespace App\Test\Fixture;
 
-use Cake\TestSuite\Fixture\TestFixture;
-
 /**
  * TagsFixture
  */
-class TagsFixture extends TestFixture
+class TagsFixture extends AppFixture
 {
     /**
      * Fields
@@ -35,6 +33,18 @@ class TagsFixture extends TestFixture
         ],
     ];
     // phpcs:enable
+
+    private array $defaultData = [
+        'id' => 1,
+        'name' => 'Tag name',
+        'slug' => 'tag-name',
+        'parent_id' => 1,
+        'lft' => 1,
+        'rght' => 1,
+        'selectable' => 1,
+        'created' => '2021-01-01 01:01:00',
+        'modified' => '2021-01-01 01:01:00',
+    ];
     /**
      * Init method
      *
@@ -42,19 +52,16 @@ class TagsFixture extends TestFixture
      */
     public function init(): void
     {
-        $this->records = [
-            [
-                'id' => 1,
-                'name' => 'Lorem ipsum dolor sit amet',
-                'slug' => 'Lorem ipsum dolor sit amet',
-                'parent_id' => 1,
-                'lft' => 1,
-                'rght' => 1,
-                'selectable' => 1,
-                'created' => '2020-09-23 19:13:26',
-                'modified' => '2020-09-23 19:13:26',
-            ],
-        ];
+        $this->addRecord([
+            'id' => 1,
+            'name' => 'Tag 1',
+            'slug' => 'tag-1',
+        ]);
+        $this->addRecord([
+            'id' => 2,
+            'name' => 'Tag 2',
+            'slug' => 'tag-2',
+        ]);
         parent::init();
     }
 }
