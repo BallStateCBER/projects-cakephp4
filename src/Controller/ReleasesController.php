@@ -119,7 +119,8 @@ class ReleasesController extends AppController
                 Cache::delete('sidebar_tags', 'long');
                 Cache::delete('sidebar_partners', 'long');
                 $this->updateDataCenterHome();
-                $this->redirect($release->url);
+
+                return $this->redirect($release->url);
             } else {
                 $this->Flash->error(
                     'The release could not be saved. Please correct any indicated errors and try again.'
