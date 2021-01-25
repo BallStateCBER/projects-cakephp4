@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Test\TestCase\Controller;
 
 use App\Test\Fixture\ReleasesFixture;
-use App\Test\Fixture\UsersFixture;
 use Cake\Routing\Router;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
@@ -70,11 +69,8 @@ class ReleasesControllerTest extends TestCase
      */
     private function setUserSession(): void
     {
-        $usersFixture = new UsersFixture();
-        $userData = $usersFixture->records[0];
         $this->session([
-            'Auth' => ['User' => $userData],
-            //'Auth' => ['User' => $this->getTableLocator()->get('Users')->find()->first()],
+            'Auth' => $this->getTableLocator()->get('Users')->find()->first(),
         ]);
     }
 
