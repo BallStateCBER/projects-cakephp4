@@ -272,6 +272,31 @@ class ReleasesControllerTest extends TestCase
     }
 
     /**
+     * Tests that new partners can be added through the release form
+     *
+     * @return void
+     */
+    public function testAddNewPartner()
+    {
+        $this->setUserSession();
+        $this->releasePostData['new_partner'] = 'New Partner Name';
+        $this->post($this->addUrl, $this->releasePostData);
+
+        /** @var \App\Model\Entity\Release $newRelease */
+        $newRelease = $this->Releases
+            ->find()
+            ->contain(['Partners'])
+            ->orderDesc('Releases.id')
+            ->first();
+
+        $this->assertEquals(
+            $this->releasePostData['new_partner'],
+            $newRelease->partner->name,
+            'New partner not added'
+        );
+    }
+
+    /**
      * Test edit method
      *
      * @return void
