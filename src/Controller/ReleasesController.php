@@ -254,6 +254,7 @@ class ReleasesController extends AppController
      */
     private function processNewAuthors(Release $release)
     {
+        $this->loadModel('Authors');
         $newAuthors = $this->request->getData('new_authors') ?? [];
         foreach ($newAuthors as $authorName) {
             $author = $this->Authors->newEntity(['name' => $authorName]);
