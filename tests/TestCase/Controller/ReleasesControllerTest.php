@@ -53,7 +53,6 @@ class ReleasesControllerTest extends TestCase
         'description' => '<p>Release description</p>',
         'tags' => ['_ids' => ['1', '2']],
         'custom_tags' => 'New Tag 3, New Tag 4',
-
     ];
 
     private string $addUrl = '/releases/add';
@@ -303,7 +302,7 @@ class ReleasesControllerTest extends TestCase
      */
     public function testEdit(): void
     {
-        $this->markTestIncomplete('Not implemented yet.');
+
     }
 
     /**
@@ -313,6 +312,8 @@ class ReleasesControllerTest extends TestCase
      */
     public function testDelete(): void
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $release = $this->Releases->get(ReleasesFixture::RELEASE_WITH_GRAPHICS);
+        $this->Releases->delete($release);
+        $this->assertFalse($this->Releases->exists(['id' => ReleasesFixture::RELEASE_WITH_GRAPHICS]));
     }
 }
