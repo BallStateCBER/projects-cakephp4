@@ -8,6 +8,7 @@ use App\Test\Fixture\ReleasesFixture;
 use Cake\Routing\Router;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
+use Cake\Utility\Hash;
 use FilesystemIterator;
 use Laminas\Diactoros\UploadedFile;
 use RecursiveDirectoryIterator;
@@ -50,7 +51,7 @@ class ReleasesControllerTest extends TestCase
         'authors' => ['_ids' => ['1']],
         'new_authors' => ['New Author 1', 'New Author 2'],
         'description' => '<p>Release description</p>',
-        'tags' => ['1', '2'],
+        'tags' => ['_ids' => ['1', '2']],
         'custom_tags' => 'New Tag 3, New Tag 4',
 
     ];
@@ -207,10 +208,56 @@ class ReleasesControllerTest extends TestCase
         /** @var \App\Model\Entity\Release $newRelease */
         $newRelease = $this->Releases
             ->find()
-            ->contain(['Graphics'])
+            ->contain(['Authors', 'Graphics', 'Tags'])
             ->orderDesc('id')
             ->first();
         $this->assertRedirect($newRelease->url);
+
+        $this->assertEquals($this->releasePostData['released'], $newRelease->released->format('Y-m-d'));
+        foreach ($this->releasePostData['authors']['_ids'] as $authorId) {
+            $newReleaseAuthorIds = Hash::extract($newRelease->authors, '{n}.id');
+            $this->assertContains($authorId, $newReleaseAuthorIds, 'Expected author ID not found');
+        }
+
+        foreach ($this->releasePostData['tags']['_ids'] as $tagId) {
+            $savedTagNames = [];
+            foreach ($newRelease->tags as $tag) {
+                $savedTagNames[] = $tag->id;
+            }
+            $this->assertContains($tagId, $savedTagNames, 'Expected tag ID not found');
+        }
+        $fields = [
+            'title',
+            'partner_id',
+            'description',
+        ];
+        foreach ($fields as $field) {
+            $this->assertEquals(
+                $this->releasePostData[$field],
+                $newRelease->$field,
+                "$field field has incorrect value"
+            );
+        }
+
+        $customTagNames = explode(',', $this->releasePostData['custom_tags']);
+        $customTagNames = array_map('strtolower', $customTagNames);
+        $customTagNames = array_map('trim', $customTagNames);
+        foreach ($customTagNames as $tagName) {
+            $savedTagNames = [];
+            foreach ($newRelease->tags as $tag) {
+                $savedTagNames[] = $tag->name;
+            }
+            $this->assertContains($tagName, $savedTagNames, 'Expected tag name not found');
+        }
+
+        $newAuthorNames = array_map('trim', $this->releasePostData['new_authors']);
+        foreach ($newAuthorNames as $authorName) {
+            $savedAuthorName = [];
+            foreach ($newRelease->authors as $author) {
+                $savedAuthorName[] = $author->name;
+            }
+            $this->assertContains($authorName, $savedAuthorName, 'Expected author name not found');
+        }
 
         $this->assertCount(
             count($this->releasePostData['graphics']),
