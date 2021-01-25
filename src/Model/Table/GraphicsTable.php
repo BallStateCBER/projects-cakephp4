@@ -38,7 +38,8 @@ use Josegonzalez\Upload\Validation\UploadValidation;
  */
 class GraphicsTable extends Table
 {
-    const GRAPHICS_DIR_ROOT = ROOT . DS . 'webroot' . DS . 'img' . DS . 'releases' . DS;
+    public const GRAPHICS_DIR_ROOT = ROOT . DS . 'webroot' . DS . 'img' . DS . 'releases' . DS;
+    public const GRAPHICS_DIR_ROOT_TESTING = TESTS . 'FileUploadDest' . DS;
 
     /**
      * Initialize method
@@ -60,7 +61,7 @@ class GraphicsTable extends Table
                 'path' => '', // filesystem.root + getNextDirNumber(), appended by GraphicsPathProcessor
                 'pathProcessor' => GraphicsPathProcessor::class,
                 'filesystem' => [
-                    'root' => self::GRAPHICS_DIR_ROOT,
+                    'root' => PHP_SAPI === 'cli' ? self::GRAPHICS_DIR_ROOT_TESTING : self::GRAPHICS_DIR_ROOT,
                 ],
                 'fields' => ['dir' => 'dir'],
                 'keepFilesOnDelete' => false,

@@ -3,10 +3,16 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Controller;
 
+use App\Model\Table\GraphicsTable;
 use App\Test\Fixture\ReleasesFixture;
 use Cake\Routing\Router;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
+use FilesystemIterator;
+use Laminas\Diactoros\UploadedFile;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use const UPLOAD_ERR_OK;
 
 /**
  * App\Controller\ReleasesController Test Case
@@ -46,6 +52,7 @@ class ReleasesControllerTest extends TestCase
         'description' => '<p>Release description</p>',
         'tags' => ['1', '2'],
         'custom_tags' => 'New Tag 3, New Tag 4',
+
     ];
 
     private string $addUrl = '/releases/add';
@@ -60,6 +67,50 @@ class ReleasesControllerTest extends TestCase
         parent::setUp();
         $this->loadRoutes();
         $this->Releases = $this->getTableLocator()->get('Releases');
+        $this->releasePostData['graphics'] = [
+            [
+                'title' => 'Mask',
+                'url' => 'https://google.com',
+                'weight' => '0',
+                'image' => new UploadedFile(
+                    TESTS . 'FilesToUpload' . DS . 'image.tmp',
+                    29999,
+                    UPLOAD_ERR_OK,
+                    'image.png',
+                    'image/png'
+                ),
+            ],
+            [
+                'title' => 'Crook',
+                'url' => 'https://theEther.com',
+                'weight' => '1',
+                'image' => new UploadedFile(
+                    TESTS . 'FilesToUpload' . DS . 'image2.tmp',
+                    29999,
+                    UPLOAD_ERR_OK,
+                    'image2.png',
+                    'image/png'
+                ),
+            ],
+        ];
+    }
+
+    /**
+     * Cleans up uploaded files after a test has concluded
+     */
+    public function tearDown(): void
+    {
+        parent::tearDown();
+
+        // Delete all uploaded images
+        $dir = new RecursiveDirectoryIterator(GraphicsTable::GRAPHICS_DIR_ROOT_TESTING, FilesystemIterator::SKIP_DOTS);
+        $dir = new RecursiveIteratorIterator($dir, RecursiveIteratorIterator::CHILD_FIRST);
+        foreach ($dir as $file) {
+            if ($file->getFilename() == '.gitkeep') {
+                continue;
+            }
+            $file->isDir() ? rmdir($file->getRealPath()) : unlink($file->getRealPath());
+        }
     }
 
     /**
@@ -152,12 +203,25 @@ class ReleasesControllerTest extends TestCase
     {
         $this->setUserSession();
         $this->post($this->addUrl, $this->releasePostData);
+
         /** @var \App\Model\Entity\Release $newRelease */
         $newRelease = $this->Releases
             ->find()
+            ->contain(['Graphics'])
             ->orderDesc('id')
             ->first();
         $this->assertRedirect($newRelease->url);
+
+        $this->assertCount(
+            count($this->releasePostData['graphics']),
+            $newRelease->graphics,
+            'Incorrect number of graphics saved'
+        );
+        foreach ($newRelease->graphics as $graphic) {
+            $path = GraphicsTable::GRAPHICS_DIR_ROOT_TESTING . $graphic->dir . DS;
+            $this->assertFileExists($path . $graphic->image);
+            $this->assertFileExists($path . $graphic->thumbnail);
+        }
     }
 
     /**
