@@ -55,6 +55,9 @@ class GraphicsFixture extends AppFixture
         $this->addRecord([
             'id' => 1,
         ]);
+        $this->addRecord([
+            'id' => 2,
+        ]);
         parent::init();
     }
 }

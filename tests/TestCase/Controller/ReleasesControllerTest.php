@@ -5,6 +5,7 @@ namespace App\Test\TestCase\Controller;
 
 use App\Model\Table\GraphicsTable;
 use App\Test\Fixture\ReleasesFixture;
+use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
@@ -56,6 +57,7 @@ class ReleasesControllerTest extends TestCase
     ];
 
     private string $addUrl = '/releases/add';
+    private string $editUrl = '/releases/edit/';
 
     /**
      * Sets up the test case
@@ -69,8 +71,8 @@ class ReleasesControllerTest extends TestCase
         $this->Releases = $this->getTableLocator()->get('Releases');
         $this->releasePostData['graphics'] = [
             [
-                'title' => 'Mask',
-                'url' => 'https://google.com',
+                'title' => 'Image 1',
+                'url' => 'https://example.com',
                 'weight' => '0',
                 'image' => new UploadedFile(
                     TESTS . 'FilesToUpload' . DS . 'image.tmp',
@@ -81,8 +83,8 @@ class ReleasesControllerTest extends TestCase
                 ),
             ],
             [
-                'title' => 'Crook',
-                'url' => 'https://theEther.com',
+                'title' => 'Image 2',
+                'url' => 'https://example.com',
                 'weight' => '1',
                 'image' => new UploadedFile(
                     TESTS . 'FilesToUpload' . DS . 'image2.tmp',
@@ -296,13 +298,89 @@ class ReleasesControllerTest extends TestCase
     }
 
     /**
-     * Test edit method
+     * Test that edit method returns a success response and updates the entity if valid data is provided
      *
      * @return void
      */
-    public function testEdit(): void
+    public function testEditSuccess(): void
     {
+        $data = array_merge(
+            $this->releasePostData,
+            [
+                'title' => 'Edited',
+                'description' => '<p>Edited</p>',
+                'authors' => ['_ids' => ['2']],
+                'new_authors' => ['New Author'],
+                'released' => '2099-01-01',
+                'tags' => ['_ids' => ['3']],
+                'custom_tags' => 'New Tag',
+                'partner_id' => '2',
+                'graphics' => [
+                    [
+                        'id' => 1,
+                        'title' => 'Image 1 Edited',
+                        'url' => 'https://example-edited.com',
+                        'weight' => '5',
+                        'remove' => 0,
+                    ],
+                    [
+                        'id' => 2,
+                        'remove' => 1,
+                    ],
+                ],
+            ]
+        );
 
+        $this->setUserSession();
+        $releaseId = ReleasesFixture::RELEASE_WITH_GRAPHICS;
+        $this->put($this->editUrl . $releaseId, $data);
+
+        $release = $this->Releases->get(
+            $releaseId,
+            ['contain' => ['Authors', 'Graphics', 'Tags']]
+        );
+        $this->assertRedirect($release->url);
+
+        $this->assertEquals($data['title'], $release->title);
+        $this->assertEquals($data['description'], $release->description);
+
+        $this->assertCount(2, $release->authors);
+
+        $savedAuthorNames = [];
+        $savedAuthorIds = [];
+        foreach ($release->authors as $author) {
+            $savedAuthorNames[] = $author->name;
+            $savedAuthorIds[] = $author->id;
+        }
+        $this->assertContains($data['new_authors'][0], $savedAuthorNames, 'Expected author name not found');
+        $this->assertContains($data['authors']['_ids'][0], $savedAuthorIds, 'Expected author ID not found');
+
+        $this->assertEquals($data['released'], $release->released->format('Y-m-d'));
+
+        $this->assertCount(2, $release->tags);
+
+        $customTagNames = explode(',', $data['custom_tags']);
+        $customTagNames = array_map('strtolower', $customTagNames);
+        $customTagNames = array_map('trim', $customTagNames);
+        $savedTagNames = [];
+        $savedTagIds = [];
+        foreach ($release->tags as $tag) {
+            $savedTagNames[] = $tag->name;
+            $savedTagIds[] = $tag->id;
+        }
+        $this->assertContains($customTagNames[0], $savedTagNames, 'Expected tag name not found');
+        $this->assertContains($data['tags']['_ids'][0], $savedTagIds, 'Expected tag ID not found');
+
+        $updatedGraphic = $data['graphics'][0];
+        foreach (['title', 'url', 'weight'] as $field) {
+            $this->assertEquals($updatedGraphic[$field], $release->graphics[0]->$field, "$field field not updated");
+        }
+
+        $deletedGraphic = $data['graphics'][1];
+        $graphicsTable = $this->getTableLocator()->get('Graphics');
+        $this->assertFalse($graphicsTable->exists(['id' => $deletedGraphic['id']]), 'Graphic was not deleted');
+
+        $this->assertEquals($data['partner_id'], $release->partner_id, 'Expected partner ID not found');
     }
 
     /**

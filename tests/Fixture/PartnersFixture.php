@@ -42,11 +42,19 @@ class PartnersFixture extends TestFixture
         $this->records = [
             [
                 'id' => 1,
-                'name' => 'Lorem ipsum dolor sit amet',
-                'short_name' => 'Lorem ipsum dolor sit amet',
-                'slug' => 'Lorem ipsum dolor sit amet',
-                'created' => '2020-09-23 19:12:51',
-                'modified' => '2020-09-23 19:12:51',
+                'name' => 'Partner 1',
+                'short_name' => 'Partner 1',
+                'slug' => 'partner-1',
+                'created' => '2020-01-01 01:00:00',
+                'modified' => '2020-01-01 01:00:00',
+            ],
+            [
+                'id' => 2,
+                'name' => 'Partner 2',
+                'short_name' => 'Partner 2',
+                'slug' => 'partner-2',
+                'created' => '2020-01-01 01:00:00',
+                'modified' => '2020-01-01 01:00:00',
             ],
         ];
         parent::init();

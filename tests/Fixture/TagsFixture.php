@@ -62,6 +62,11 @@ class TagsFixture extends AppFixture
             'name' => 'Tag 2',
             'slug' => 'tag-2',
         ]);
+        $this->addRecord([
+            'id' => 3,
+            'name' => 'Tag 3',
+            'slug' => 'tag-3',
+        ]);
         parent::init();
     }
 }

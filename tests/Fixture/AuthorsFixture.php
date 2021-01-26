@@ -38,7 +38,11 @@ class AuthorsFixture extends TestFixture
         $this->records = [
             [
                 'id' => 1,
-                'name' => 'Lorem ipsum dolor sit amet',
+                'name' => 'Author 1',
+            ],
+            [
+                'id' => 2,
+                'name' => 'Author 2',
             ],
         ];
         parent::init();
