@@ -5,7 +5,6 @@ namespace App\Test\TestCase\Controller;
 
 use App\Model\Table\GraphicsTable;
 use App\Test\Fixture\ReleasesFixture;
-use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
@@ -295,6 +294,57 @@ class ReleasesControllerTest extends TestCase
             $newRelease->partner->name,
             'New partner not added'
         );
+    }
+
+    /**
+     * Tests that a release cannot be added with a specified blank field
+     *
+     * @param string $field Field name
+     * @return void
+     */
+    private function testAddFailBlankField(string $field)
+    {
+        $startingCount = $this->Releases->find()->count();
+
+        $this->setUserSession();
+        $data = $this->releasePostData;
+        unset($data[$field]);
+        $this->post($this->addUrl, $data);
+        $this->assertNoRedirect("Redirect not expected with missing '$field' field");
+        $this->assertResponseContains('Please correct any indicated errors and try again');
+
+        $endingCount = $this->Releases->find()->count();
+        $this->assertEquals($startingCount, $endingCount);
+    }
+
+    /**
+     * Tests that a release cannot be added with a blank description
+     *
+     * @return void
+     */
+    public function testAddFailBlankDescription()
+    {
+        $this->testAddFailBlankField('description');
+    }
+
+    /**
+     * Tests that a release cannot be added with a blank title
+     *
+     * @return void
+     */
+    public function testAddFailBlankTitle()
+    {
+        $this->testAddFailBlankField('title');
+    }
+
+    /**
+     * Tests that a release cannot be added with a blank release date
+     *
+     * @return void
+     */
+    public function testAddFailBlankReleased()
+    {
+        $this->testAddFailBlankField('released');
     }
 
     /**
