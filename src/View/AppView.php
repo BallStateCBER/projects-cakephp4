@@ -24,6 +24,7 @@ use DataCenter\View\DataCenterView;
  *
  * @link https://book.cakephp.org/4/en/views.html#the-app-view
  * @property \DataCenter\View\Helper\TagHelper $Tag
+ * @property \App\View\Helper\ReleaseHelper $Release
  */
 class AppView extends DataCenterView
 {
@@ -39,5 +40,6 @@ class AppView extends DataCenterView
     public function initialize(): void
     {
         parent::initialize();
+        $this->loadHelper('Release');
     }
 }

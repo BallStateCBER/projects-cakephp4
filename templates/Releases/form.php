@@ -47,26 +47,6 @@ use Cake\Utility\Hash;
         },
         $reportFiletypes
     );
-
-    /**
-     * Returns a string that will display any of this entity's errors
-     *
-     * @param \Cake\Datasource\EntityInterface $entity Entity object
-     * @return string|null
-     */
-    function displayErrors(EntityInterface $entity)
-    {
-        if (!$entity->hasErrors()) {
-            return null;
-        }
-        $errors = $entity->getErrors();
-        $errorMsgsPerField = array_map(function ($errorMsgs, $field) {
-            return $field . ': ' . implode('; ', $errorMsgs);
-        }, $errors, array_keys($errors));
-
-        return '<p class="alert alert-danger">' . implode('<br />', $errorMsgsPerField) . '</p>';
-    }
-
 ?>
 
 <?php $this->append('scriptTop'); ?>
@@ -168,7 +148,7 @@ use Cake\Utility\Hash;
     <?php if ($release->authors): ?>
         <?php foreach ($release->authors as $author): ?>
             <li>
-                <?= displayErrors($author) ?>
+                <?= $this->Release->displayErrors($author) ?>
                 <?= $author->name ?>
                 <input type="hidden" name="authors[_ids][]" value="<?= $author->id ?>" />
                 <button>
@@ -244,7 +224,7 @@ use Cake\Utility\Hash;
         </thead>
         <tbody>
             <?php foreach ($release->graphics ?? [] as $k => $g): ?>
-                <?php $errors = displayErrors($g); ?>
+                <?php $errors = $this->Release->displayErrors($g); ?>
                 <?php if ($errors): ?>
                     <tr class="errors">
                         <td colspan="5">
