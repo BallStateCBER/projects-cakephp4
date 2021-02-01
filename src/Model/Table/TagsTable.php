@@ -123,7 +123,6 @@ class TagsTable extends Table
     {
         return $query
             ->select(['Tags.id', 'Tags.name', 'Tags.slug'])
-            ->distinct(['Tags.name', 'Tags.slug'])
             ->matching('Releases')
             ->orderAsc('Tags.name');
     }
