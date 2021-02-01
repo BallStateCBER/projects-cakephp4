@@ -3,7 +3,7 @@
 @import "../../vendor/ballstatecber/datacenter-plugin-cakephp4/webroot/css/datacenter.scss";
 @import "../../vendor/ballstatecber/datacenter-plugin-cakephp4/webroot/css/tag_editor.scss";
 
-#menu_column {
+#menu-column {
   h2 {
     margin-bottom: 0.5em;
     margin-top: 1em;
@@ -28,7 +28,7 @@ ul.tags {
   }
 }
 
-#login_link {
+#login-link {
   display: inline-block;
   font-size: 80%;
   margin-top: 20px;
@@ -256,7 +256,7 @@ table.graphics {
   float: right;
 }
 
-#author_select {
+#author-select {
   margin-bottom: 0;
 }
 
