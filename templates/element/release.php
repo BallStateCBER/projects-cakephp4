@@ -6,27 +6,47 @@
 
 $loggedIn = $this->request->getSession()->read('User');
 $graphicsColClass = count($release->graphics ?? []) > 1 ? 'graphics_col_double' : 'graphics_col_single';
+$tagLinks = [];
+foreach ($release->tags as $tag) {
+    $tagLinks[] = $this->Html->link(
+        $tag->name,
+        [
+            'controller' => 'Tags',
+            'action' => 'view',
+            'id' => $tag->id,
+            'slug' => $tag->slug,
+        ]
+    );
+}
+$authorLinks = [];
+foreach ($release->authors as $author) {
+    $authorLinks[] = $this->Html->link(
+        $author->name,
+        $author->url
+    );
+}
+$headerClass = $this->request->getParam('action') == 'view' ? 'sr-only' : null;
 ?>
-<div class="release">
-    <?php if ($this->request->getParam('action') !== 'view'): ?>
-        <h1>
-            <?= $this->Html->link(
-                $release->title,
-                $release->url
-            ) ?>
-        </h1>
-    <?php endif; ?>
-
-    <p class="partner">
+<section class="release">
+    <h1 class="<?= $headerClass ?>">
         <?= $this->Html->link(
-            $release->partner->name,
-            $release->partner->url
+            $release->title,
+            $release->url
         ) ?>
-    </p>
+    </h1>
 
-    <p class="date">
-        Published <?= $release->released->format('F j, Y') ?>
-    </p>
+    <div class="under-headline">
+        <span class="partner">
+            <?= $this->Html->link(
+                $release->partner->name,
+                $release->partner->url
+            ) ?>
+        </span>
+
+        <span class="date">
+            Published <?= $release->released->format('F j, Y') ?>
+        </span>
+    </div>
 
     <?php if ($loggedIn): ?>
         <span class="controls">
@@ -58,89 +78,44 @@ $graphicsColClass = count($release->graphics ?? []) > 1 ? 'graphics_col_double' 
         </span>
     <?php endif; ?>
 
-    <table>
-        <tbody>
-            <tr>
-                <td class="description_col">
-                    <?= $release->description ?>
+    <div class="description">
+        <?= $release->description ?>
+    </div>
 
-                    <?php if ($release->tags): ?>
-                        <p class="tags">
-                            Tags:
-                            <?php
-                                $tagLinks = [];
-                                foreach ($release->tags as $tag) {
-                                    $tagLinks[] = $this->Html->link(
-                                        $tag->name,
-                                        [
-                                            'controller' => 'Tags',
-                                            'action' => 'view',
-                                            'id' => $tag->id,
-                                            'slug' => $tag->slug,
-                                        ]
-                                    );
-                                }
-                                echo implode(', ', $tagLinks);
-                            ?>
-                        </p>
-                    <?php endif; ?>
+    <?php if ($release->graphics): ?>
+        <section class="graphics">
+            <h2>
+                Download
+            </h2>
+            <ul class="list-unstyled">
+                <?php foreach ($release->graphics as $k => $graphic): ?>
+                    <li>
+                        <?= $this->Html->link(
+                            sprintf(
+                                '<img src="%s" alt="%s" /><br />%s',
+                                "/img/releases/$graphic->dir/$graphic->thumbnail",
+                                $graphic->title,
+                                $graphic->title,
+                            ),
+                            $graphic->url,
+                            ['escape' => false]
+                        ) ?>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </section>
+    <?php endif; ?>
 
-                    <?php if ($release->authors): ?>
-                        <p class="authors">
-                            <?= __n('Author', 'Authors', count($release->authors)) ?>:
-                            <?php
-                                $authorLinks = [];
-                                foreach ($release->authors as $author) {
-                                    $authorLinks[] = $this->Html->link(
-                                        $author->name,
-                                        $author->url
-                                    );
-                                }
-                                echo implode(', ', $authorLinks);
-                            ?>
-                        </p>
-                    <?php endif; ?>
+    <?php if ($release->tags): ?>
+        <p class="tags">
+            Tags: <?= implode(', ', $tagLinks) ?>
+        </p>
+    <?php endif; ?>
 
-                </td>
-                <td class="graphics_col <?= $graphicsColClass ?>">
-                    <?php if ($release->graphics): ?>
-                        <table>
-                            <tr>
-                                <?php foreach ($release->graphics as $k => $graphic): ?>
-                                    <?php if ($k + 1 == count($release->graphics) && $k % 2 == 0): ?>
-                                        <td>
-                                            &nbsp;
-                                        </td>
-                                    <?php endif; ?>
-                                    <td>
-                                        <?php
-                                            $imgSrc = sprintf(
-                                                '/img/releases/%s/%s',
-                                                $graphic->dir,
-                                                $graphic->thumbnail
-                                            );
-                                            echo $this->Html->link(
-                                                sprintf(
-                                                    '<div class="graphic"><img src="%s" alt="%s" /></div>%s',
-                                                    $imgSrc,
-                                                    $graphic->title,
-                                                    $graphic->title,
-                                                ),
-                                                $graphic->url,
-                                                ['escape' => false]
-                                            );
-                                        ?>
-                                    </td>
-                                    <?php if ($k % 2 == 1 && count($release->graphics) > $k + 1): ?>
-                                        </tr>
-                                        <tr>
-                                    <?php endif; ?>
-                                <?php endforeach; ?>
-                            </tr>
-                        </table>
-                    <?php endif; ?>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+    <?php if ($release->authors): ?>
+        <p class="authors">
+            <?= __n('Author', 'Authors', count($release->authors)) ?>:
+            <?= implode(', ', $authorLinks) ?>
+        </p>
+    <?php endif; ?>
+</section>

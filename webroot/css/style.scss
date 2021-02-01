@@ -51,7 +51,7 @@ ul.tags {
   font-size: 0.85em;
 }
 
-div.release {
+section.release {
   clear: right;
 
   h1,
@@ -63,61 +63,28 @@ div.release {
     margin-bottom: 10px;
   }
 
-  table {
-    width: 100%;
+  .under-headline {
+    display: flex;
+    justify-content: space-between;
   }
 
-  td {
-    vertical-align: top;
-  }
+  .graphics {
+    background-color: #eee;
+    border-radius: 10px;
+    margin: 1em;
+    padding: 1em;
 
-  .graphics_col_double {
-    width: 420px;
-
-    li {
-      margin-bottom: 5px;
-
-      &:nth-child(odd) {
-        margin-right: 5px;
-      }
-
-      &:last-child {
-        margin-right: 0;
-      }
+    h2 {
+      border-bottom: 1px solid #ddd;
     }
-  }
 
-  .graphics_col_single {
-    width: 205px;
-
-    li {
+    ul {
       margin: 0;
     }
-  }
 
-  p.tags,
-  p.authors,
-  p.partner {
-    font-size: 80%;
-    text-transform: uppercase;
-  }
-
-  p.date {
-    font-style: italic;
-  }
-
-  .description_col {
-    padding-right: 15px;
-  }
-
-  td.graphics_col {
     a {
-      background-color: #EEEEEE;
-      border-radius: 10px;
       display: inline-block;
       height: 100%;
-      margin-bottom: 5px;
-      padding: 5px;
       text-align: center;
       text-transform: uppercase;
       width: 195px;
@@ -137,23 +104,26 @@ div.release {
       max-width: 195px;
     }
 
-    p {
-      text-align: right;
-    }
-
-    div.graphic {
-      display: table-cell;
-      height: 195px;
-      vertical-align: middle;
+    li {
+      display: inline-block;
+      vertical-align: top;
       width: 195px;
     }
+  }
 
-    td:first-child {
+  p.tags,
+  p.authors {
+    font-size: 80%;
+    text-transform: uppercase;
+  }
 
-      a {
-        margin-right: 5px;
-      }
-    }
+  .partner {
+    text-transform: uppercase;
+  }
+
+  .date {
+    font-style: italic;
+    align-self: flex-end;
   }
 
   .controls {
@@ -169,15 +139,25 @@ div.release {
       margin: 0 5px;
     }
   }
+
+  .description {
+    margin-top: 1em;
+  }
 }
 
 .releases {
   .release {
     border-bottom: 1px solid #ccc;
-    padding: 15px 0;
+    padding: 3em 0;
 
+    &:first-child {
+      padding-top: 0;
+    }
     &:last-child {
       border-bottom: 0;
+    }
+    p:last-child {
+      margin-bottom: 0;
     }
   }
 }
