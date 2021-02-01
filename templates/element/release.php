@@ -24,6 +24,10 @@ $graphicsColClass = count($release->graphics ?? []) > 1 ? 'graphics_col_double' 
         ) ?>
     </p>
 
+    <p class="date">
+        Published <?= $release->released->format('F j, Y') ?>
+    </p>
+
     <?php if ($loggedIn): ?>
         <span class="controls">
             <?= $this->Html->link(
@@ -99,10 +103,6 @@ $graphicsColClass = count($release->graphics ?? []) > 1 ? 'graphics_col_double' 
 
                 </td>
                 <td class="graphics_col <?= $graphicsColClass ?>">
-                    <p class="date">
-                        Published <?= $release->released->format('F j, Y') ?>
-                    </p>
-
                     <?php if ($release->graphics): ?>
                         <table>
                             <tr>
