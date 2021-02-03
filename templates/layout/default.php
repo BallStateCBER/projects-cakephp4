@@ -7,7 +7,7 @@ $this->assign('sidebar', $this->element('sidebar'));
 ?>
 
 <?php $this->append('site_title'); ?>
-    <h1 id="site-title" class="max_width">
+    <h1 id="site-title">
         <a href="/">
             <img src="/img/banner.jpg" alt="Projects and Publications" />
         </a>
