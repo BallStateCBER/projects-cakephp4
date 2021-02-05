@@ -35,17 +35,17 @@ $headerClass = $this->request->getParam('action') == 'view' ? 'sr-only' : null;
         ) ?>
     </h1>
 
-    <div class="under-headline">
-        <span class="partner">
+    <div class="under-headline row">
+        <div class="partner col-12 col-md-6">
             <?= $this->Html->link(
                 $release->partner->name,
                 $release->partner->url
             ) ?>
-        </span>
+        </div>
 
-        <span class="date">
+        <div class="date col-12 col-md-6 text-md-right">
             Published <?= $release->released->format('F j, Y') ?>
-        </span>
+        </div>
     </div>
 
     <?php if ($loggedIn): ?>
