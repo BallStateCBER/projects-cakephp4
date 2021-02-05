@@ -1,3 +1,5 @@
+@use "sass:map";
+
 @import "./cake.css";
 @import "../../vendor/twbs/bootstrap/scss/bootstrap.scss";
 @import "../../vendor/ballstatecber/datacenter-plugin-cakephp4/webroot/css/datacenter.scss";
@@ -10,6 +12,24 @@
 
     &:first-of-type {
       margin-top: 0;
+    }
+
+    &[data-toggle="collapse"] {
+      cursor: pointer;
+    }
+  }
+
+  button.navbar-toggler {
+    float: right;
+    font-size: 100%;
+    padding: 4px;
+  }
+}
+
+@media (min-width: map.get($grid-breakpoints, "md")) {
+  #sidebar {
+    h2[data-toggle="collapse"] {
+      cursor: text;
     }
   }
 }
