@@ -322,61 +322,63 @@ use Cake\Utility\Hash;
                     </button>
                 </th>
             </tr>
-            <tr class="dummy-row">
-                <td>
-                    <button class="remove-graphic btn btn-link">
-                        <i class="fas fa-times-circle" title="Remove"></i>
-                    </button>
-                </td>
-                <td>
-                    <div class="form-group">
-                        <input type="file" name="graphics[dummy][image]" accept="image/*"
-                               id="upload-graphic-dummy" class="form-control-file" disabled="disabled" />
-                        <label class="sr-only" for="upload-graphic-dummy">
-                            Choose file
-                        </label>
-                    </div>
-                </td>
-                <td>
-                    <?= $this->Form->control(
-                        'graphics.dummy.title',
-                        [
-                            'label' => false,
-                            'disabled' => true,
-                            'required' => true,
-                        ]
-                    ) ?>
-                </td>
-                <td>
-                    <?= $this->Form->control(
-                        'graphics.dummy.url',
-                        [
-                            'label' => false,
-                            'disabled' => true,
-                            'required' => true,
-                            'templates' => $buttonAppendTemplate,
-                            'templateVars' => [
-                                'after' => '<button title="Find report" ' .
-                                    'class="btn btn-outline-secondary find-report">' .
-                                    '<i class="fas fa-search" title="Find report"></i></button>',
-                            ],
-                        ]
-                    ) ?>
-                </td>
-                <td>
-                    <?= $this->Form->control(
-                        'graphics.dummy.weight',
-                        [
-                            'label' => false,
-                            'disabled' => true,
-                            'type' => 'select',
-                            'options' => $release->graphics
-                                ? range(1, count($release->graphics) + 1)
-                                : [1],
-                        ]
-                    ) ?>
-                </td>
-            </tr>
+            <template>
+                <tr class="dummy-row">
+                    <td>
+                        <button class="remove-graphic btn btn-link">
+                            <i class="fas fa-times-circle" title="Remove"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <input type="file" name="graphics[dummy][image]" accept="image/*"
+                                   id="upload-graphic-dummy" class="form-control-file" disabled="disabled" />
+                            <label class="sr-only" for="upload-graphic-dummy">
+                                Choose file
+                            </label>
+                        </div>
+                    </td>
+                    <td>
+                        <?= $this->Form->control(
+                            'graphics.dummy.title',
+                            [
+                                'label' => false,
+                                'disabled' => true,
+                                'required' => true,
+                            ]
+                        ) ?>
+                    </td>
+                    <td>
+                        <?= $this->Form->control(
+                            'graphics.dummy.url',
+                            [
+                                'label' => false,
+                                'disabled' => true,
+                                'required' => true,
+                                'templates' => $buttonAppendTemplate,
+                                'templateVars' => [
+                                    'after' => '<button title="Find report" ' .
+                                        'class="btn btn-outline-secondary find-report">' .
+                                        '<i class="fas fa-search" title="Find report"></i></button>',
+                                ],
+                            ]
+                        ) ?>
+                    </td>
+                    <td>
+                        <?= $this->Form->control(
+                            'graphics.dummy.weight',
+                            [
+                                'label' => false,
+                                'disabled' => true,
+                                'type' => 'select',
+                                'options' => $release->graphics
+                                    ? range(1, count($release->graphics) + 1)
+                                    : [1],
+                            ]
+                        ) ?>
+                    </td>
+                </tr>
+            </template>
         </tfoot>
     </table>
 </fieldset>
