@@ -8,6 +8,7 @@ use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Database\Expression\QueryExpression;
 use Cake\Event\EventInterface;
+use Cake\ORM\Query;
 use Cake\Routing\Router;
 use SplFileInfo;
 
@@ -563,5 +564,44 @@ class ReleasesController extends AppController
         $pageTitle = 'Releases';
 
         $this->set(compact('pageTitle', 'releases'));
+    }
+
+    /**
+     * Provides a printout of JSON-encoded data used by the Data Center's homepage
+     *
+     * @return void
+     */
+    public function latest()
+    {
+        /** @var \App\Model\Entity\Release|array $release */
+        $release = $this->Releases
+            ->find()
+            ->select(['id', 'title', 'released', 'slug'])
+            ->contain([
+                'Graphics' => function (Query $q) {
+                    return $q
+                        ->select(['id', 'release_id', 'dir', 'image'])
+                        ->orderAsc('weight')
+                        ->limit(1);
+                },
+            ])
+            ->orderDesc('released')
+            ->first();
+
+        if ($release) {
+            $release->url = Router::url([
+                'controller' => 'Releases',
+                'action' => 'view',
+                'id' => $release->id,
+                'slug' => $release->slug,
+            ], true);
+            if ($release->graphics) {
+                $release->graphic = Router::url($release->graphics[0]->thumbnailFullPath, true);
+                unset($release->graphics);
+            }
+            $release = $release->toArray();
+        }
+        $this->set('release', $release);
+        $this->viewBuilder()->setLayout('ajax');
     }
 }
