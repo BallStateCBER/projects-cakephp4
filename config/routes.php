@@ -45,6 +45,8 @@ use Cake\Routing\RouteBuilder;
 $routes->setRouteClass(DashedRoute::class);
 
 $routes->scope('/', function (RouteBuilder $builder) {
+    $builder->setExtensions(['json']);
+
     // Releases
     $builder->connect('/', ['controller' => 'Releases', 'action' => 'index']);
     $builder->connect(

@@ -27,6 +27,7 @@ class ReleasesController extends AppController
 {
     public const ALLOW = [
         'index',
+        'latest',
         'listReports',
         'search',
         'updateDataCenterHome',
@@ -599,9 +600,10 @@ class ReleasesController extends AppController
                 $release->graphic = Router::url($release->graphics[0]->thumbnailFullPath, true);
                 unset($release->graphics);
             }
-            $release = $release->toArray();
         }
-        $this->set('release', $release);
-        $this->viewBuilder()->setLayout('ajax');
+        $this->set([
+            'release' => $release,
+            '_serialize' => ['release'],
+        ]);
     }
 }
