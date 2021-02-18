@@ -19,7 +19,7 @@
                 </button>
             </div>
         </div>
-        <ul class="unstyled collapse navbar-collapse" id="sidebar-admin">
+        <ul class="list-unstyled collapse navbar-collapse" id="sidebar-admin">
             <li>
                 <?= $this->Html->link(
                     'New Release',
@@ -151,7 +151,7 @@
             </button>
         </div>
     </div>
-    <ul class="tags unstyled collapse navbar-collapse" id="tags-list">
+    <ul class="tags list-unstyled collapse navbar-collapse" id="tags-list">
         <?php foreach ($sidebarVars['tags'] as $tag): ?>
             <li>
                 <?php
@@ -183,7 +183,7 @@
             </button>
         </div>
     </div>
-    <ul class="partners unstyled collapse navbar-collapse" id="partners-list">
+    <ul class="partners list-unstyled collapse navbar-collapse" id="partners-list">
         <?php foreach ($sidebarVars['partners'] as $partner): ?>
             <li>
                 <?= $this->Html->link(
@@ -210,7 +210,7 @@
             </button>
         </div>
     </div>
-    <ul class="unstyled collapse navbar-collapse" id="years-list">
+    <ul class="list-unstyled collapse navbar-collapse" id="years-list">
         <?php foreach ($sidebarVars['years'] as $year): ?>
             <li>
                 <?= $this->Html->link($year, [
