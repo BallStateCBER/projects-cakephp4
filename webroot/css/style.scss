@@ -37,9 +37,11 @@
 ul.tags {
   li {
     display: inline;
+    margin-right: 0.5em;
 
     &:after {
       content: '\2022';
+      margin-left: 0.5em;
     }
 
     &:last-child:after {
