@@ -20,33 +20,32 @@
  * @var mixed $field
  */
 
-use Cake\Datasource\EntityInterface;
 use Cake\Utility\Hash;
 
-    $this->Html->script('release_form', ['block' => 'scriptTop']);
-    $this->element('DataCenter.font_awesome_init');
-    $this->element('DataCenter.rich_text_editor_init', ['selector' => '#description']);
+$this->Html->script('release_form', ['block' => 'scriptTop']);
+$this->element('DataCenter.font_awesome_init');
+$this->element('DataCenter.rich_text_editor_init', ['selector' => '#description']);
 
-    $newPartnerOptions = [
-        'id' => 'release-new-partner',
-        'label' => 'Client, Partner, or Sponsor',
-        'type' => 'text',
-        'templates' => $alternateTemplates,
-    ];
+$newPartnerOptions = [
+    'id' => 'release-new-partner',
+    'label' => 'Client, Partner, or Sponsor',
+    'type' => 'text',
+    'templates' => $alternateTemplates,
+];
 
-    $validReportExtensions = array_map(
-        function ($extension) {
-            return ".$extension";
-        },
-        $reportFiletypes
-    );
+$validReportExtensions = array_map(
+    function ($extension) {
+        return ".$extension";
+    },
+    $reportFiletypes
+);
 
-    $validReportWildcardExtensions = array_map(
-        function ($extension) {
-            return "*.$extension";
-        },
-        $reportFiletypes
-    );
+$validReportWildcardExtensions = array_map(
+    function ($extension) {
+        return "*.$extension";
+    },
+    $reportFiletypes
+);
 ?>
 
 <?php $this->append('scriptTop'); ?>
@@ -323,7 +322,7 @@ use Cake\Utility\Hash;
                 </th>
             </tr>
             <template>
-                <tr class="dummy-row">
+                <tr class="graphic">
                     <td>
                         <button class="remove-graphic btn btn-link">
                             <i class="fas fa-times-circle" title="Remove"></i>
