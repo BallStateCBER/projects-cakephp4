@@ -323,7 +323,7 @@ use Cake\Utility\Hash;
                 </th>
             </tr>
             <template>
-                <tr class="dummy-row">
+                <tr class="graphic">
                     <td>
                         <button class="remove-graphic btn btn-link">
                             <i class="fas fa-times-circle" title="Remove"></i>

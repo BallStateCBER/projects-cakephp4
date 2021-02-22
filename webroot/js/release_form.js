@@ -255,10 +255,12 @@ class ReleaseForm {
     // Get and advance the key
     let i = this.getGraphicsCount();
 
-    // Get the row to be copied
-    const newRow = document.querySelector('table.graphics tfoot .dummy-row').cloneNode(true);
-    newRow.classList.remove('dummy-row');
-    newRow.classList.add('graphic');
+    // Copy the row
+    const templateContent = document.querySelector('table.graphics tfoot template').content.cloneNode(true);
+    document.querySelector('table.graphics tbody').append(templateContent);
+
+    // Get the copied row
+    const newRow = document.querySelector('table.graphics tbody tr:last-child');
 
     // Apply a unique key to each row
     newRow.querySelectorAll('input, select, label').forEach(function (element) {
@@ -290,9 +292,6 @@ class ReleaseForm {
       }
       self.toggleReportFinder(button, i);
     });
-
-    // Add the now-unique row
-    document.querySelector('table.graphics tbody').append(newRow);
 
     // Update 'order' options
     this.updateOrderSelectors();
