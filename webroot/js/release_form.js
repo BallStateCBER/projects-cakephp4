@@ -205,7 +205,12 @@ class ReleaseForm {
   }
 
   removeGraphic(button) {
-    button.closest('tr').remove();
+    const graphicRow = button.closest('tr');
+    const reportSelectionRow = graphicRow.nextElementSibling;
+    if (reportSelectionRow && reportSelectionRow.dataset.forRow === graphicRow.dataset.graphicsRow) {
+      reportSelectionRow.remove();
+    }
+    graphicRow.remove();
     this.updateOrderSelectors();
 
     // Hide table head if table body is empty
@@ -257,6 +262,7 @@ class ReleaseForm {
 
     // Copy the row
     const templateContent = document.querySelector('table.graphics tfoot template').content.cloneNode(true);
+    templateContent.querySelector('tr').dataset.graphicsRow = i.toString();
     document.querySelector('table.graphics tbody').append(templateContent);
 
     // Get the copied row
@@ -338,9 +344,11 @@ class ReleaseForm {
    * cell: the table cell that contains the input field to be populated
    * i: the unique key of the row in the 'add/edit linked graphics' box */
   setupReportFinder(html, cell, i) {
+    const graphicRow = cell.closest('tr');
     const newRow = document.createElement('tr');
+    newRow.dataset.forRow = graphicRow.dataset.graphicsRow;
     newRow.innerHTML = `<td colspan="4" class="report-choices"><div id="report-choices-${i}">${html}</div></td>`;
-    cell.closest('tr').after(newRow);
+    graphicRow.after(newRow);
     newRow.querySelector('button.report').addEventListener('click', function (event) {
       event.preventDefault();
       const reportFilename = event.target.innerText.trim();
