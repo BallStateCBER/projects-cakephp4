@@ -102,6 +102,7 @@ class ReleaseForm {
       self.addGraphic('ReleaseAddForm');
     });
 
+    // Add data attributes to graphics elements
     const graphicsRows = document.querySelectorAll('tr.graphic');
     for (let i = 0; i < graphicsRows.length; i++) {
       graphicsRows[i].dataset.graphicsRow = i.toString();
@@ -111,9 +112,7 @@ class ReleaseForm {
     findReportButtons.forEach(button => {
       button.addEventListener('click', function (event) {
         event.preventDefault();
-        const button = event.target;
-        const i = button.closest('tr').dataset.graphicsRow;
-        self.toggleReportFinder(button, i);
+        self.toggleReportFinder(event.target);
       });
     });
   }
@@ -273,26 +272,23 @@ class ReleaseForm {
    */
   addGraphic() {
     // Get and advance the key
-    let i = this.getGraphicsCount();
+    let i = this.getGraphicsCount().toString();
 
     // Copy the row
     const templateContent = document.querySelector('table.graphics tfoot template').content.cloneNode(true);
-    templateContent.querySelector('tr').dataset.graphicsRow = i.toString();
+    templateContent.querySelector('tr').dataset.graphicsRow = i;
     document.querySelector('table.graphics tbody').append(templateContent);
 
     // Get the copied row
     const newRow = document.querySelector('table.graphics tbody tr:last-child');
 
-    // Apply a unique key to each row
+    // Apply a unique key to each element
     newRow.querySelectorAll('input, select, label').forEach(function (element) {
-      element.id = element.id.replace('dummy', i);
-      element.name = element.name ? element.name.replace('dummy', i) : null;
-      element.htmlFor = element.htmlFor ? element.htmlFor.replace('dummy', i) : null;
-      element.className = element.className.replace('dummy', i);
+      element.id = element.id.replace('{i}', i);
+      element.name = element.name ? element.name.replace('{i}', i) : null;
+      element.htmlFor = element.htmlFor ? element.htmlFor.replace('{i}', i) : null;
+      element.className = element.className.replace('{i}', i);
       element.disabled = false;
-    });
-    newRow.querySelectorAll('label').forEach(function (element) {
-      element.htmlFor = element.htmlFor.replace('{i}', i);
     });
 
     // Set up the remove button
@@ -307,11 +303,7 @@ class ReleaseForm {
     // Set up the 'find report' button
     newRow.querySelector('button.find-report').addEventListener('click', function (event) {
       event.preventDefault();
-      let button = event.target;
-      if (!button.classList.contains('btn')) {
-        button = button.closest('button');
-      }
-      self.toggleReportFinder(button, i);
+      self.toggleReportFinder(event.target);
     });
 
     // Update 'order' options
@@ -327,9 +319,14 @@ class ReleaseForm {
   }
 
   /* Called when a 'find report' button is clicked
-   * button: the button clicked
-   * i: the unique key for the corresponding 'linked graphics' row */
-  toggleReportFinder(button, i) {
+   * button: the button clicked */
+  toggleReportFinder(button) {
+    // Handle the button's contents being registered as the event.target, rather than the button itself
+    if (!button.classList.contains('btn')) {
+      button = button.closest('button');
+    }
+
+    const i = button.closest('tr').dataset.graphicsRow;
     const existingSelectionBox = document.getElementById(`report-choices-${i}`);
 
     // Open

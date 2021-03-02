@@ -320,16 +320,16 @@ $validReportWildcardExtensions = array_map(
                     </td>
                     <td>
                         <div class="form-group">
-                            <input type="file" name="graphics[dummy][image]" accept="image/*"
-                                   id="upload-graphic-dummy" class="form-control-file" disabled="disabled" />
-                            <label class="sr-only" for="upload-graphic-dummy">
+                            <input type="file" name="graphics[{i}][image]" accept="image/*"
+                                   id="upload-graphic-{i}" class="form-control-file" disabled="disabled" />
+                            <label class="sr-only" for="upload-graphic-{i}">
                                 Choose file
                             </label>
                         </div>
                     </td>
                     <td>
                         <?= $this->Form->control(
-                            'graphics.dummy.title',
+                            'graphics.{i}.title',
                             [
                                 'label' => false,
                                 'disabled' => true,
@@ -339,7 +339,7 @@ $validReportWildcardExtensions = array_map(
                     </td>
                     <td>
                         <?= $this->Form->control(
-                            'graphics.dummy.url',
+                            'graphics.{i}.url',
                             [
                                 'label' => false,
                                 'disabled' => true,
@@ -355,7 +355,7 @@ $validReportWildcardExtensions = array_map(
                     </td>
                     <td>
                         <?= $this->Form->control(
-                            'graphics.dummy.weight',
+                            'graphics.{i}.weight',
                             [
                                 'label' => false,
                                 'disabled' => true,
