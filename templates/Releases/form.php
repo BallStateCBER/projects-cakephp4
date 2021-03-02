@@ -289,16 +289,6 @@ $validReportWildcardExtensions = array_map(
                                 )],
                             ]
                         ) ?>
-                        <?php $this->append('buffered'); ?>
-                            document.getElementById(<?= json_encode("find-report-button-$k") ?>)
-                                .addEventListener(
-                                    'click',
-                                    function (event) {
-                                        event.preventDefault();
-                                        toggleReportFinder(this, <?= json_encode($k) ?>);
-                                    }
-                                );
-                        <?php $this->end(); ?>
                     </td>
                     <td>
                         <?= $this->Form->control(

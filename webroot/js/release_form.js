@@ -101,6 +101,21 @@ class ReleaseForm {
       event.preventDefault();
       self.addGraphic('ReleaseAddForm');
     });
+
+    const graphicsRows = document.querySelectorAll('tr.graphic');
+    for (let i = 0; i < graphicsRows.length; i++) {
+      graphicsRows[i].dataset.graphicsRow = i.toString();
+    }
+
+    const findReportButtons = document.querySelectorAll('button.find-report');
+    findReportButtons.forEach(button => {
+      button.addEventListener('click', function (event) {
+        event.preventDefault();
+        const button = event.target;
+        const i = button.closest('tr').dataset.graphicsRow;
+        self.toggleReportFinder(button, i);
+      });
+    });
   }
 
   hasUnaddedAuthor() {
