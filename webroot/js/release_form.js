@@ -1,6 +1,5 @@
 class ReleaseForm {
   constructor() {
-    const self = this;
     this.setupAddAuthor();
     this.setupRemoveAuthor();
     this.setupSelectAuthor();
