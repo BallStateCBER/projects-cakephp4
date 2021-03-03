@@ -359,6 +359,14 @@ class ReleaseForm {
         newAuthorNameField.value = '';
       }, duration);
     });
+
+    const newAuthorInput = document.getElementById('new-author-input');
+    newAuthorInput.addEventListener('keyup', event => {
+      event.preventDefault();
+      if (event.key === 'Enter') {
+        this.addAuthor();
+      }
+    });
   }
 
   setupRemoveAuthor() {
