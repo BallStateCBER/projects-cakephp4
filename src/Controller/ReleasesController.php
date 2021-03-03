@@ -29,6 +29,7 @@ class ReleasesController extends AppController
         'index',
         'latest',
         'listReports',
+        'reportNotFound',
         'search',
         'updateDataCenterHome',
         'view',
@@ -580,5 +581,15 @@ class ReleasesController extends AppController
             'release' => $release,
             '_serialize' => ['release'],
         ]);
+    }
+
+    /**
+     * Requests for reports that don't exist have this page returned
+     *
+     * @return void
+     */
+    public function reportNotFound(): void
+    {
+        $this->set(['pageTitle' => 'File not found']);
     }
 }
