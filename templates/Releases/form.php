@@ -223,6 +223,15 @@ $validReportWildcardExtensions = array_map(
         </thead>
         <tbody>
             <?php foreach ($release->graphics ?? [] as $k => $g): ?>
+                <?php $this->start('uploadGraphicInput'); ?>
+                <div class="form-group">
+                    <input type="file" name="graphics[<?= $k ?>][image]" accept="image/*"
+                           id="upload-graphic-<?= $k ?>" class="form-control-file" />
+                    <label class="sr-only" for="upload-graphic-<?= $k ?>">
+                        Choose file
+                    </label>
+                </div>
+                <?php $this->end(); ?>
                 <?php $errors = $this->Release->displayErrors($g); ?>
                 <?php if ($errors): ?>
                     <tr class="errors">
@@ -239,13 +248,7 @@ $validReportWildcardExtensions = array_map(
                             </button>
                         </td>
                         <td>
-                            <div class="form-group">
-                                <input type="file" name="graphics[<?= $k ?>][image]" accept="image/*"
-                                       id="upload-graphic-<?= $k ?>" class="form-control-file" />
-                                <label class="sr-only" for="upload-graphic-<?= $k ?>">
-                                    Choose file
-                                </label>
-                            </div>
+                            <?= $this->fetch('uploadGraphicInput') ?>
                         </td>
                     <?php elseif ($action == 'edit'): ?>
                         <td>
@@ -259,14 +262,22 @@ $validReportWildcardExtensions = array_map(
                             ) ?>
                         </td>
                         <td>
-                            <img src="<?= $release->graphics[$k]->thumbnailFullPath ?>" />
-                            <?= $this->Form->control(
-                                "graphics.$k.id",
-                                [
-                                    'value' => $release->graphics[$k]->id,
-                                    'type' => 'hidden',
-                                ]
-                            ) ?>
+                            <?php
+                                $imgWebPath = $release->graphics[$k]->thumbnailFullPath;
+                                $imgFilePath = WWW_ROOT . str_replace('/', DS, substr($imgWebPath, 1));
+                            ?>
+                            <?php if (file_exists($imgFilePath)): ?>
+                                <img src="<?= $imgWebPath ?>" />
+                                <?= $this->Form->control(
+                                    "graphics.$k.id",
+                                    [
+                                        'value' => $release->graphics[$k]->id,
+                                        'type' => 'hidden',
+                                    ]
+                                ) ?>
+                            <?php else: ?>
+                                <?= $this->fetch('uploadGraphicInput') ?>
+                            <?php endif; ?>
                         </td>
                     <?php endif; ?>
                     <td>
