@@ -254,6 +254,7 @@ $validReportWildcardExtensions = array_map(
                                 [
                                     'type' => 'checkbox',
                                     'label' => false,
+                                    'value' => 0,
                                 ]
                             ) ?>
                         </td>
