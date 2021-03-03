@@ -272,6 +272,27 @@ class ReleasesControllerTest extends TestCase
     }
 
     /**
+     * Tests that valid data can be POSTed successfully
+     *
+     * @return void
+     */
+    public function testAddWithoutCustomTags(): void
+    {
+        $this->setUserSession();
+        $data = $this->releasePostData;
+        unset($data['custom_tags']);
+        $this->post($this->addUrl, $data);
+
+        /** @var \App\Model\Entity\Release $newRelease */
+        $newRelease = $this->Releases
+            ->find()
+            ->contain(['Authors', 'Graphics', 'Tags'])
+            ->orderDesc('id')
+            ->first();
+        $this->assertRedirect($newRelease->url);
+    }
+
+    /**
      * Tests that new partners can be added through the release form
      *
      * @return void
