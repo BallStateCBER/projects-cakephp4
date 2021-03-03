@@ -1,106 +1,16 @@
 class ReleaseForm {
   constructor() {
-    const self = this;
-
-    const addAuthorToggler = document.getElementById('add-author-toggler');
-    addAuthorToggler.addEventListener('click', function (event) {
-      event.preventDefault();
-      const newAuthor = document.getElementById('new-author-container');
-      slideToggle(newAuthor);
-    });
-
-    const removeButtons = document.querySelectorAll('#authors-container button');
-    removeButtons.forEach(function (removeButton) {
-      removeButton.addEventListener('click', function (event) {
-        event.preventDefault();
-        const container = event.target.parentElement;
-        const duration = 300;
-        slideUp(container, duration);
-        setTimeout(function () {
-          container.remove();
-        }, duration);
-      });
-    });
-
-    const addAuthorButton = document.getElementById('add-author-button');
-    addAuthorButton.addEventListener('click', function (event) {
-      event.preventDefault();
-      self.addAuthor();
-    });
-
-    const cancelAddAuthorButton = document.getElementById('cancel-add-author-button');
-    cancelAddAuthorButton.addEventListener('click', function (event) {
-      event.preventDefault();
-      const newAuthorContainer = document.getElementById('new-author-container');
-      const newAuthorNameField = newAuthorContainer.querySelector('input[type=text]');
-      const duration = 300;
-      slideUp(newAuthorContainer, duration);
-      setTimeout(function () {
-        newAuthorNameField.value = '';
-      }, duration);
-    });
-
-    const authorSelector = document.getElementById('author-select');
-    authorSelector.addEventListener('change', function () {
-      self.selectAuthor();
-    });
-
-    const form = document.getElementById('ReleaseForm');
-    form.addEventListener('submit', function (event) {
-      if (self.hasUnaddedAuthor()) {
-        event.preventDefault();
-        const authorName = document.querySelector('#new-author-container input').value;
-        alert('Please click "add" to add ' + authorName + ' to this release.');
-      }
-    });
-
-    const addPartnerButton = document.getElementById('add-partner-button');
-    addPartnerButton.addEventListener('click', function (event) {
-      event.preventDefault();
-      document.getElementById('release-partner-id').selectedIndex = 0;
-      document.getElementById('choose-partner').style.display = 'none';
-      document.getElementById('add-partner').style.display = 'block';
-      document.getElementById('release-new-partner').required = true;
-    });
-
-    const choosePartnerButton = document.getElementById('choose-partner-button');
-    choosePartnerButton.addEventListener('click', function (event) {
-      event.preventDefault();
-      const newPartnerField = document.getElementById('release-new-partner');
-      newPartnerField.value = '';
-      newPartnerField.required = false;
-      document.getElementById('choose-partner').style.display = 'block';
-      document.getElementById('add-partner').style.display = 'none';
-    });
-
-    const uploadReportNoteButton = document.getElementById('footnote-upload-reports-handle');
-    uploadReportNoteButton.addEventListener('click', function (event) {
-      event.preventDefault();
-      const uploadNote = document.getElementById('footnote-upload-reports');
-      uploadNote.style.display = uploadNote.style.display === 'none' ? 'block' : 'none';
-    });
-
-    const uploadGraphicsNoteButton = document.getElementById('footnote-upload-graphics-handle');
-    uploadGraphicsNoteButton.addEventListener('click', function (event) {
-      event.preventDefault();
-      const uploadNote = document.getElementById('footnote-upload-graphics');
-      uploadNote.style.display = uploadNote.style.display === 'none' ? 'block' : 'none';
-    });
-
-    const removeGraphicButtons = document.querySelectorAll('button.remove-graphic');
-    removeGraphicButtons.forEach(function (button) {
-      button.addEventListener('click', function (event) {
-        event.preventDefault();
-        self.removeGraphic(event.target);
-      });
-
-    });
-
-    const addGraphicButton = document.querySelector('button.add-graphic');
-    addGraphicButton.addEventListener('click', function (event) {
-      event.preventDefault();
-      self.addGraphic('ReleaseAddForm');
-    });
+    this.setupAddAuthor();
+    this.setupRemoveAuthor();
+    this.setupSelectAuthor();
+    this.setupSubmitForm();
+    this.setupAddPartner();
+    this.setupChoosePartner();
+    this.setupTips();
+    this.setupRemoveGraphic();
+    this.setupAddGraphic();
+    this.setupExistingGraphics();
+    this.setupFindReport();
   }
 
   hasUnaddedAuthor() {
@@ -205,7 +115,12 @@ class ReleaseForm {
   }
 
   removeGraphic(button) {
-    button.closest('tr').remove();
+    const graphicRow = button.closest('tr');
+    const reportSelectionRow = graphicRow.nextElementSibling;
+    if (reportSelectionRow && reportSelectionRow.dataset.forRow === graphicRow.dataset.graphicsRow) {
+      reportSelectionRow.remove();
+    }
+    graphicRow.remove();
     this.updateOrderSelectors();
 
     // Hide table head if table body is empty
@@ -253,25 +168,23 @@ class ReleaseForm {
    */
   addGraphic() {
     // Get and advance the key
-    let i = this.getGraphicsCount();
+    let i = this.getGraphicsCount().toString();
 
     // Copy the row
     const templateContent = document.querySelector('table.graphics tfoot template').content.cloneNode(true);
+    templateContent.querySelector('tr').dataset.graphicsRow = i;
     document.querySelector('table.graphics tbody').append(templateContent);
 
     // Get the copied row
     const newRow = document.querySelector('table.graphics tbody tr:last-child');
 
-    // Apply a unique key to each row
+    // Apply a unique key to each element
     newRow.querySelectorAll('input, select, label').forEach(function (element) {
-      element.id = element.id.replace('dummy', i);
-      element.name = element.name ? element.name.replace('dummy', i) : null;
-      element.htmlFor = element.htmlFor ? element.htmlFor.replace('dummy', i) : null;
-      element.className = element.className.replace('dummy', i);
+      element.id = element.id.replace('{i}', i);
+      element.name = element.name ? element.name.replace('{i}', i) : null;
+      element.htmlFor = element.htmlFor ? element.htmlFor.replace('{i}', i) : null;
+      element.className = element.className.replace('{i}', i);
       element.disabled = false;
-    });
-    newRow.querySelectorAll('label').forEach(function (element) {
-      element.htmlFor = element.htmlFor.replace('{i}', i);
     });
 
     // Set up the remove button
@@ -286,11 +199,7 @@ class ReleaseForm {
     // Set up the 'find report' button
     newRow.querySelector('button.find-report').addEventListener('click', function (event) {
       event.preventDefault();
-      let button = event.target;
-      if (!button.classList.contains('btn')) {
-        button = button.closest('button');
-      }
-      self.toggleReportFinder(button, i);
+      self.toggleReportFinder(event.target);
     });
 
     // Update 'order' options
@@ -306,9 +215,14 @@ class ReleaseForm {
   }
 
   /* Called when a 'find report' button is clicked
-   * button: the button clicked
-   * i: the unique key for the corresponding 'linked graphics' row */
-  toggleReportFinder(button, i) {
+   * button: the button clicked */
+  toggleReportFinder(button) {
+    // Handle the button's contents being registered as the event.target, rather than the button itself
+    if (!button.classList.contains('btn')) {
+      button = button.closest('button');
+    }
+
+    const i = button.closest('tr').dataset.graphicsRow;
     const existingSelectionBox = document.getElementById(`report-choices-${i}`);
 
     // Open
@@ -338,9 +252,11 @@ class ReleaseForm {
    * cell: the table cell that contains the input field to be populated
    * i: the unique key of the row in the 'add/edit linked graphics' box */
   setupReportFinder(html, cell, i) {
+    const graphicRow = cell.closest('tr');
     const newRow = document.createElement('tr');
+    newRow.dataset.forRow = graphicRow.dataset.graphicsRow;
     newRow.innerHTML = `<td colspan="4" class="report-choices"><div id="report-choices-${i}">${html}</div></td>`;
-    cell.closest('tr').after(newRow);
+    graphicRow.after(newRow);
     newRow.querySelector('button.report').addEventListener('click', function (event) {
       event.preventDefault();
       const reportFilename = event.target.innerText.trim();
@@ -416,5 +332,147 @@ class ReleaseForm {
         break;
       }
     }
+  }
+
+  setupAddAuthor() {
+    const addAuthorToggler = document.getElementById('add-author-toggler');
+    addAuthorToggler.addEventListener('click', function (event) {
+      event.preventDefault();
+      const newAuthor = document.getElementById('new-author-container');
+      slideToggle(newAuthor);
+    });
+
+    const addAuthorButton = document.getElementById('add-author-button');
+    addAuthorButton.addEventListener('click', event => {
+      event.preventDefault();
+      this.addAuthor();
+    });
+
+    const cancelAddAuthorButton = document.getElementById('cancel-add-author-button');
+    cancelAddAuthorButton.addEventListener('click', function (event) {
+      event.preventDefault();
+      const newAuthorContainer = document.getElementById('new-author-container');
+      const newAuthorNameField = newAuthorContainer.querySelector('input[type=text]');
+      const duration = 300;
+      slideUp(newAuthorContainer, duration);
+      setTimeout(function () {
+        newAuthorNameField.value = '';
+      }, duration);
+    });
+
+    const newAuthorInput = document.getElementById('new-author-input');
+    newAuthorInput.addEventListener('keyup', event => {
+      event.preventDefault();
+      if (event.key === 'Enter') {
+        this.addAuthor();
+      }
+    });
+  }
+
+  setupRemoveAuthor() {
+    const removeButtons = document.querySelectorAll('#authors-container button');
+    removeButtons.forEach(function (removeButton) {
+      removeButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        const container = event.target.parentElement;
+        const duration = 300;
+        slideUp(container, duration);
+        setTimeout(function () {
+          container.remove();
+        }, duration);
+      });
+    });
+  }
+
+  setupSelectAuthor() {
+    const authorSelector = document.getElementById('author-select');
+    authorSelector.addEventListener('change', () => {
+      this.selectAuthor();
+    });
+  }
+
+  setupSubmitForm() {
+    const form = document.getElementById('ReleaseForm');
+    form.addEventListener('submit', event => {
+      if (this.hasUnaddedAuthor()) {
+        event.preventDefault();
+        const authorName = document.querySelector('#new-author-container input').value;
+        alert('Please click "add" to add ' + authorName + ' to this release.');
+      }
+    });
+  }
+
+  setupAddPartner() {
+    const addPartnerButton = document.getElementById('add-partner-button');
+    addPartnerButton.addEventListener('click', function (event) {
+      event.preventDefault();
+      document.getElementById('release-partner-id').selectedIndex = 0;
+      document.getElementById('choose-partner').style.display = 'none';
+      document.getElementById('add-partner').style.display = 'block';
+      document.getElementById('release-new-partner').required = true;
+    });
+  }
+
+  setupChoosePartner() {
+    const choosePartnerButton = document.getElementById('choose-partner-button');
+    choosePartnerButton.addEventListener('click', function (event) {
+      event.preventDefault();
+      const newPartnerField = document.getElementById('release-new-partner');
+      newPartnerField.value = '';
+      newPartnerField.required = false;
+      document.getElementById('choose-partner').style.display = 'block';
+      document.getElementById('add-partner').style.display = 'none';
+    });
+  }
+
+  setupTips() {
+    const uploadReportNoteButton = document.getElementById('footnote-upload-reports-handle');
+    uploadReportNoteButton.addEventListener('click', function (event) {
+      event.preventDefault();
+      const uploadNote = document.getElementById('footnote-upload-reports');
+      uploadNote.style.display = uploadNote.style.display === 'none' ? 'block' : 'none';
+    });
+
+    const uploadGraphicsNoteButton = document.getElementById('footnote-upload-graphics-handle');
+    uploadGraphicsNoteButton.addEventListener('click', function (event) {
+      event.preventDefault();
+      const uploadNote = document.getElementById('footnote-upload-graphics');
+      uploadNote.style.display = uploadNote.style.display === 'none' ? 'block' : 'none';
+    });
+  }
+
+  setupRemoveGraphic() {
+    const removeGraphicButtons = document.querySelectorAll('button.remove-graphic');
+    removeGraphicButtons.forEach(button => {
+      button.addEventListener('click', event => {
+        event.preventDefault();
+        this.removeGraphic(event.target);
+      });
+    });
+  }
+
+  setupAddGraphic() {
+    const addGraphicButton = document.querySelector('button.add-graphic');
+    addGraphicButton.addEventListener('click', event => {
+      event.preventDefault();
+      this.addGraphic('ReleaseAddForm');
+    });
+  }
+
+  setupExistingGraphics() {
+    const graphicsRows = document.querySelectorAll('tr.graphic');
+    for (let i = 0; i < graphicsRows.length; i++) {
+      graphicsRows[i].dataset.graphicsRow = i.toString();
+    }
+  }
+
+  setupFindReport() {
+    const findReportButtons = document.querySelectorAll('button.find-report');
+    findReportButtons.forEach(button => {
+      button.addEventListener('click', event => {
+        event.preventDefault();
+        this.toggleReportFinder(event.target);
+      });
+    });
   }
 }

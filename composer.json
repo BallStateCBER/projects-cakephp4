@@ -5,7 +5,7 @@
     "type": "project",
     "license": "MIT",
     "require": {
-        "php": ">=7.4",
+        "php": ">=8.0",
         "ext-json": "*",
         "ballstatecber/datacenter-plugin-cakephp4": "dev-master",
         "cakedc/users": "^9.0",

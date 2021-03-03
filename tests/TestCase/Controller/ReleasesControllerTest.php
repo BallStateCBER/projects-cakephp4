@@ -272,6 +272,27 @@ class ReleasesControllerTest extends TestCase
     }
 
     /**
+     * Tests that valid data can be POSTed successfully
+     *
+     * @return void
+     */
+    public function testAddWithoutCustomTags(): void
+    {
+        $this->setUserSession();
+        $data = $this->releasePostData;
+        unset($data['custom_tags']);
+        $this->post($this->addUrl, $data);
+
+        /** @var \App\Model\Entity\Release $newRelease */
+        $newRelease = $this->Releases
+            ->find()
+            ->contain(['Authors', 'Graphics', 'Tags'])
+            ->orderDesc('id')
+            ->first();
+        $this->assertRedirect($newRelease->url);
+    }
+
+    /**
      * Tests that new partners can be added through the release form
      *
      * @return void
@@ -431,6 +452,50 @@ class ReleasesControllerTest extends TestCase
         $this->assertFalse($graphicsTable->exists(['id' => $deletedGraphic['id']]), 'Graphic was not deleted');
 
         $this->assertEquals($data['partner_id'], $release->partner_id, 'Expected partner ID not found');
+    }
+
+    /**
+     * Test that the edit form is pre-populated with all expected contents
+     *
+     * @return void
+     */
+    public function testEditFormContents(): void
+    {
+        $this->setUserSession();
+        $releaseId = ReleasesFixture::RELEASE_WITH_GRAPHICS;
+
+        $release = $this->Releases->get(
+            $releaseId,
+            ['contain' => ['Authors', 'Graphics', 'Partners', 'Tags']]
+        );
+
+        $this->get($this->editUrl . $releaseId);
+        $this->assertResponseOk();
+
+        $selectedTags = [];
+        foreach ($release->tags as $tag) {
+            $selectedTags[] = [
+                'id' => $tag->id,
+                'name' => $tag->name,
+            ];
+            $this->assertResponseContains('"selectedTags":' . json_encode($selectedTags));
+        }
+        foreach ($release->authors as $author) {
+            $selectedAuthorInput = sprintf(
+                '<input type="hidden" name="authors[_ids][]" value="%s"',
+                $author->id,
+            );
+            $this->assertResponseContains($selectedAuthorInput);
+        }
+        foreach ($release->graphics as $graphic) {
+            $this->assertResponseContains($graphic->title);
+        }
+        $selectedPartnerOption = sprintf(
+            '<option value="%s" selected="selected">%s</option>',
+            $release->partner->id,
+            $release->partner->name,
+        );
+        $this->assertResponseContains($selectedPartnerOption);
     }
 
     /**
