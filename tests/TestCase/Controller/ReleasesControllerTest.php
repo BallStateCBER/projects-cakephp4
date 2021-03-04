@@ -160,7 +160,7 @@ class ReleasesControllerTest extends TestCase
         // Assert partner link inside of p.partner
         $this->assertResponseRegExp(sprintf(
             '/%s%s%s%s%s/',
-            preg_quote('<p class="partner">'),
+            preg_quote('<div class="partner col-12 col-md-6">'),
             '\\s*',
             preg_quote(sprintf(
                 '<a href="%s">%s</a>',
@@ -168,7 +168,7 @@ class ReleasesControllerTest extends TestCase
                 $release->partner->name
             ), '/'),
             '\\s*',
-            preg_quote('</p>', '/')
+            preg_quote('</div>', '/')
         ));
 
         // Assert all author links inside of p.authors
