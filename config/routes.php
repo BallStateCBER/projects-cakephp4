@@ -59,6 +59,7 @@ $routes->scope('/', function (RouteBuilder $builder) {
         ['controller' => 'Releases', 'action' => 'year'],
         ['year' => '[0-9]+', 'pass' => ['year']],
     );
+    $builder->connect('/reports/*', ['controller' => 'Releases', 'action' => 'reportNotFound']);
 
     // Partners
     $builder->connect(

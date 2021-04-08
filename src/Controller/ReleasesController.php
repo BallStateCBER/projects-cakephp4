@@ -29,6 +29,7 @@ class ReleasesController extends AppController
         'index',
         'latest',
         'listReports',
+        'reportNotFound',
         'search',
         'updateDataCenterHome',
         'view',
@@ -120,7 +121,6 @@ class ReleasesController extends AppController
                 $this->Flash->success('Release added');
                 Cache::delete('sidebar_tags', 'long');
                 Cache::delete('sidebar_partners', 'long');
-                $this->updateDataCenterHome();
 
                 return $this->redirect($release->url);
             } else {
@@ -187,30 +187,6 @@ class ReleasesController extends AppController
         }
 
         return $this->redirect($this->request->referer());
-    }
-
-    /**
-     * Calls a page that refreshes the Data Center's homepage's cache of the latest release
-     *
-     * @return bool
-     */
-    private function updateDataCenterHome()
-    {
-        $isLocalhost = stripos($_SERVER['SERVER_NAME'] ?? '', 'localhost') !== false;
-        $url = $isLocalhost
-            ? 'http://dchome.localhost/refresh_latest_release'
-            : 'https://cberdata.org/refresh_latest_release';
-
-        $contextOptions = $isLocalhost ? [
-            'ssl' => [
-                'verify_peer' => false,
-                'verify_peer_name' => false,
-            ],
-        ] : [];
-
-        $results = trim(file_get_contents($url, false, stream_context_create($contextOptions)));
-
-        return (bool)$results;
     }
 
     /**
@@ -605,5 +581,15 @@ class ReleasesController extends AppController
             'release' => $release,
             '_serialize' => ['release'],
         ]);
+    }
+
+    /**
+     * Requests for reports that don't exist have this page returned
+     *
+     * @return void
+     */
+    public function reportNotFound(): void
+    {
+        $this->set(['pageTitle' => 'File not found']);
     }
 }

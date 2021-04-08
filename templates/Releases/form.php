@@ -223,6 +223,15 @@ $validReportWildcardExtensions = array_map(
         </thead>
         <tbody>
             <?php foreach ($release->graphics ?? [] as $k => $g): ?>
+                <?php $this->start('uploadGraphicInput'); ?>
+                <div class="form-group">
+                    <input type="file" name="graphics[<?= $k ?>][image]" accept="image/*"
+                           id="upload-graphic-<?= $k ?>" class="form-control-file" />
+                    <label class="sr-only" for="upload-graphic-<?= $k ?>">
+                        Choose file
+                    </label>
+                </div>
+                <?php $this->end(); ?>
                 <?php $errors = $this->Release->displayErrors($g); ?>
                 <?php if ($errors): ?>
                     <tr class="errors">
@@ -239,13 +248,7 @@ $validReportWildcardExtensions = array_map(
                             </button>
                         </td>
                         <td>
-                            <div class="form-group">
-                                <input type="file" name="graphics[<?= $k ?>][image]" accept="image/*"
-                                       id="upload-graphic-<?= $k ?>" class="form-control-file" />
-                                <label class="sr-only" for="upload-graphic-<?= $k ?>">
-                                    Choose file
-                                </label>
-                            </div>
+                            <?= $this->fetch('uploadGraphicInput') ?>
                         </td>
                     <?php elseif ($action == 'edit'): ?>
                         <td>
@@ -254,18 +257,27 @@ $validReportWildcardExtensions = array_map(
                                 [
                                     'type' => 'checkbox',
                                     'label' => false,
+                                    'value' => 0,
                                 ]
                             ) ?>
                         </td>
                         <td>
-                            <img src="<?= $release->graphics[$k]->thumbnailFullPath ?>" />
-                            <?= $this->Form->control(
-                                "graphics.$k.id",
-                                [
-                                    'value' => $release->graphics[$k]->id,
-                                    'type' => 'hidden',
-                                ]
-                            ) ?>
+                            <?php
+                                $imgWebPath = $release->graphics[$k]->thumbnailFullPath;
+                                $imgFilePath = WWW_ROOT . str_replace('/', DS, substr($imgWebPath, 1));
+                            ?>
+                            <?php if (file_exists($imgFilePath)): ?>
+                                <img src="<?= $imgWebPath ?>" />
+                                <?= $this->Form->control(
+                                    "graphics.$k.id",
+                                    [
+                                        'value' => $release->graphics[$k]->id,
+                                        'type' => 'hidden',
+                                    ]
+                                ) ?>
+                            <?php else: ?>
+                                <?= $this->fetch('uploadGraphicInput') ?>
+                            <?php endif; ?>
                         </td>
                     <?php endif; ?>
                     <td>
@@ -289,16 +301,6 @@ $validReportWildcardExtensions = array_map(
                                 )],
                             ]
                         ) ?>
-                        <?php $this->append('buffered'); ?>
-                            document.getElementById(<?= json_encode("find-report-button-$k") ?>)
-                                .addEventListener(
-                                    'click',
-                                    function (event) {
-                                        event.preventDefault();
-                                        toggleReportFinder(this, <?= json_encode($k) ?>);
-                                    }
-                                );
-                        <?php $this->end(); ?>
                     </td>
                     <td>
                         <?= $this->Form->control(
@@ -330,16 +332,16 @@ $validReportWildcardExtensions = array_map(
                     </td>
                     <td>
                         <div class="form-group">
-                            <input type="file" name="graphics[dummy][image]" accept="image/*"
-                                   id="upload-graphic-dummy" class="form-control-file" disabled="disabled" />
-                            <label class="sr-only" for="upload-graphic-dummy">
+                            <input type="file" name="graphics[{i}][image]" accept="image/*"
+                                   id="upload-graphic-{i}" class="form-control-file" disabled="disabled" />
+                            <label class="sr-only" for="upload-graphic-{i}">
                                 Choose file
                             </label>
                         </div>
                     </td>
                     <td>
                         <?= $this->Form->control(
-                            'graphics.dummy.title',
+                            'graphics.{i}.title',
                             [
                                 'label' => false,
                                 'disabled' => true,
@@ -349,7 +351,7 @@ $validReportWildcardExtensions = array_map(
                     </td>
                     <td>
                         <?= $this->Form->control(
-                            'graphics.dummy.url',
+                            'graphics.{i}.url',
                             [
                                 'label' => false,
                                 'disabled' => true,
@@ -365,7 +367,7 @@ $validReportWildcardExtensions = array_map(
                     </td>
                     <td>
                         <?= $this->Form->control(
-                            'graphics.dummy.weight',
+                            'graphics.{i}.weight',
                             [
                                 'label' => false,
                                 'disabled' => true,
